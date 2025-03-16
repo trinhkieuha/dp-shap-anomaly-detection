@@ -77,6 +77,9 @@ class VisualDistr:
         num_cols (int): Number of columns in the subplot layout.
         bins (int): Number of bins for histogram.
         kde (bool): Whether to overlay a KDE plot.
+
+        Returns:
+        module: The set of histograms that present the distributions of numerical variables.
         """
         num_vars = len(self.numerical_variables)
         num_rows = num_vars // num_cols + 1  # Dynamically calculate rows
@@ -109,7 +112,8 @@ class VisualDistr:
             fig.delaxes(axes[j])
         
         plt.tight_layout()
-        plt.show()
+
+        return plt
 
     def plot_categorical_distributions(self, num_cols=5, label=None):
         """
@@ -118,6 +122,9 @@ class VisualDistr:
         Parameters:
         num_cols (int): Number of columns in the subplot layout.
         label (str, optional): Target label column name, if any (excluded from plots).
+
+        Returns:
+        module: The set of histograms that present the distributions of categorical variables.
         """
 
         if label and label in self.categorical_vars:
@@ -148,7 +155,8 @@ class VisualDistr:
             fig.delaxes(axes[j])
 
         plt.tight_layout()
-        plt.show()
+
+        return plt
 
     def compute_categorical_distributions(self):
         """
@@ -201,6 +209,9 @@ class VisualCorr:
     def num_num_corr(self):
         """
         Plots a heatmap of correlations between numerical variables.
+
+        Returns:
+        module: The heatmap that presents Pearson's correlation between numerical variables.
         """
         corr_matrix = self.data[self.numerical_variables].corr()
 
@@ -210,12 +221,16 @@ class VisualCorr:
         # Heatmap
         plt.figure(figsize=(10, 8))
         sns.heatmap(corr_matrix, mask=mask, cmap="coolwarm", annot=True, fmt=".2f", linewidths=0.5)
-        plt.show()
+
+        return plt
 
     def cat_num_corr(self):
         """
         Computes the Kruskal-Wallis test for categorical vs. numerical variable associations.
         Displays a heatmap of statistical significance.
+
+        Returns:
+        module: The heatmap that presents the p-values of the Kruskal-Wallis test for categorical vs. numerical variables.
         """
         kw_test = []
         for cat_col in self.categorical_vars:
@@ -234,15 +249,20 @@ class VisualCorr:
         sns.heatmap(kw_test_df, cmap="coolwarm_r", annot=True, fmt=".2f", linewidths=0.5)
         plt.xlabel("")
         plt.ylabel("")
-        plt.show()
+
+        return plt
 
     def cramers_v(self, x, y):
         """
         Computes Cramér's V statistic for categorical-categorical correlation.
+
+        Returns:
+        float: Cramér's V statistic
         """
         confusion_matrix = pd.crosstab(x, y)
         chi2 = stats.chi2_contingency(confusion_matrix)[0]
         n = confusion_matrix.sum().sum()
+        
         return np.sqrt(chi2 / (n * (min(confusion_matrix.shape) - 1)))
     
     def cat_cat_corr(self):
@@ -252,6 +272,9 @@ class VisualCorr:
         Cramér’s V is a measure of association between two categorical variables, ranging from 0 to 1.
         - A value close to 0 indicates weak association.
         - A value close to 1 indicates a strong association.
+
+        Returns:
+        module: The heatmap that presents Cramér’s V correlation between categorical variables.
         """
 
         # Compute Cramér’s V for all categorical variables
@@ -271,4 +294,5 @@ class VisualCorr:
         sns.heatmap(cramers_v_matrix, annot=True, cmap="coolwarm", fmt=".2f")
         plt.xlabel("")
         plt.ylabel("")
-        plt.show()
+
+        return plt
