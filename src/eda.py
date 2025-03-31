@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from IPython.display import display
 import seaborn as sns
 import scipy.stats as stats
+from sklearn.manifold import TSNE
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
@@ -15,7 +18,7 @@ warnings.filterwarnings("ignore")
 # Function to detect variable types
 # ----------------------------------------
 
-def detect_variable_type(df):
+def data_info(df):
     """
     Detects whether each column in the DataFrame is categorical or numerical.
     
@@ -42,8 +45,13 @@ def detect_variable_type(df):
             var_dict["min"] = df[col].min()
             var_dict["max"] = df[col].max()
         else:
-            var_dict["var_type"] = 'categorical'
+            if set(df[col].dropna().unique()) == set(["yes", "no"]):
+                var_dict["var_type"] = 'binary'
+            else:
+                var_dict["var_type"] = 'categorical'
             var_dict["num_unique"] = df[col].nunique()
+            var_dict["unique_list"] = df[col].unique().astype(str)
+            var_dict["mode"] = df[col].mode()[0]
 
         # Store data type
         var_dict["data_type"] = df[col].dtype
@@ -52,8 +60,15 @@ def detect_variable_type(df):
         var_dict['missing'] = df[col].isnull().sum()
 
         variable_info.append(var_dict)
+
+    var_info = pd.DataFrame(variable_info, columns=['var_name', 'var_type', 'data_type'
+                                                                 , 'missing', 'mean', 'median', 'mode' 
+                                                                 , 'std_dev', 'skewness', 'kurtosis'
+                                                                 , 'min', 'max'
+                                                                 , 'num_unique', 'unique_list'
+                                                                 ])
     
-    return variable_info
+    return var_info
 
 # ----------------------------------------
 # Class for Data Distribution Visualization
@@ -64,7 +79,7 @@ class VisualDistr:
     Class for visualizing the distributions of numerical and categorical variables.
     """
 
-    def __init__(self, data, categorical_vars, numerical_variables):
+    def __init__(self, data, categorical_vars=None, numerical_variables=None):
         self.data = data
         self.categorical_vars = categorical_vars
         self.numerical_variables = numerical_variables
@@ -296,3 +311,43 @@ class VisualCorr:
         plt.ylabel("")
 
         return plt
+    
+# ----------------------------------------
+# Function for t-SNE Visualization
+# ----------------------------------------
+
+def tsne_scatter(features, labels, dimensions=2):
+    if dimensions not in (2, 3):
+        raise ValueError('Make sure the dimensions parameter is 2 or 3')
+
+    # t-SNE dimensionality reduction
+    features_embedded = TSNE(n_components=dimensions, random_state=42).fit_transform(features)
+    
+    # Initialising the plot
+    fig, ax = plt.subplots(figsize=(8,8))
+    
+    # Counting dimensions
+    if dimensions == 3: ax = fig.add_subplot(111, projection='3d')
+
+    # Plotting data
+    ax.scatter(
+        *zip(*features_embedded[np.where(labels==1)]),
+        marker='o',
+        color='r',
+        s=2,
+        alpha=0.7,
+        label='Fraud'
+    )
+    ax.scatter(
+        *zip(*features_embedded[np.where(labels==0)]),
+        marker='o',
+        color='g',
+        s=2,
+        alpha=0.3,
+        label='Clean'
+    )
+
+    # Display the plot
+    plt.legend(loc='best')
+    
+    return plt
