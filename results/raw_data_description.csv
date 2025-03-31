@@ -1,22 +1,24 @@
-var_name,var_type,data_type,missing,mean,median,std_dev,skewness,kurtosis,min,max,num_unique
-age,numerical,int64,0,40.02406040594348,38.0,10.421249980934048,0.7846968157646645,0.7913115311544336,17.0,98.0,
-job,categorical,object,330,,,,,,,,11.0
-marital,categorical,object,80,,,,,,,,3.0
-education,categorical,object,1731,,,,,,,,7.0
-default,categorical,object,8597,,,,,,,,2.0
-housing,categorical,object,990,,,,,,,,2.0
-loan,categorical,object,990,,,,,,,,2.0
-contact,categorical,object,0,,,,,,,,2.0
-month,categorical,object,0,,,,,,,,10.0
-day_of_week,categorical,object,0,,,,,,,,5.0
-duration,numerical,int64,0,258.2850101971448,180.0,259.2792488364648,3.263141255262832,20.247938014978796,0.0,4918.0,
-campaign,numerical,int64,0,2.567592502670681,2.0,2.7700135429023276,4.762506697067009,36.979795142898865,1.0,56.0,
-pdays,numerical,float64,39673,6.014521452145215,6.0,3.824906257479066,1.4585638453665568,2.5645621040583566,0.0,27.0,
-previous,numerical,int64,0,0.17296299893172767,0.0,0.4949010798392897,3.8320422428611836,20.108816215208236,0.0,7.0,
-poutcome,categorical,object,0,,,,,,,,3.0
-emp_var_rate,numerical,float64,0,0.08188550063125165,1.1,1.5709597405170255,-0.7240955492472556,-1.0626315246508407,-3.4,1.4,
-cons_price_idx,numerical,float64,0,93.57566436826262,93.749,0.5788400489541262,-0.23088765135788006,-0.8298085771833406,92.201,94.767,
-cons_conf_idx,numerical,float64,0,-40.50260027192386,-41.8,4.628197856174544,0.30317985874819237,-0.35855831054052567,-50.8,-26.9,
-euribor3m,numerical,float64,0,3.621290812858114,4.857,1.734447404851267,-0.7091879563778298,-1.4068026223874996,0.634,5.045,
-nr_employed,numerical,float64,0,5167.035910944936,5191.0,72.25152766826108,-1.044262407089151,-0.0037603756956321455,4963.6,5228.1,
-y,categorical,object,0,,,,,,,,2.0
+var_name,var_type,data_type,missing,mean,median,mode,std_dev,skewness,kurtosis,min,max,num_unique,unique_list
+age,numerical,int64,0,40.02406040594348,38.0,,10.421249980934048,0.7846968157646645,0.7913115311544336,17.0,98.0,,
+job,categorical,object,330,,,admin.,,,,,,11.0,"['housemaid' 'services' 'admin.' 'blue-collar' 'technician' 'retired'
+ 'management' 'unemployed' 'self-employed' 'nan' 'entrepreneur' 'student']"
+marital,categorical,object,80,,,married,,,,,,3.0,['married' 'single' 'divorced' 'nan']
+education,categorical,object,1731,,,university.degree,,,,,,7.0,"['basic.4y' 'high.school' 'basic.6y' 'basic.9y' 'professional.course'
+ 'nan' 'university.degree' 'illiterate']"
+default,binary,object,8597,,,no,,,,,,2.0,['no' 'nan' 'yes']
+housing,binary,object,990,,,yes,,,,,,2.0,['no' 'yes' 'nan']
+loan,binary,object,990,,,no,,,,,,2.0,['no' 'yes' 'nan']
+contact,categorical,object,0,,,cellular,,,,,,2.0,['telephone' 'cellular']
+month,categorical,object,0,,,may,,,,,,10.0,['may' 'jun' 'jul' 'aug' 'oct' 'nov' 'dec' 'mar' 'apr' 'sep']
+day_of_week,categorical,object,0,,,thu,,,,,,5.0,['mon' 'tue' 'wed' 'thu' 'fri']
+duration,numerical,int64,0,258.2850101971448,180.0,,259.2792488364648,3.263141255262832,20.247938014978796,0.0,4918.0,,
+campaign,numerical,int64,0,2.567592502670681,2.0,,2.7700135429023276,4.762506697067009,36.979795142898865,1.0,56.0,,
+pdays,numerical,float64,39673,6.014521452145215,6.0,,3.824906257479066,1.4585638453665568,2.5645621040583566,0.0,27.0,,
+previous,numerical,int64,0,0.17296299893172767,0.0,,0.4949010798392897,3.8320422428611836,20.108816215208236,0.0,7.0,,
+poutcome,categorical,object,0,,,nonexistent,,,,,,3.0,['nonexistent' 'failure' 'success']
+emp_var_rate,numerical,float64,0,0.08188550063125165,1.1,,1.5709597405170255,-0.7240955492472556,-1.0626315246508407,-3.4,1.4,,
+cons_price_idx,numerical,float64,0,93.57566436826262,93.749,,0.5788400489541262,-0.23088765135788006,-0.8298085771833406,92.201,94.767,,
+cons_conf_idx,numerical,float64,0,-40.50260027192386,-41.8,,4.628197856174544,0.30317985874819237,-0.35855831054052567,-50.8,-26.9,,
+euribor3m,numerical,float64,0,3.621290812858114,4.857,,1.734447404851267,-0.7091879563778298,-1.4068026223874996,0.634,5.045,,
+nr_employed,numerical,float64,0,5167.035910944936,5191.0,,72.25152766826108,-1.044262407089151,-0.0037603756956321455,4963.6,5228.1,,
+y,binary,object,0,,,no,,,,,,2.0,['no' 'yes']
