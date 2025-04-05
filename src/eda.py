@@ -34,7 +34,7 @@ def data_info(df):
         var_dict = {"var_name": col}
         
         # Identify whether the variable is numerical or categorical
-        if pd.api.types.is_numeric_dtype(df[col]):
+        if pd.api.types.is_numeric_dtype(df[col]) and set(df[col].dropna().unique()) != set([1, 0]):
             var_dict["var_type"] = 'numerical'
             # Compute summary statistics for numerical variables
             var_dict["mean"] = df[col].mean()
@@ -45,7 +45,7 @@ def data_info(df):
             var_dict["min"] = df[col].min()
             var_dict["max"] = df[col].max()
         else:
-            if set(df[col].dropna().unique()) == set(["yes", "no"]):
+            if set(df[col].dropna().unique()) == set(["yes", "no"]) or set(df[col].dropna().unique()) == set([1, 0]):
                 var_dict["var_type"] = 'binary'
             else:
                 var_dict["var_type"] = 'categorical'
