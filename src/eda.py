@@ -336,7 +336,7 @@ def tsne_scatter(features, labels, dimensions=2):
         color='r',
         s=2,
         alpha=0.7,
-        label='Fraud'
+        label='Anomaly'
     )
     ax.scatter(
         *zip(*features_embedded[np.where(labels==0)]),
@@ -344,7 +344,7 @@ def tsne_scatter(features, labels, dimensions=2):
         color='g',
         s=2,
         alpha=0.3,
-        label='Clean'
+        label='Normal'
     )
 
     # Display the plot
