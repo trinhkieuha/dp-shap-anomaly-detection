@@ -8,22 +8,24 @@ import random
 from tensorflow_privacy.privacy.optimizers.dp_optimizer_keras import DPKerasSGDOptimizer
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score
 from itertools import product
+import matplotlib.pyplot as plt
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
 warnings.filterwarnings("ignore")
 
 class HybridLoss(tf.keras.losses.Loss):
-    def __init__(self, model, real_cols, binary_cols, all_cols, lam, reduce=True):
+    def __init__(self, model, real_cols, binary_cols, all_cols, lam, gamma, reduce=True):
         """
         Initializes the inputs to compute loss.
 
         Parameters:
         - model: tf.keras.Model, the full autoencoder model (used to access weights for L2 regularization)
-        - real_cols: list of str, names of real-valued features ℛ
-        - binary_cols: list of str, names of binary-valued features ℬ
+        - real_cols: list of str, names of real-valued features
+        - binary_cols: list of str, names of binary-valued features
         - all_cols: list or pd.Index of all feature names (used to index into x and x_hat)
-        - lam: float, regularization coefficient (λ)
+        - lam: float, regularization coefficient
+        - gamma: float, range [0, 1], weight of MSE
         - reduce: bool, if True returns scalar loss (mean over batch),
                   if False returns per-sample loss (for DP or anomaly scoring)
         """
@@ -34,6 +36,7 @@ class HybridLoss(tf.keras.losses.Loss):
         self.binary_cols = binary_cols
         self.all_cols = all_cols
         self.lam = lam
+        self.gamma = gamma
         self.reduce = reduce
 
     def call(self, y_true, y_pred):
@@ -55,7 +58,8 @@ class HybridLoss(tf.keras.losses.Loss):
             -x_bin * tf.math.log(x_hat_bin) - (1 - x_bin) * tf.math.log(1 - x_hat_bin), axis=1
         )  # [batch_size]
 
-        recon_loss = mse_loss + ce_loss  # [batch_size]
+        # Compute reconstruction loss as the weighted sum of MSE and cross-entropy errors
+        recon_loss = self.gamma * mse_loss + (1 - self.gamma) * ce_loss
 
         # L2 regularization term (shared across batch)
         l2_reg = tf.add_n([
@@ -78,12 +82,14 @@ class AutoencoderTrainer:
                  hidden_dims=[64, 32],
                  learning_rate=1e-3,
                  lam=1e-4,
+                 gamma=0.2,
                  max_epochs=100,
                  patience_limit=10,
                  batch_size=64,
                  activation='relu',
                  dropout_rate=None,
-                 verbose=True):
+                 verbose=True,
+                 plot_losses=False):
         """
         Initializes the trainer and constructs the encoder-decoder architecture.
         Parameters:
@@ -92,13 +98,16 @@ class AutoencoderTrainer:
         - binary_cols: list of str, list of column names corresponding to binary features (used for cross-entropy loss).
         - all_cols: list or pd.Index, complete list of all input feature names; used for column indexing.
         - hidden_dims: list of int, default = [64, 32], sizes of the hidden layers for the encoder. The decoder will mirror this structure.
-        - activation: str, default = 'relu', activation function to use in each hidden layer.
-        - dropout_rate: float or None, default = None, if not None, applies dropout with the specified rate after each hidden layer.
         - learning_rate: float, default = 1e-3, learning rate for the optimizer.
         - lam: float, default = 1e-4, L2 regularization coefficient.
-        - batch_size: int, default = 64, mini-batch size used during training.
+        - gamma: float, range [0, 1], weight of MSE
         - max_epochs: int, default = 100, maximum number of epochs to train the autoencoder.
         - patience_limit: int, default = 10, number of epochs to wait for improvement in validation loss before early stopping.
+        - batch_size: int, default = 64, mini-batch size used during training.
+        - activation: str, default = 'relu', activation function to use in each hidden layer.
+        - dropout_rate: float or None, default = None, if not None, applies dropout with the specified rate after each hidden layer.
+        - verbose: boolean, default = True, if True, print log message.
+        - plot_losses: boolean, default = False, if True, plot the trajectory of the losses
         """
         self.input_dim = input_dim
         self.real_cols = real_cols
@@ -107,12 +116,14 @@ class AutoencoderTrainer:
         self.hidden_dims = hidden_dims
         self.learning_rate = learning_rate
         self.lam = lam
+        self.gamma = gamma
         self.max_epochs = max_epochs
         self.patience_limit = patience_limit
         self.batch_size = batch_size
         self.activation = activation
         self.dropout_rate = dropout_rate
         self.verbose = verbose
+        self.plot_losses = plot_losses
 
         # Set seeds
         self.seed = 42
@@ -132,25 +143,75 @@ class AutoencoderTrainer:
         - decoder: tf.keras.Sequential, the decoder model, which reconstructs the input from the encoded representation. 
         Ends with a sigmoid-activated output layer to produce values in [0, 1].
         """
-        encoder = tf.keras.Sequential()
+        # --- Encoder ---
+        encoder = tf.keras.Sequential(name='encoder')
         for h_dim in self.hidden_dims:
-            encoder.add(tf.keras.layers.Dense(h_dim
-                                              , activation=self.activation
-                                              , kernel_initializer='glorot_uniform'))
+            encoder.add(tf.keras.layers.Dense(
+                h_dim,
+                activation=self.activation,
+                kernel_initializer='glorot_uniform'
+            ))
             if self.dropout_rate is not None:
                 encoder.add(tf.keras.layers.Dropout(rate=self.dropout_rate))
 
-        decoder = tf.keras.Sequential()
+        # --- Decoder hidden layers ---
+        decoder_input = tf.keras.Input(shape=(self.hidden_dims[-1],), name='decoder_input')
+        x = decoder_input
         for h_dim in reversed(self.hidden_dims[:-1]):
-            decoder.add(tf.keras.layers.Dense(h_dim
-                                              , activation=self.activation
-                                              , kernel_initializer='glorot_uniform'))
+            x = tf.keras.layers.Dense(
+                h_dim,
+                activation=self.activation,
+                kernel_initializer='glorot_uniform'
+            )(x)
             if self.dropout_rate is not None:
-                decoder.add(tf.keras.layers.Dropout(rate=self.dropout_rate))
+                x = tf.keras.layers.Dropout(rate=self.dropout_rate)(x)
 
-        decoder.add(tf.keras.layers.Dense(self.input_dim, activation='sigmoid', kernel_initializer='glorot_uniform'))
+        # --- Output layers with ordered activations ---
+        real_dim = len(self.real_cols)
+        binary_dim = len(self.binary_cols)
+
+        real_output = tf.keras.layers.Dense(
+            real_dim, activation='linear', name='real_output'
+        )(x)
+
+        binary_output = tf.keras.layers.Dense(
+            binary_dim, activation='sigmoid', name='binary_output'
+        )(x)
+
+        # Concatenate in specified order: [real, binary]
+        # Map from column name to output tensor
+        output_dict = {col: real_output[:, i] for i, col in enumerate(self.real_cols)}
+        output_dict.update({col: binary_output[:, i] for i, col in enumerate(self.binary_cols)})
+
+        # Stack columns in the order of self.all_cols
+        ordered_outputs = [tf.expand_dims(output_dict[col], axis=-1) for col in self.all_cols]
+        full_output = tf.keras.layers.Concatenate(name='decoder_output')(ordered_outputs)
+
+        decoder = tf.keras.Model(
+            inputs=decoder_input,
+            outputs=full_output,
+            name='decoder'
+        )
 
         return encoder, decoder
+    
+    def track_loss(self, train_loss_history, val_loss_history):
+        """
+        Plots the training and validation loss histories over the last 100 epochs.
+
+        Parameters:
+        - train_loss_history: list of float, training loss at each epoch.
+        - val_loss_history: list of float, validation loss at each epoch.
+        """
+        plt.plot(train_loss_history[-100:], label='Train Loss')
+        plt.plot(val_loss_history[-100:], label='Val Loss')
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.title("Training and Validation Loss")
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
 
     def train(self, x_train, x_val):
         """
@@ -169,35 +230,77 @@ class AutoencoderTrainer:
                             real_cols=self.real_cols,
                             binary_cols=self.binary_cols,
                             all_cols=self.all_cols,
-                            lam=self.lam)
+                            lam=self.lam,
+                            gamma=self.gamma,
+                            reduce=False) # Not reduce to calculate per-example loss
 
-        # Compile model
-        self.autoencoder.compile(optimizer=optimizer, loss=loss_fn)
+        # Prepare data for TensorFlow
+        train_data = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
+        train_data = train_data.batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
+        val_data = tf.convert_to_tensor(x_val.values.astype(np.float32))
 
-        # Early stopping callback
-        early_stop = tf.keras.callbacks.EarlyStopping(
-            monitor="val_loss",
-            patience=self.patience_limit,
-            restore_best_weights=True,
-            verbose=1 if self.verbose else 0
-        )
+        # Initialize the training
+        train_loss_history = []
+        val_loss_history = []
+        best_val_loss = float('inf')
+        patience = 0
+        best_weights = None
+        train_loss_tracker = tf.keras.metrics.Mean(name="train_loss")
+        val_loss_tracker = tf.keras.metrics.Mean(name="val_loss")
 
-        # Fit model
-        self.autoencoder.fit(
-            x=x_train.values.astype(np.float32),
-            y=x_train.values.astype(np.float32),
-            validation_data=(x_val.values.astype(np.float32), x_val.values.astype(np.float32)),
-            batch_size=self.batch_size,
-            epochs=self.max_epochs,
-            shuffle=True,
-            callbacks=[early_stop],
-            verbose=1 if self.verbose else 0
-        )
+        # Define a TensorFlow function for each training step
+        @tf.function
+        def train_step(x_batch):
+            with tf.GradientTape() as tape:
+                recon = self.autoencoder(x_batch, training=True)
+                per_batch_loss = loss_fn(x_batch, recon)
+                mean_loss = tf.reduce_mean(per_batch_loss)
+            grads = tape.gradient(mean_loss, self.autoencoder.trainable_variables)
+            optimizer.apply_gradients(zip(grads, self.autoencoder.trainable_variables))
+            train_loss_tracker.update_state(mean_loss)
 
+        # Loop over the epoch
+        for epoch in range(self.max_epochs):
+
+            # Reset metric states at the start of the epoch
+            train_loss_tracker.reset_state()
+            val_loss_tracker.reset_state()
+
+            # Loop over mini-batches
+            for x_batch in train_data:
+                train_step(x_batch)
+            
+            # Validation loss
+            val_recon = self.autoencoder(val_data, training=False)
+            val_loss_tracker.update_state(tf.reduce_mean(loss_fn(val_data, val_recon)))
+
+            if self.verbose:
+                print(f"Epoch {epoch+1} → Train Loss: {train_loss_tracker.result():.4f}, Val Loss: {val_loss_tracker.result():.4f}")
+            train_loss_history.append(train_loss_tracker.result().numpy())
+            val_loss_history.append(val_loss_tracker.result().numpy())
+
+            # Early stopping
+            if val_loss_tracker.result() < best_val_loss:
+                best_val_loss = val_loss_tracker.result()
+                best_weights = self.autoencoder.get_weights()
+                patience = 0
+            else:
+                patience += 1
+                if patience >= self.patience_limit:
+                    if self.verbose:
+                        print("Early stopping triggered.")
+                    break
+
+        self.autoencoder.set_weights(best_weights)
+        
+        # Plot the trajectory of the losses
+        if self.plot_losses:
+            self.track_loss(train_loss_history, val_loss_history)
+        
         return self.autoencoder
 
 class AnomalyDetector:
-    def __init__(self, model, real_cols, binary_cols, all_cols, lam=1e-4):
+    def __init__(self, model, real_cols, binary_cols, all_cols, lam=1e-4, gamma=0.2):
         """
         Initializes the anomaly detector with a trained autoencoder model.
 
@@ -207,13 +310,15 @@ class AnomalyDetector:
         - binary_cols: list of str, binary feature names
         - all_cols: list or pd.Index, all input feature names
         - lam: float, L2 regularization coefficient
+        - gamma: float, range [0, 1], weight of MSE
         """
         self.model = model
         self.real_cols = real_cols
         self.binary_cols = binary_cols
         self.all_cols = all_cols
         self.lam = lam
-        self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, reduce=False)
+        self.gamma = gamma
+        self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
     def compute_anomaly_scores(self, x):
         """
@@ -242,7 +347,6 @@ class AnomalyDetector:
 
         Returns:
         - y_pred: np.ndarray of shape (n_samples,), binary predictions
-        - scores: np.ndarray of shape (n_samples,), reconstruction losses
         """
         y_pred = (scores > threshold).astype(int)
         return y_pred
@@ -257,7 +361,7 @@ class AnomalyDetector:
         - scores: np.ndarray of shape (n_samples,), reconstruction losses
 
         Returns:
-        - metrics: dict with precision, recall, F1, and AUC
+        - metrics: dict with accuracy, precision, recall, F1, and AUC
         """
         precision, recall, f1, _ = precision_recall_fscore_support(y_true, y_pred, average='binary')
         auc = roc_auc_score(y_true, scores)
@@ -271,17 +375,26 @@ class AnomalyDetector:
         }
     
 class AutoencoderTuner:
-    def __init__(self, x_train, x_train_val, x_val, y_val, real_cols, binary_cols, all_cols, verbose=True):
+    def __init__(self, x_train, x_train_val,
+                 x_val, y_val,
+                 real_cols, binary_cols, all_cols,
+                 activation='relu',
+                 max_epochs=100,
+                 patience_limit=10):
         """
         Initializes the hyperparameter tuner for the autoencoder.
 
         Parameters:
         - x_train: pd.DataFrame, training data (normal-only)
+        - x_train_val: pd.DataFrame, training + validation data (used during model fitting)
         - x_val: pd.DataFrame, validation data (mixed, labeled)
         - y_val: np.ndarray, ground truth labels for validation set
         - real_cols: list of str, real-valued feature names
         - binary_cols: list of str, binary-valued feature names
         - all_cols: list or pd.Index of all input feature names
+        - activation: str, activation function used in the autoencoder
+        - max_epochs: int, maximum number of training epochs
+        - patience_limit: int, early stopping patience threshold
         """
         self.x_train = x_train
         self.x_train_val = x_train_val
@@ -290,7 +403,9 @@ class AutoencoderTuner:
         self.real_cols = real_cols
         self.binary_cols = binary_cols
         self.all_cols = all_cols
-        self.verbose = verbose
+        self.activation = activation
+        self.max_epochs = max_epochs
+        self.patience_limit = patience_limit
 
     def tune(self, param_grid, metric="auc"):
         """
@@ -303,6 +418,7 @@ class AutoencoderTuner:
         - best_model: trained autoencoder model with best AUC
         - best_params: dict, hyperparameters corresponding to best model
         - best_auc: float, AUC score on validation set
+        - results_df: pd.DataFrame, the table that contains all the hyperparameter information
         """
         results = []
         best_metric_val = -np.inf
@@ -324,12 +440,14 @@ class AutoencoderTuner:
                 hidden_dims=params.get('hidden_dims', [64]),
                 learning_rate=params.get('learning_rate', 1e-2),
                 lam=params.get('lam', 1e-3),
-                max_epochs=params.get('max_epochs', 100),
-                patience_limit=params.get('patience_limit', 10),
+                gamma=params.get('gamma', 0.5),
+                max_epochs=self.max_epochs,
+                patience_limit=self.patience_limit,
                 batch_size=params.get('batch_size', 64),
-                activation=params.get('activation', 'relu'),
+                activation=self.activation,
                 dropout_rate=params.get('dropout_rate', None),
-                verbose=self.verbose
+                verbose=False,
+                plot_losses=False
             )
             model = trainer.train(self.x_train, self.x_train_val)
 
