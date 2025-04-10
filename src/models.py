@@ -9,6 +9,8 @@ from tensorflow_privacy.privacy.optimizers.dp_optimizer_keras import DPKerasSGDO
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score
 from itertools import product
 import matplotlib.pyplot as plt
+from collections import defaultdict
+
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
@@ -131,10 +133,10 @@ class AutoencoderTrainer:
         tf.random.set_seed(self.seed)
 
         # Build model
-        self.encoder, self.decoder = self.build_autoencoder()
+        self.encoder, self.decoder = self._build_autoencoder()
         self.autoencoder = tf.keras.Sequential([self.encoder, self.decoder])
 
-    def build_autoencoder(self):
+    def _build_autoencoder(self):
         """
         Constructs encoder and decoder networks with optional dropout.
 
@@ -195,7 +197,7 @@ class AutoencoderTrainer:
 
         return encoder, decoder
     
-    def track_loss(self, train_loss_history, val_loss_history):
+    def _track_loss(self, train_loss_history, val_loss_history):
         """
         Plots the training and validation loss histories over the last 100 epochs.
 
@@ -295,7 +297,7 @@ class AutoencoderTrainer:
         
         # Plot the trajectory of the losses
         if self.plot_losses:
-            self.track_loss(train_loss_history, val_loss_history)
+            self._track_loss(train_loss_history, val_loss_history)
         
         return self.autoencoder
 
@@ -320,7 +322,7 @@ class AnomalyDetector:
         self.gamma = gamma
         self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
-    def compute_anomaly_scores(self, x):
+    def _compute_anomaly_scores(self, x):
         """
         Computes per-sample reconstruction losses using HybridLoss.
 
@@ -337,7 +339,7 @@ class AnomalyDetector:
             return np.array([per_sample_loss.numpy()])
         return per_sample_loss.numpy()
 
-    def detect(self, scores, threshold=0.01):
+    def _detect(self, scores, threshold=0.01):
         """
         Detects anomalies in the input based on the reconstruction loss.
 
@@ -351,7 +353,7 @@ class AnomalyDetector:
         y_pred = (scores > threshold).astype(int)
         return y_pred
 
-    def evaluate(self, y_pred, y_true, scores):
+    def _evaluate(self, y_pred, y_true, scores):
         """
         Evaluates anomaly detection performance on a labeled test set.
 
@@ -407,82 +409,128 @@ class AutoencoderTuner:
         self.max_epochs = max_epochs
         self.patience_limit = patience_limit
 
-    def tune(self, param_grid, metric="auc"):
+    def grid_tune(self, param_grid, metric="auc"):
         """
         Performs grid search over the parameter grid.
-
+ 
         Parameters:
         - param_grid: dict, keys are parameter names, values are lists of candidate values
-
+ 
         Returns:
-        - best_model: trained autoencoder model with best AUC
+        - best_model: trained autoencoder model with best validation score
         - best_params: dict, hyperparameters corresponding to best model
-        - best_auc: float, AUC score on validation set
-        - results_df: pd.DataFrame, the table that contains all the hyperparameter information
+        - best_metric_val: float, best score on validation set
+        - results_df: pd.DataFrame, contains all hyperparameter results
         """
         results = []
         best_metric_val = -np.inf
         best_model = None
         best_params = None
-
-        # Grid search over remaining parameters
+ 
         keys, values = zip(*param_grid.items())
         for combination in product(*values):
             params = dict(zip(keys, combination))
             print(f"\nTraining with: {params}")
-
-            # Train autoencoder
-            trainer = AutoencoderTrainer(
-                input_dim=self.x_train.shape[1],
-                real_cols=self.real_cols,
-                binary_cols=self.binary_cols,
-                all_cols=self.all_cols,
-                hidden_dims=params.get('hidden_dims', [64]),
-                learning_rate=params.get('learning_rate', 1e-2),
-                lam=params.get('lam', 1e-3),
-                gamma=params.get('gamma', 0.5),
-                max_epochs=self.max_epochs,
-                patience_limit=self.patience_limit,
-                batch_size=params.get('batch_size', 64),
-                activation=self.activation,
-                dropout_rate=params.get('dropout_rate', None),
-                verbose=False,
-                plot_losses=False
-            )
-            model = trainer.train(self.x_train, self.x_train_val)
-
-            # Calculate scores
-            detector = AnomalyDetector(
-                    model=model,
-                    real_cols=self.real_cols,
-                    binary_cols=self.binary_cols,
-                    all_cols=self.all_cols,
-                    lam=params['lam']
-                )
-            scores = detector.compute_anomaly_scores(self.x_val)
-
-            # Evaluate over threshold grid
-            for q in np.linspace(0.70, 0.95, 5):
-                threshold = np.quantile(scores, q)
-                y_pred = detector.detect(scores, threshold)
-                eval_scores = detector.evaluate(y_pred, self.y_val, scores)
-                metric_val = eval_scores[metric]
-
-                print(f"  Threshold {threshold:.4f} → {metric.capitalize()} = {metric_val:.4f}")
-
-                if metric_val > best_metric_val:
-                    best_metric_val = metric_val
-                    best_model = model
-                    best_params = params.copy()
-                    best_params['threshold'] = threshold
-                
-                results.append({**params, 'threshold': threshold, **eval_scores})
-
+ 
+            model = self._train_model(params)
+            metric_val = self._evaluate_model(model, metric)
+            print(f"  {metric.capitalize()} = {metric_val:.4f}")
+ 
+            if metric_val > best_metric_val:
+                best_metric_val = metric_val
+                best_model = model
+                best_params = params.copy()
+ 
+            results.append({**params, metric: metric_val})
+ 
         print("\nBest parameters found:")
         for k, v in best_params.items():
             print(f"- {k}: {v}")
         print(f"Best validation {metric.capitalize()}: {best_metric_val:.4f}")
-
+ 
         results_df = pd.DataFrame(results)
-
         return best_model, best_params, best_metric_val, results_df
+    
+    def sequential_tune(self, param_grid, metric="auc", random_size=5):
+        random.seed(123)
+        keys = list(param_grid.keys())
+        best_params = {}
+        result_records = []
+ 
+        for i, key in enumerate(keys):
+            print(f"\nTuning: {key}")
+            scores_for_key = []
+ 
+            # Define the search space excluding the current key
+            context_keys = [k for k in keys if k != key]
+            context_space = {
+                k: [best_params[k]] if k in best_params else param_grid[k]
+                for k in context_keys
+            }
+ 
+            # Generate shared context configs
+            all_contexts = list(product(*context_space.values()))
+            random.shuffle(all_contexts)
+            sampled_contexts = all_contexts[:min(random_size, len(all_contexts))]  # sample up to 5
+ 
+            # Build full config for each value of the current key
+            for value in param_grid[key]:
+                print("\tValue:", value)
+                trial_scores = []
+ 
+                for context_values in sampled_contexts:
+                    # Generate the config dictionary
+                    config = {k: v for k, v in zip(context_keys, context_values)}
+                    config[key] = value # Add tuned hyperparameter
+                    # Train and evaluate model
+                    model = self._train_model(config)
+                    eval_rslt = self._evaluate_model(model, metric)
+                    scores = eval_rslt[1] # Model performance metrics
+                    config["threshold"] = eval_rslt[0] # Add best threshold results
+                    # Append the chosen metric value
+                    trial_scores.append(scores[metric])
+                    print("\t\t", config, "-", scores[metric])
+                    # Append the tuned results to result_records 
+                    result_records.append({'order': i + 1, 'tuned_param': key, **config, **scores})
+
+                # Calculate the mean score
+                mean_score = np.mean(trial_scores)
+                scores_for_key.append((value, mean_score))
+ 
+            # Select best value for this hyperparameter
+            best_value = max(scores_for_key, key=lambda x: x[1])[0]
+            best_params[key] = best_value
+            print(f"→ Best {key}: {best_value}")
+ 
+        # Final model with tuned parameters
+        final_model = self._train_model(best_params)
+        final_eval = self._evaluate_model(final_model, metric)
+        best_params["threshold"] = final_eval[0]
+        final_score = final_eval[1]
+ 
+        return final_model, best_params, final_score, pd.DataFrame(result_records)
+    
+    def _train_model(self, params):
+        trainer = AutoencoderTrainer(
+            input_dim=self.x_train.shape[1],
+            real_cols=self.real_cols,
+            binary_cols=self.binary_cols,
+            all_cols=self.all_cols,
+            activation=self.activation,
+            max_epochs=self.max_epochs,
+            patience_limit=self.patience_limit,
+            verbose=False,
+            **params
+        )
+        return trainer.train(self.x_train_val, self.x_val)
+
+    def _evaluate_model(self, model, metric):
+        detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols)
+        scores = detector._compute_anomaly_scores(self.x_val)
+        eval_scores = []
+        for q in np.linspace(0.70, 0.95, 5):
+            threshold = np.quantile(scores, q)
+            y_pred = detector._detect(scores, threshold)
+            eval_scores.append((threshold, detector._evaluate(y_pred, self.y_val, scores)))
+        max_score = max(eval_scores, key=lambda x: x[1][metric])
+        return max_score[0], max_score[1]
