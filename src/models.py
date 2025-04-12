@@ -1,16 +1,20 @@
 # Import relevant packages
 import pandas as pd
+import os
 import warnings
 import numpy as np
 from IPython.display import display
 import tensorflow as tf
 import random
-from tensorflow_privacy.privacy.optimizers.dp_optimizer_keras import DPKerasSGDOptimizer
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score
 from itertools import product
 import matplotlib.pyplot as plt
-from collections import defaultdict
-
+import tensorflow.keras.backend as K
+from scipy.stats import trim_mean
+from datetime import datetime
+from skopt import Optimizer
+from skopt.space import Real, Integer, Categorical
+ 
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
@@ -153,7 +157,7 @@ class AutoencoderTrainer:
                 activation=self.activation,
                 kernel_initializer='glorot_uniform'
             ))
-            if self.dropout_rate is not None:
+            if self.dropout_rate is not None and not np.isnan(self.dropout_rate):
                 encoder.add(tf.keras.layers.Dropout(rate=self.dropout_rate))
 
         # --- Decoder hidden layers ---
@@ -165,7 +169,7 @@ class AutoencoderTrainer:
                 activation=self.activation,
                 kernel_initializer='glorot_uniform'
             )(x)
-            if self.dropout_rate is not None:
+            if self.dropout_rate is not None and not np.isnan(self.dropout_rate):
                 x = tf.keras.layers.Dropout(rate=self.dropout_rate)(x)
 
         # --- Output layers with ordered activations ---
@@ -238,7 +242,7 @@ class AutoencoderTrainer:
 
         # Prepare data for TensorFlow
         train_data = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
-        train_data = train_data.batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
+        train_data = train_data.cache().batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
         val_data = tf.convert_to_tensor(x_val.values.astype(np.float32))
 
         # Initialize the training
@@ -382,7 +386,8 @@ class AutoencoderTuner:
                  real_cols, binary_cols, all_cols,
                  activation='relu',
                  max_epochs=100,
-                 patience_limit=10):
+                 patience_limit=10,
+                 version=None):
         """
         Initializes the hyperparameter tuner for the autoencoder.
 
@@ -408,107 +413,10 @@ class AutoencoderTuner:
         self.activation = activation
         self.max_epochs = max_epochs
         self.patience_limit = patience_limit
-
-    def grid_tune(self, param_grid, metric="auc"):
-        """
-        Performs grid search over the parameter grid.
- 
-        Parameters:
-        - param_grid: dict, keys are parameter names, values are lists of candidate values
- 
-        Returns:
-        - best_model: trained autoencoder model with best validation score
-        - best_params: dict, hyperparameters corresponding to best model
-        - best_metric_val: float, best score on validation set
-        - results_df: pd.DataFrame, contains all hyperparameter results
-        """
-        results = []
-        best_metric_val = -np.inf
-        best_model = None
-        best_params = None
- 
-        keys, values = zip(*param_grid.items())
-        for combination in product(*values):
-            params = dict(zip(keys, combination))
-            print(f"\nTraining with: {params}")
- 
-            model = self._train_model(params)
-            metric_val = self._evaluate_model(model, metric)
-            print(f"  {metric.capitalize()} = {metric_val:.4f}")
- 
-            if metric_val > best_metric_val:
-                best_metric_val = metric_val
-                best_model = model
-                best_params = params.copy()
- 
-            results.append({**params, metric: metric_val})
- 
-        print("\nBest parameters found:")
-        for k, v in best_params.items():
-            print(f"- {k}: {v}")
-        print(f"Best validation {metric.capitalize()}: {best_metric_val:.4f}")
- 
-        results_df = pd.DataFrame(results)
-        return best_model, best_params, best_metric_val, results_df
-    
-    def sequential_tune(self, param_grid, metric="auc", random_size=5):
-        random.seed(123)
-        keys = list(param_grid.keys())
-        best_params = {}
-        result_records = []
- 
-        for i, key in enumerate(keys):
-            print(f"\nTuning: {key}")
-            scores_for_key = []
- 
-            # Define the search space excluding the current key
-            context_keys = [k for k in keys if k != key]
-            context_space = {
-                k: [best_params[k]] if k in best_params else param_grid[k]
-                for k in context_keys
-            }
- 
-            # Generate shared context configs
-            all_contexts = list(product(*context_space.values()))
-            random.shuffle(all_contexts)
-            sampled_contexts = all_contexts[:min(random_size, len(all_contexts))]  # sample up to 5
- 
-            # Build full config for each value of the current key
-            for value in param_grid[key]:
-                print("\tValue:", value)
-                trial_scores = []
- 
-                for context_values in sampled_contexts:
-                    # Generate the config dictionary
-                    config = {k: v for k, v in zip(context_keys, context_values)}
-                    config[key] = value # Add tuned hyperparameter
-                    # Train and evaluate model
-                    model = self._train_model(config)
-                    eval_rslt = self._evaluate_model(model, metric)
-                    scores = eval_rslt[1] # Model performance metrics
-                    config["threshold"] = eval_rslt[0] # Add best threshold results
-                    # Append the chosen metric value
-                    trial_scores.append(scores[metric])
-                    print("\t\t", config, "-", scores[metric])
-                    # Append the tuned results to result_records 
-                    result_records.append({'order': i + 1, 'tuned_param': key, **config, **scores})
-
-                # Calculate the mean score
-                mean_score = np.mean(trial_scores)
-                scores_for_key.append((value, mean_score))
- 
-            # Select best value for this hyperparameter
-            best_value = max(scores_for_key, key=lambda x: x[1])[0]
-            best_params[key] = best_value
-            print(f"→ Best {key}: {best_value}")
- 
-        # Final model with tuned parameters
-        final_model = self._train_model(best_params)
-        final_eval = self._evaluate_model(final_model, metric)
-        best_params["threshold"] = final_eval[0]
-        final_score = final_eval[1]
- 
-        return final_model, best_params, final_score, pd.DataFrame(result_records)
+        if not version:
+            self.version = datetime.now().strftime("%Y%m%d%H%M")
+        else:
+            self.version = version
     
     def _train_model(self, params):
         trainer = AutoencoderTrainer(
@@ -524,13 +432,229 @@ class AutoencoderTuner:
         )
         return trainer.train(self.x_train_val, self.x_val)
 
-    def _evaluate_model(self, model, metric):
-        detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols)
+    def _evaluate_model(self, model, metric, lam=1e-4, gamma=0.2):
+        detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols, lam=lam, gamma=gamma)
         scores = detector._compute_anomaly_scores(self.x_val)
         eval_scores = []
         for q in np.linspace(0.70, 0.95, 5):
             threshold = np.quantile(scores, q)
             y_pred = detector._detect(scores, threshold)
             eval_scores.append((threshold, detector._evaluate(y_pred, self.y_val, scores)))
+        if metric == 'auc':
+            metric = 'f1_score' # if the chosen metric for hyperparameter tuning is 'auc,' use f1 for threshold instead since auc will be the same
         max_score = max(eval_scores, key=lambda x: x[1][metric])
         return max_score[0], max_score[1]
+
+    def sequential_tune(self, param_grid, metric="auc", random_size=5):
+        """
+        Performs sequential hyperparameter tuning over the parameter grid.
+
+        Parameters:
+        - param_grid: dict, keys are parameter names, values are lists of candidate values
+        - metric: str, performance metric used to evaluate models (default "auc")
+        - random_size: int, number of context samples to use for evaluation (default 5)
+
+        Returns:
+        - best_model: trained autoencoder model with best validation score
+        - best_params: dict, best-performing hyperparameters including threshold
+        - final_score: dict, evaluation metrics of best model
+        """
+        rng = random.Random(123)
+        keys = list(param_grid.keys())
+        best_params = {}
+        final_score = None
+
+        # Set up logging path for saving tuning results
+        checkpoint_path = f"experiments/hyperparam_tune/baseline/seq_{metric}_{self.version}.csv"
+        
+        # Initialize log file and evaluated set if checkpoint doesn't exist
+        if not os.path.exists(checkpoint_path):
+            with open(checkpoint_path, "w") as f:
+                f.write("order,tuned_param,value,metric,mean_score\n")
+            evaluated = dict()
+        else:
+            # Load previously evaluated configurations
+            prev_df = pd.read_csv(checkpoint_path)
+            evaluated = {
+                (row['tuned_param']
+                 , str(row['value'])
+                 ): row['mean_score']
+                for _, row in prev_df.iterrows()
+            }
+            print(evaluated)
+            # Retrieve best values per parameter from past results
+            grouped = prev_df.groupby('tuned_param')
+            for param, group in grouped:
+                best_value = group.loc[group['mean_score'].idxmax(), 'value']
+                best_params[param] = best_value
+
+        # Loop through each hyperparameter key to tune
+        for i, key in enumerate(keys):
+            print(f"\nTuning: {key}")
+            scores_for_key = []
+
+            # Build the contextual space excluding the current key
+            context_keys = [k for k in keys if k != key]
+            context_space = {
+                k: [best_params[k]] if k in best_params else param_grid[k]
+                for k in context_keys
+            }
+
+            # Generate a random subset of context configurations
+            all_contexts = list(product(*context_space.values()))
+            rng.shuffle(all_contexts)
+            sampled_contexts = all_contexts[:min(random_size, len(all_contexts))]
+
+            # Evaluate each candidate value of the current hyperparameter
+            for value in param_grid[key]:
+                print("\tValue:", value)
+
+                key_value = (key, str(value) if value else 'nan')
+                if key_value in evaluated.keys():
+                    print(f"\tSkipping previously evaluated: {value}")
+                    scores_for_key.append((value, evaluated[key_value]))
+                    continue
+
+                trial_scores = []
+
+                # Evaluate each value in sampled contexts
+                for context_values in sampled_contexts:
+                    config = {k: v for k, v in zip(context_keys, context_values)}
+                    config[key] = value  # Insert the value being tuned
+
+                    # Train and evaluate model
+                    model = self._train_model(config)
+                    eval_rslt = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
+                    scores = eval_rslt[1]
+                    config["threshold"] = eval_rslt[0]
+                    trial_scores.append(scores[metric])
+
+                    # Free memory
+                    K.clear_session()
+                    del model
+
+                # Compute mean validation score for the current value
+                mean_score = np.mean(trial_scores)
+                scores_for_key.append((value, mean_score))
+                print("\t\tMean score:", mean_score)
+
+                # Log to file
+                safe_value = str(value).replace('"', '""')  # Escape any existing double quotes
+                with open(checkpoint_path, "a") as f:
+                    f.write(f'{i + 1},{key},"{safe_value}",{metric},{mean_score}\n')
+
+            # Choose the value with the best average performance
+            best_value = max(scores_for_key, key=lambda x: x[1])[0]
+            del scores_for_key
+            best_params[key] = best_value
+            print(f"→ Best {key}: {best_value}")
+
+        # Train and evaluate final model using the best hyperparameters
+        final_model = self._train_model(best_params)
+        final_eval = self._evaluate_model(final_model, metric, lam=best_params['lam'], gamma=best_params['gamma'])
+        best_params["threshold"] = final_eval[0]
+        final_score = final_eval[1]
+
+        # Save the best model
+        final_model.save(f"models/baseline_{self.version}")
+
+        return final_model, best_params, final_score
+    
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5):
+        """
+        Performs Bayesian Optimization to tune hyperparameters using skopt.
+
+        Parameters:
+        - param_space: dict, keys are parameter names and values are lists of candidate values.
+        - metric: str, performance metric to optimize (default = "auc").
+        - n_calls: int, total number of hyperparameter evaluations (random + model-based).
+        - random_starts: int, number of initial random evaluations before using surrogate model.
+
+        Returns:
+        - final_model: trained autoencoder with best config.
+        - best_config: dict, best hyperparameter set including best threshold.
+        - final_score: dict, evaluation results of the final model.
+        - pd.DataFrame: complete results table.
+        """
+
+        # Objective function for skopt: maps hyperparameter config to negative metric score
+        def objective(params):
+            config = dict(zip(param_space.keys(), params))  # Build dictionary from params
+            try:
+                model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
+                threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
+                K.clear_session()  # Clear TensorFlow session to free memory
+                del model
+                return -scores[metric]  # skopt minimizes, so we negate the metric
+            except Exception as e:
+                print("Failed config:", config)
+                print("Error:", e)
+                return 1.0  # High penalty loss for failed trials
+
+        # Define skopt-compatible hyperparameter search space
+        skopt_space = []
+        for k, v in param_space.items():
+            if all(isinstance(i, float) for i in v):
+                skopt_space.append(Real(min(v), max(v), name=k))
+            elif all(isinstance(i, int) for i in v):
+                skopt_space.append(Integer(min(v), max(v), name=k))
+            else:
+                # Handle categorical lists (e.g., hidden_dims like [64, 32])
+                safe_values = [tuple(i) if isinstance(i, list) else i for i in v]
+                skopt_space.append(Categorical(safe_values, name=k, transform="identity"))
+
+        # Initialize the Bayesian optimizer
+        optimizer = Optimizer(dimensions=skopt_space,
+                            n_initial_points=random_starts,
+                            random_state=123)
+
+        best_score = -float("inf")     # Track the best validation score found
+        best_config = None             # Track the best hyperparameter configuration
+
+        # Prepare log file to save trial history (iteration-wise)
+        log_path = f"experiments/hyperparam_tune/baseline/bayes_{metric}_{self.version}.csv"
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        with open(log_path, "w") as f:
+            f.write(",".join(list(param_space.keys()) + [metric]) + "\n")
+
+        # Perform the optimization loop
+        for i in range(n_calls):
+            next_params = optimizer.ask()  # Suggest next set of hyperparameters
+
+            # Evaluate the proposed parameters and get corresponding loss
+            loss = objective(next_params)
+
+            optimizer.tell(next_params, loss)  # Update optimizer with the new observation
+            score = -loss                      # Convert loss back to a score
+
+            trial_config = dict(zip(param_space.keys(), next_params))  # Map params to dict
+
+            # Append current trial to results and write to log
+            safe_values = []
+            for k in param_space.keys():
+                val = str(trial_config[k])
+                if "," in val or '"' in val:
+                    val = '"' + val.replace('"', '""') + '"'  # Escape internal quotes and wrap in quotes
+                safe_values.append(val)
+
+            with open(log_path, "a") as f:
+                f.write(",".join(safe_values) + f",{score}\n")
+
+            # Update best config if this trial performs better
+            if score > best_score:
+                best_score = score
+                best_config = trial_config
+
+        # Convert tuple-valued parameters (e.g. hidden_dims) back to list for training
+        decoded_final = {
+            k: list(v) if isinstance(v, tuple) and isinstance(param_space[k][0], list) else v
+            for k, v in best_config.items()
+        }
+
+        # Retrain and evaluate the best configuration
+        final_model = self._train_model(decoded_final)
+        final_eval = self._evaluate_model(final_model, metric, lam=best_config['lam'], gamma=best_config['gamma'])
+        best_config["threshold"] = final_eval[0]  # Add threshold to the config
+        final_score = final_eval[1]               # Store the full metric dictionary
+
+        return final_model, best_config, final_score
