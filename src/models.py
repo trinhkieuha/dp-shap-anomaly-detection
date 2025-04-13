@@ -556,7 +556,7 @@ class AutoencoderTuner:
         final_score = final_eval[1]
 
         # Save the best model
-        final_model.save(f"models/baseline_{self.version}")
+        final_model.save(f"models/baseline/{self.version}")
 
         return final_model, best_params, final_score
     
@@ -656,5 +656,8 @@ class AutoencoderTuner:
         final_eval = self._evaluate_model(final_model, metric, lam=best_config['lam'], gamma=best_config['gamma'])
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
         final_score = final_eval[1]               # Store the full metric dictionary
+
+        # Save the best model
+        final_model.save(f"models/baseline/{self.version}")
 
         return final_model, best_config, final_score

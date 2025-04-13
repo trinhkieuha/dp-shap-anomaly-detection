@@ -121,7 +121,43 @@ def main():
 
         # --- Display final results ---
         print("Best parameters:", best_params)
-        print("Performance:", best_score)
+        print("Performance on the validation set:", best_score)
+
+        # --- Evaluate on the test set ---
+        # Read relevant files
+        X_test = pd.read_feather("data/processed/X_test.feather")
+        y_test = pd.read_feather("data/processed/y_test.feather")
+
+        # After training
+        detector = AnomalyDetector(
+            model=best_model,
+            real_cols=real_cols,
+            binary_cols=binary_cols,
+            all_cols=all_cols,
+            lam=best_params['lam'],
+            gamma=best_params['gamma'],
+        )
+
+        # Compute scores
+        scores = detector._compute_anomaly_scores(X_test)
+
+        # Detect
+        y_pred = detector._detect(scores, best_params['threshold'])
+
+        # Evaluate
+        metrics = detector._evaluate(y_pred, y_test, scores)
+        print("Performance on the test set:", metrics)
+
+        # Save test performance to CSV
+        results_path = "results/metrics/baseline.csv"
+        metrics["version"] = args.version
+        metrics["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if os.path.exists(results_path):
+            existing_df = pd.read_csv(results_path)
+            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True)
+        else:
+            metrics_df = pd.DataFrame([metrics])
+        metrics_df.to_csv(results_path, index=False)
 
     except Exception as e:
         # --- Log failure with timestamp and error ---

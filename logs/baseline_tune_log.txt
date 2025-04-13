@@ -1,4 +1,24 @@
 
 
-=== Run started at: 2025-04-13 00:31:44.870202 ===
-Arguments: version=202504130031, tune_method=bayesian, metric=auc, n_calls=40, random_starts=5
+=== Run started at: 2025-04-13 00:52:12.158985 ===
+Arguments: version=202504130052, tune_method=bayesian, metric=auc, n_calls=10, random_starts=5
+Run ended at: 2025-04-13 00:53:52.701752
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 00:54:37.559994 ===
+Arguments: version=202504130054, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 01:09:08.327520
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 01:11:13.593870 ===
+Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 01:19:20.469320
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 01:19:43.718323 ===
+Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 01:37:39.929748
+Status: SUCCESS
