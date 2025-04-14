@@ -4,7 +4,9 @@ import pandas as pd
 import warnings
 from datetime import datetime
 from IPython.display import display
+import numpy as np
 import argparse
+import pickle
 
 # Set up system path
 sys.dont_write_bytecode = True
@@ -119,6 +121,13 @@ def main():
                 param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts
             )
 
+        # --- Save the best hyperparameters ---
+        with open("hyperparams/baseline/{}.pkl".format(args.version), "wb") as f:
+            pickle.dump(best_params, f)
+
+        # --- Save the best model ---
+        best_model.save(f"models/baseline/{args.version}")
+
         # --- Display final results ---
         print("Best parameters:", best_params)
         print("Performance on the validation set:", best_score)
@@ -154,7 +163,7 @@ def main():
         metrics["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if os.path.exists(results_path):
             existing_df = pd.read_csv(results_path)
-            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True)
+            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("timestamp", ascending=True).drop_duplicates(subset=["version"], keep='last')
         else:
             metrics_df = pd.DataFrame([metrics])
         metrics_df.to_csv(results_path, index=False)

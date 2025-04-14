@@ -32,3 +32,60 @@ Arguments: version=202504131714, tune_method=bayesian, metric=auc, n_calls=30, r
 Arguments: version=202504131715, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
 Run ended at: 2025-04-13 17:31:52.589204
 Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 19:12:36.718649 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 19:30:45.850156
+Status: FAILED
+Error: [Errno 2] No such file or directory: 'hyperparams/202504131912.json'
+
+
+=== Run started at: 2025-04-13 19:33:46.140599 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 19:48:00.974012
+Status: FAILED
+Error: Object of type int64 is not JSON serializable
+
+
+=== Run started at: 2025-04-13 19:48:08.137346 ===
+Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-13 20:17:19.346456 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 20:31:57.082156
+Status: FAILED
+Error: Object of type int64 is not JSON serializable
+
+
+=== Run started at: 2025-04-13 20:32:04.704386 ===
+Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-13 20:32:13.699985 ===
+Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-13 20:35:57.253727 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 20:52:36.308828
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 20:58:10.655433 ===
+Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 21:10:14.869371
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 21:10:21.954531 ===
+Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 21:21:37.412742
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-13 21:21:44.243888 ===
+Arguments: version=202504131715, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
+Run ended at: 2025-04-13 21:55:03.749576
+Status: SUCCESS
