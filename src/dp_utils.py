@@ -3,13 +3,14 @@ import dp_accounting
 from absl import app
 import math
 import numpy as np
+import tensorflow_probability as tfp
 
 def add_gaussian_noise(tensor, sigma):
     
     return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
 
 class DPSGDSanitizer:
-    def __init__(self, n, batch_size, target_epsilon, epochs, delta):
+    def __init__(self, n, batch_size, target_epsilon, epochs, delta, c2=1.5):
         """
         Initializes the DPSGDSanitizer with parameters for differential privacy.
         Parameters:
@@ -22,7 +23,8 @@ class DPSGDSanitizer:
         self.accountant = self._make_accountant()
         self.target_epsilon = target_epsilon
         self.delta = delta
-        self.steps_taken = 0  # New attribute to track training steps
+        self.steps_taken = 0
+        self.c2 = c2
 
         # Compute the sampling probability
         self.q = batch_size / n  # the sampling probability
@@ -57,7 +59,7 @@ class DPSGDSanitizer:
         - float, the computed noise scale sigma.
         """
         # Calculate target noise multiplier
-        target_noise = (1.5 * self.q * math.sqrt(self.T * math.log(1 / self.delta))) / self.target_epsilon
+        target_noise = (self.c2 * self.q * math.sqrt(self.T * math.log(1 / self.delta))) / self.target_epsilon
 
         return target_noise
 
@@ -78,38 +80,27 @@ class DPSGDSanitizer:
 
         return achieved_epsilon
 
-    def sanitize(self, per_sample_grads, sigma, l2norm_bound=0.1):
+    def sanitize(self, grad, sigma, l2norm_pct=90.0):
         """
-        Sanitizes per-sample gradients using DP-SGD:
-        - Clips each individual gradient to l2norm_bound
-        - Averages the clipped gradients
-        - Adds Gaussian noise to the average
-
+        Sanitizes the gradients using the Gaussian mechanism for differential privacy.
         Parameters:
-        - per_sample_grads: tf.Tensor of shape [batch_size, ...] — gradients for a single variable
-        - sigma: float — noise multiplier
-        - l2norm_bound: float — max L2 norm for clipping
-
+        - per_sample_grads: tf.Tensor, the gradients to be sanitized.
+        - sigma: float, the noise scale for the Gaussian mechanism.
+        - l2norm_pct: float, the percentile for clipping the gradients.
         Returns:
-        - tf.Tensor — sanitized gradient (same shape as one sample)
-        """
-        # Flatten each per-sample gradient for norm computation
-        grads_flat = tf.reshape(per_sample_grads, [tf.shape(per_sample_grads)[0], -1])  # shape: [batch_size, num_params]
-        norms = tf.norm(grads_flat, axis=1)  # shape: [batch_size]
+        - tf.Tensor, the sanitized gradients.
+        """    
 
-        # Compute clipping factors
-        scaling = tf.minimum(1.0, l2norm_bound / (norms + 1e-8))  # shape: [batch_size]
-        scaling = tf.reshape(scaling, [-1] + [1] * (len(per_sample_grads.shape) - 1))  # broadcast shape
+        # Compute the L2 norms of the gradients
+        l2_norms = tf.norm(grad)
+    
+        # Compute the 90th percentile
+        l2norm_bound = tf.minimum(tfp.stats.percentile(l2_norms, l2norm_pct, interpolation='nearest'), 5)
 
-        # Clip
-        grads_clipped = per_sample_grads * scaling  # shape: [batch_size, ...]
-
-        # Average over batch
-        avg_grad = tf.reduce_mean(grads_clipped, axis=0)  # shape: [...]
-
-        # Add Gaussian noise
-        noise_stddev = sigma * l2norm_bound
-        noise = tf.random.normal(shape=tf.shape(avg_grad), stddev=noise_stddev)
-        sanitized_grad = avg_grad + noise
+        # Clip the gradients
+        grad = tf.clip_by_norm(grad, clip_norm=l2norm_bound)
+        
+        # Add noises
+        sanitized_grad = add_gaussian_noise(grad, sigma * l2norm_bound) # Add noise
 
         return sanitized_grad

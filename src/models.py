@@ -98,7 +98,8 @@ class AutoencoderTrainer:
                  dp_sgd=False,
                  target_epsilon=1,
                  delta=1e-5,
-                 l2norm_bound=1.0):
+                 l2norm_pct=90.0,
+                 c2=1.5):
         """
         Initializes the trainer and constructs the encoder-decoder architecture.
         Parameters:
@@ -121,6 +122,7 @@ class AutoencoderTrainer:
         - target_epsilon: float, default = 0.1, target epsilon for differential privacy.
         - delta: float, default = 1e-5, target delta for differential privacy.
         - l2norm_bound: float, default = 1.0, maximum L2 norm to clip gradients to (used in DP-SGD).
+        - c2: float, default = 1.5, constant used in the DPSGD sanitizer.
         """
         self.input_dim = input_dim
         self.real_cols = real_cols
@@ -140,7 +142,8 @@ class AutoencoderTrainer:
         self.dp_sgd = dp_sgd
         self.target_epsilon = target_epsilon
         self.delta = delta
-        self.l2norm_bound = l2norm_bound
+        self.l2norm_pct = l2norm_pct
+        self.c2 = c2
 
         # Set seeds
         self.seed = 42
@@ -272,60 +275,30 @@ class AutoencoderTrainer:
                                         batch_size=self.batch_size,
                                         target_epsilon=self.target_epsilon,
                                         epochs=self.max_epochs,
-                                        delta=self.delta)
+                                        delta=self.delta,
+                                        c2=self.c2)
             # Calculate sigma using the desired epsilon and delta
             noise_multiplier = sanitizer.compute_noise()
-            print(f"Noise multiplier: {noise_multiplier:.4f}")
+            if self.verbose:
+                print(f"Noise multiplier: {noise_multiplier:.4f}")
 
         # Define a TensorFlow function for each training step
         @tf.function
-        def train_step(x_batch, steps):                        
-            # Clip gradients if using DP-SGD
+        def train_step(x_batch):
+            with tf.GradientTape() as tape:
+                recon = self.autoencoder(x_batch, training=True)
+                per_batch_loss = loss_fn(x_batch, recon)
+                mean_loss = tf.reduce_mean(per_batch_loss)
+            grads = tape.gradient(mean_loss, self.autoencoder.trainable_variables)
             if self.dp_sgd:
-                # Compute per-example gradients
-                @tf.function
-                def grad_fn(x_i):
-                    with tf.GradientTape() as tape_i:
-                        x_i = tf.expand_dims(x_i, axis=0)
-                        recon_i = self.autoencoder(x_i, training=True)
-                        loss_i = tf.reduce_sum(loss_fn(x_i, recon_i))  # scalar loss
-                    grads = tape_i.gradient(loss_i, self.autoencoder.trainable_variables)
-                    grads = tf.nest.map_structure(
-                        lambda g, v: tf.zeros_like(v) if g is None else g,
-                        grads,
-                        self.autoencoder.trainable_variables
-                    )
-                    return grads
-                # Compute per-example gradients
-                per_variable_grads = tf.vectorized_map(grad_fn, x_batch)  # [batch_size, var_shape...]
-
                 sanitized_grads = []
-                # Loop over each gradient
-                for var_index, grads_i in enumerate(per_variable_grads):
-                    sanitized_grad = sanitizer.sanitize(grads_i, sigma=noise_multiplier, l2norm_bound=self.l2norm_bound)
+                for px_grad in grads:
+                    sanitized_grad = sanitizer.sanitize(px_grad, sigma=noise_multiplier, l2norm_pct=self.l2norm_pct)
                     sanitized_grads.append(sanitized_grad)
-
-                # Apply sanitized gradients
                 optimizer.apply_gradients(zip(sanitized_grads, self.autoencoder.trainable_variables))
-                
-                # Compute mean loss for logging
-                recon = self.autoencoder(x_batch, training=False)
-                mean_loss = tf.reduce_mean(loss_fn(x_batch, recon))
-
             else:
-                # Apply standard SGD
-                with tf.GradientTape() as tape:
-                    recon = self.autoencoder(x_batch, training=True) # forward pass
-                    # Compute the loss
-                    per_batch_loss = loss_fn(x_batch, recon)
-                    # Compute the mean loss over the batch
-                    mean_loss = tf.reduce_mean(per_batch_loss)
-                # Backward pass and update weights
-                grads = tape.gradient(mean_loss, self.autoencoder.trainable_variables)
-                # Apply gradients
                 optimizer.apply_gradients(zip(grads, self.autoencoder.trainable_variables))
-                
-            # Update the training loss metric
+            
             train_loss_tracker.update_state(mean_loss)
 
         # Loop over the epoch
@@ -337,7 +310,7 @@ class AutoencoderTrainer:
 
             # Loop over mini-batches
             for x_batch in train_data:
-                train_step(x_batch, epoch + 1)
+                train_step(x_batch)
             
             # Compose the privacy event
             if self.dp_sgd:
@@ -352,6 +325,7 @@ class AutoencoderTrainer:
             if self.verbose:
                 if self.dp_sgd and spent_eps > self.target_epsilon:
                     print(f"\tWARNING: achieved epsilon {spent_eps:.4f} exceeds target epsilon {self.target_epsilon:.4f}.")
+                    break
                 print(f"Epoch {epoch+1} → Train Loss: {train_loss_tracker.result():.4f}, Val Loss: {val_loss_tracker.result():.4f}")
             train_loss_history.append(train_loss_tracker.result().numpy())
             val_loss_history.append(val_loss_tracker.result().numpy())
@@ -462,7 +436,10 @@ class AutoencoderTuner:
                  activation='relu',
                  max_epochs=100,
                  patience_limit=10,
-                 version=None):
+                 version=None,
+                 dp_sgd=False,
+                 target_epsilon=1,
+                 delta=1e-5):
         """
         Initializes the hyperparameter tuner for the autoencoder.
 
@@ -477,6 +454,10 @@ class AutoencoderTuner:
         - activation: str, activation function used in the autoencoder
         - max_epochs: int, maximum number of training epochs
         - patience_limit: int, early stopping patience threshold
+        - version: str, version identifier for the tuning run
+        - dp_sgd: bool, if True, use differential privacy during training
+        - target_epsilon: float, target epsilon for differential privacy
+        - delta: float, target delta for differential privacy
         """
         self.x_train = x_train
         self.x_train_val = x_train_val
@@ -488,6 +469,9 @@ class AutoencoderTuner:
         self.activation = activation
         self.max_epochs = max_epochs
         self.patience_limit = patience_limit
+        self.dp_sgd = dp_sgd
+        self.target_epsilon = target_epsilon
+        self.delta = delta
         if not version:
             self.version = datetime.now().strftime("%Y%m%d%H%M")
         else:
@@ -511,6 +495,9 @@ class AutoencoderTuner:
             max_epochs=self.max_epochs,
             patience_limit=self.patience_limit,
             verbose=False,
+            dp_sgd=self.dp_sgd,
+            target_epsilon=self.target_epsilon,
+            delta=self.delta,
             **params
         )
         return trainer.train(self.x_train_val, self.x_val)
@@ -561,7 +548,10 @@ class AutoencoderTuner:
         final_score = None
 
         # Set up logging path for saving tuning results
-        checkpoint_path = f"experiments/hyperparam_tune/baseline/seq_{metric}_{self.version}.csv"
+        if self.dp_sgd:
+            checkpoint_path = f"experiments/hyperparam_tune/dpsgd/bayes_{metric}_{self.version}.csv"
+        else:
+            checkpoint_path = f"experiments/hyperparam_tune/baseline/seq_{metric}_{self.version}.csv"
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
         if not os.path.exists(checkpoint_path):
@@ -674,11 +664,20 @@ class AutoencoderTuner:
         def objective(params):
             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
             try:
-                model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
-                threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
-                K.clear_session()  # Clear TensorFlow session to free memory
-                del model
-                return -scores[metric]  # skopt minimizes, so we negate the metric
+                scores_list = []
+                for repeat_seed in range(3):  # Repeat 3 times
+                    tf.random.set_seed(1234 + repeat_seed)
+                    np.random.seed(1234 + repeat_seed)
+                    random.seed(1234 + repeat_seed)
+                    
+                    model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
+                    threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
+                    scores_list.append(scores[metric])
+                    K.clear_session()
+                    del model
+                
+                mean_score = np.mean(scores_list)
+                return -mean_score  # skopt minimizes, so we negate the metric
             except Exception as e:
                 print("Failed config:", config)
                 print("Error:", e)
@@ -705,7 +704,10 @@ class AutoencoderTuner:
         best_config = None             # Track the best hyperparameter configuration
 
         # Prepare log file to save trial history (iteration-wise)
-        log_path = f"experiments/hyperparam_tune/baseline/bayes_{metric}_{self.version}.csv"
+        if self.dp_sgd:
+            log_path = f"experiments/hyperparam_tune/dpsgd/bayes_{metric}_{self.version}.csv"
+        else:
+            log_path = f"experiments/hyperparam_tune/baseline/bayes_{metric}_{self.version}.csv"
         os.makedirs(os.path.dirname(log_path), exist_ok=True)
         with open(log_path, "w") as f:
             f.write(",".join(list(param_space.keys()) + [metric]) + "\n")
