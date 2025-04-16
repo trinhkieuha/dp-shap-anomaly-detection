@@ -44,3 +44,123 @@ Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, me
 
 === Run started at: 2025-04-15 23:45:54.948702 ===
 Arguments: version=202504152345, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 00:44:37.086131 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 14:18:40.893627 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 15:43:53.579159 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 15:45:24.760573 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 15:46:23.333340 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 15:48:01.084669 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 15:56:06.605467
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 15:58:56.419852 ===
+Arguments: version=202504152204, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 16:03:59.258317
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:08:42.199954 ===
+Arguments: version=202504152204, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 16:10:46.241922 ===
+Arguments: version=202504152204, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-16 16:14:35.030324 ===
+Arguments: version=202504152204, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 16:17:34.470901
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:20:25.849103 ===
+Arguments: version=202504152257, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 16:28:21.696018
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:29:56.302049 ===
+Arguments: version=202504161629, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-16 16:33:37.678874
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:34:32.433360 ===
+Arguments: version=202504161634, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-16 16:38:12.733236
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:39:44.603877 ===
+Arguments: version=202504152345, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 16:52:09.064373
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 16:52:15.711955 ===
+Arguments: version=202504161652, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=40, random_starts=5
+Run ended at: 2025-04-16 17:03:00.172049
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 17:03:04.425616 ===
+Arguments: version=202504161703, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-16 17:44:48.485732 ===
+Arguments: version=202504161703, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-16 18:03:56.550011 ===
+Arguments: version=202504161703, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-16 18:23:48.969257 ===
+Arguments: version=202504161703, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-16 18:46:31.552664 ===
+Arguments: version=202504161846, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-16 19:34:40.520628 ===
+Arguments: version=202504161846, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-16 19:54:45.085295
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 20:30:25.883464 ===
+Arguments: version=202504162030, tune_method=bayesian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-16 20:53:10.660078
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 20:57:06.435503 ===
+Arguments: version=202504162057, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-16 21:16:02.430611
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-16 21:25:29.381617 ===
+Arguments: version=202504162125, tune_method=bayesian, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5
+Run ended at: 2025-04-16 21:49:23.535450
+Status: SUCCESS

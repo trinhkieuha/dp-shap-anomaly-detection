@@ -178,6 +178,8 @@ def main():
         metrics["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if os.path.exists(results_path):
             existing_df = pd.read_csv(results_path)
+            existing_df["version"] = existing_df["version"].astype(str)
+
             metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("timestamp", ascending=True).drop_duplicates(subset=["version"], keep='last')
         else:
             metrics_df = pd.DataFrame([metrics])

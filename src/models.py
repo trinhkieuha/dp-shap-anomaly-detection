@@ -14,6 +14,9 @@ from datetime import datetime
 from skopt import Optimizer
 from skopt.space import Real, Integer, Categorical
 from src.dp_utils import DPSGDSanitizer
+import gc
+import concurrent.futures
+from joblib import Parallel, delayed
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
@@ -643,6 +646,21 @@ class AutoencoderTuner:
 
         return final_model, best_params, final_score
     
+    @staticmethod
+    def run_trial(seed, config, tuner_self, metric):
+        tf.random.set_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+
+        model = tuner_self._train_model(config)
+        threshold, scores = tuner_self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
+
+        K.clear_session()
+        del model
+        gc.collect()
+
+        return scores[metric]
+
     def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
@@ -661,27 +679,35 @@ class AutoencoderTuner:
         """
 
         # Objective function for skopt: maps hyperparameter config to negative metric score
+        """def objective(params):
+             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
+             try:
+                 model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
+                 threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
+                 K.clear_session()  # Clear TensorFlow session to free memory
+                 del model
+                 return -scores[metric]  # skopt minimizes, so we negate the metric
+             except Exception as e:
+                 print("Failed config:", config)
+                 print("Error:", e)
+                 return 1.0  # High penalty loss for failed trials"""
+        
         def objective(params):
             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
             try:
-                scores_list = []
-                for repeat_seed in range(3):  # Repeat 3 times
-                    tf.random.set_seed(1234 + repeat_seed)
-                    np.random.seed(1234 + repeat_seed)
-                    random.seed(1234 + repeat_seed)
-                    
-                    model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
-                    threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
-                    scores_list.append(scores[metric])
-                    K.clear_session()
-                    del model
-                
-                mean_score = np.mean(scores_list)
-                return -mean_score  # skopt minimizes, so we negate the metric
+                seeds = [1234 + i for i in range(3)]
+                results = Parallel(n_jobs=2)(
+                    delayed(AutoencoderTuner.run_trial)(seed, config, self, metric) for seed in seeds
+                )
+                results = [r for r in results if r is not None]
+                if len(results) == 0:
+                    return 1.0  # All failed
+                mean_score = np.mean(results)
+                return -mean_score
             except Exception as e:
                 print("Failed config:", config)
                 print("Error:", e)
-                return 1.0  # High penalty loss for failed trials
+                return 1.0
 
         # Define skopt-compatible hyperparameter search space
         skopt_space = []
