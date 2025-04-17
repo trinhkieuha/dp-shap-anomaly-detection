@@ -71,13 +71,13 @@ def main():
     # --- Start logging this run ---
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
-        log_file.write(f"\n\n=== Run started at: {start_time} ===\n")
-        info_txt = f"Arguments: version={args.version}, tune_method={args.tune_method}, epsilon={args.epsilon}, delta={args.delta}"
+        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, tune_method={args.tune_method}, epsilon={args.epsilon}, delta={args.delta}"
         if args.version == 'sequential':
             info_txt += f", metric={args.metric}, random_size={args.random_size}\n"
         else:
             info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
         log_file.write(info_txt)
+    print(info_txt)
     
     try:
         # --- Load data ---
@@ -93,15 +93,15 @@ def main():
         binary_cols = var_info[var_info["var_type"] == "binary"]["var_name"].tolist()
 
         # --- Define hyperparameter grid ---
+        learning_rate_grid = [l * float(args.epsilon) ** 1.5 for l in [0.001, 0.0005, 0.0002, 0.0001, 0.00005]]
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
-            'batch_size': [128, 256, 512],
+            'batch_size': [64, 128, 150],
             'dropout_rate': [0.0, 0.1, 0.2],
-            'learning_rate': [0.001, 0.0005, 0.0002, 0.0001],
+            'learning_rate': learning_rate_grid,
             'lam': [1e-4, 1e-3, 1e-2, 1e-1],
             'gamma': [0.2, 0.25, 0.3, 0.35],
             'l2norm_pct': [80, 90, 95],
-            'c2': [1, 1.5, 2, 2.5, 3],
         }
 
         # --- Initialize tuner object ---
@@ -115,7 +115,7 @@ def main():
             all_cols=all_cols,
             activation='relu',
             max_epochs=500,
-            patience_limit=5,
+            patience_limit=10,
             version=args.version,
             dp_sgd=True,
             target_epsilon=float(args.epsilon),
@@ -129,7 +129,7 @@ def main():
             )
         else:
             best_model, best_params, best_score = tuner.bo_tune(
-                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts
+                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=int(6-float(args.epsilon))
             )
 
         # --- Save the best hyperparameters ---
@@ -180,7 +180,7 @@ def main():
             existing_df = pd.read_csv(results_path)
             existing_df["version"] = existing_df["version"].astype(str)
 
-            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("timestamp", ascending=True).drop_duplicates(subset=["version"], keep='last')
+            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("version", ascending=True).drop_duplicates(subset=["version"], keep='last')
         else:
             metrics_df = pd.DataFrame([metrics])
         metrics_df.to_csv(results_path, index=False)

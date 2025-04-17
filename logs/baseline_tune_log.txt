@@ -89,3 +89,19 @@ Status: SUCCESS
 Arguments: version=202504131715, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
 Run ended at: 2025-04-13 21:55:03.749576
 Status: SUCCESS
+
+
+=== Run started at: 2025-04-17 22:05:50.551497 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-17 22:22:20.078759 ===
+Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-17 22:34:02.257295
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-17 22:38:26.842795 ===
+Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-17 22:47:16.028867
+Status: SUCCESS

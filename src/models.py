@@ -102,7 +102,9 @@ class AutoencoderTrainer:
                  target_epsilon=1,
                  delta=1e-5,
                  l2norm_pct=90.0,
-                 c2=1.5):
+                 save_privacy_tracking=False,
+                 version=None,
+                 ):
         """
         Initializes the trainer and constructs the encoder-decoder architecture.
         Parameters:
@@ -124,8 +126,9 @@ class AutoencoderTrainer:
         - dp_sgd: boolean, default = False, if True, use DP-SGD for training.
         - target_epsilon: float, default = 0.1, target epsilon for differential privacy.
         - delta: float, default = 1e-5, target delta for differential privacy.
-        - l2norm_bound: float, default = 1.0, maximum L2 norm to clip gradients to (used in DP-SGD).
-        - c2: float, default = 1.5, constant used in the DPSGD sanitizer.
+        - l2norm_pct: float, default = 90.0, percentile for clipping the gradients.
+        - save_privacy_tracking: boolean, default = False, if True, save the privacy tracking information.
+        - version: str, default = None, version identifier for the training run.
         """
         self.input_dim = input_dim
         self.real_cols = real_cols
@@ -143,10 +146,18 @@ class AutoencoderTrainer:
         self.verbose = verbose
         self.plot_losses = plot_losses
         self.dp_sgd = dp_sgd
-        self.target_epsilon = target_epsilon
-        self.delta = delta
-        self.l2norm_pct = l2norm_pct
-        self.c2 = c2
+        if not dp_sgd:
+            self.target_epsilon = None
+            self.delta = None
+            self.l2norm_pct = None
+            self.save_privacy_tracking = False
+        else:
+            self.target_epsilon = target_epsilon
+            self.delta = delta
+            self.l2norm_pct = l2norm_pct
+            self.save_privacy_tracking = save_privacy_tracking
+        if save_privacy_tracking:
+            self.version = version if version else datetime.now().strftime("%Y%m%d%H%M")
 
         # Set seeds
         self.seed = 42
@@ -279,11 +290,17 @@ class AutoencoderTrainer:
                                         target_epsilon=self.target_epsilon,
                                         epochs=self.max_epochs,
                                         delta=self.delta,
-                                        c2=self.c2)
+                                        )
             # Calculate sigma using the desired epsilon and delta
-            noise_multiplier = sanitizer.compute_noise()
+            noise_multiplier = sanitizer.compute_noise_from_eps()
             if self.verbose:
                 print(f"Noise multiplier: {noise_multiplier:.4f}")
+        # Prepare log file to save privacy accounting history (iteration-wise)
+        if self.save_privacy_tracking:
+            log_path = f"experiments/privacy_account/{self.version}_noise{noise_multiplier:.4f}.csv"
+            os.makedirs(os.path.dirname(log_path), exist_ok=True)
+            with open(log_path, "w") as f:
+                f.write("epoch,spent_eps,train_loss,val_loss\n")
 
         # Define a TensorFlow function for each training step
         @tf.function
@@ -315,16 +332,20 @@ class AutoencoderTrainer:
             for x_batch in train_data:
                 train_step(x_batch)
             
-            # Compose the privacy event
-            if self.dp_sgd:
-                spent_eps = sanitizer.compose_privacy_event(noise_multiplier, epoch + 1)
-                if self.verbose and epoch % 10 == 0:
-                    print(f'Composed DP event (after {epoch + 1} steps): achieved epsilon = {spent_eps:.4f} for delta = {self.delta}')
-                
             # Validation loss
             val_recon = self.autoencoder(val_data, training=False)
             val_loss_tracker.update_state(tf.reduce_mean(loss_fn(val_data, val_recon)))
 
+            # Compose the privacy event
+            if self.dp_sgd:
+                # Update the privacy accountant with the current step
+                spent_eps = sanitizer.compose_privacy_event(noise_multiplier, epoch + 1)
+                if self.save_privacy_tracking:
+                    with open(f"experiments/privacy_account/{self.version}_noise{noise_multiplier:.4f}.csv", "a") as f:
+                        f.write(f"{epoch + 1},{spent_eps:.4f},{train_loss_tracker.result():.4f},{val_loss_tracker.result():.4f}\n")
+                if self.verbose and epoch % 10 == 0:
+                    print(f'Composed DP event (after {epoch + 1} steps): achieved epsilon = {spent_eps:.4f} for delta = {self.delta}')
+                
             if self.verbose:
                 if self.dp_sgd and spent_eps > self.target_epsilon:
                     print(f"\tWARNING: achieved epsilon {spent_eps:.4f} exceeds target epsilon {self.target_epsilon:.4f}.")
@@ -480,14 +501,21 @@ class AutoencoderTuner:
         else:
             self.version = version
     
-    def _train_model(self, params):
+    def _train_model(self, params, final=False):
         """
         Trains the autoencoder model with the specified hyperparameters.
         Parameters:
         - params: dict, hyperparameters for the autoencoder
+        - final: bool, if True, trains the final model with the best hyperparameters
         Returns:
         - model: trained autoencoder model
         """
+        if final:
+            privacy_tracking = True
+            verbose = True
+        else:
+            privacy_tracking = False
+            verbose = False
 
         trainer = AutoencoderTrainer(
             input_dim=self.x_train.shape[1],
@@ -497,10 +525,12 @@ class AutoencoderTuner:
             activation=self.activation,
             max_epochs=self.max_epochs,
             patience_limit=self.patience_limit,
-            verbose=False,
+            verbose=verbose,
             dp_sgd=self.dp_sgd,
             target_epsilon=self.target_epsilon,
             delta=self.delta,
+            save_privacy_tracking=privacy_tracking,
+            version=self.version,
             **params
         )
         return trainer.train(self.x_train_val, self.x_val)
@@ -513,6 +543,7 @@ class AutoencoderTuner:
         - metric: str, performance metric to evaluate (e.g., 'auc', 'f1_score')
         - lam: float, L2 regularization coefficient
         - gamma: float, weight of MSE
+        - final: bool, if True, use the final model for evaluation
         Returns:
         - threshold: float, optimal threshold for anomaly detection
         - eval_scores: dict, evaluation metrics (accuracy, precision, recall, f1, auc)
@@ -652,7 +683,7 @@ class AutoencoderTuner:
         np.random.seed(seed)
         random.seed(seed)
 
-        model = tuner_self._train_model(config)
+        model = tuner_self._train_model(config, final=False)
         threshold, scores = tuner_self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
 
         K.clear_session()
@@ -661,7 +692,7 @@ class AutoencoderTuner:
 
         return scores[metric]
 
-    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5):
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
 
@@ -679,23 +710,10 @@ class AutoencoderTuner:
         """
 
         # Objective function for skopt: maps hyperparameter config to negative metric score
-        """def objective(params):
-             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
-             try:
-                 model = self._train_model(config)  # Train autoencoder with proposed hyperparameters
-                 threshold, scores = self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])  # Evaluate on validation set
-                 K.clear_session()  # Clear TensorFlow session to free memory
-                 del model
-                 return -scores[metric]  # skopt minimizes, so we negate the metric
-             except Exception as e:
-                 print("Failed config:", config)
-                 print("Error:", e)
-                 return 1.0  # High penalty loss for failed trials"""
-        
         def objective(params):
             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
             try:
-                seeds = [1234 + i for i in range(3)]
+                seeds = [1234 + i for i in range(eval_num)]
                 results = Parallel(n_jobs=2)(
                     delayed(AutoencoderTuner.run_trial)(seed, config, self, metric) for seed in seeds
                 )
@@ -773,7 +791,8 @@ class AutoencoderTuner:
         }
 
         # Retrain and evaluate the best configuration
-        final_model = self._train_model(decoded_final)
+        print("Start training the final model with best config...")
+        final_model = self._train_model(decoded_final, final=True)
         final_eval = self._evaluate_model(final_model, metric, lam=best_config['lam'], gamma=best_config['gamma'])
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
         final_score = final_eval[1]               # Store the full metric dictionary

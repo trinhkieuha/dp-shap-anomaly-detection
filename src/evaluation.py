@@ -7,6 +7,12 @@ from src.models import AnomalyDetector
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from math import pi
+
+plt.rcParams['text.usetex'] = False
+plt.rcParams['mathtext.fontset'] = 'stix'  # or other, 'dejavuserif'
+plt.rcParams['font.family'] = 'serif'  # or 'DejaVu Serif'
+plt.rcParams['font.serif'] = ['Times New Roman']  # 'DejaVu Serif' serif' 'Times'
 
 class ValidationEvaluation:
     def __init__(self, X_val, y_val, real_cols, binary_cols, all_cols, dp_sgd=False):
@@ -248,7 +254,28 @@ class ValidationEvaluation:
                 ax.fill(angles, values, alpha=0.25)
                 ax.set_title(f"Tuned by {row['tuned_by']}", size=10)
                 ax.set_xticks(angles[:-1])
-                ax.set_xticklabels(self.metric_labels)
+                ax.set_xticklabels(self.metric_labels.values())
+                for label,i in zip(ax.get_xticklabels(),range(0,len(angles))):
+
+                    angle_rad=angles[i]
+                    if angle_rad <= pi/2:
+                        ha= 'left'
+                        va= "bottom"
+
+                    elif pi/2 < angle_rad <= pi:
+                        ha= 'right'
+                        va= "bottom"
+
+                    elif pi < angle_rad <= (3*pi/2):
+                        ha= 'right'
+                        va= "top"  
+
+                    else:
+                        ha= 'left'
+                        va= "bottom"
+
+                    label.set_verticalalignment(va)
+                    label.set_horizontalalignment(ha) 
                 ax.set_ylim(0, 1)
                 ax.grid(True)
                 j += 1
@@ -260,7 +287,7 @@ class ValidationEvaluation:
             # Title and layout
             title = "Validation Performance"
             if self.dp_sgd:
-                title += f" (ε = {eps}, δ = {delt})"
+                title += r" ($\varepsilon$ = " + str(eps) + r", $\delta$ = " + str(delt) + ")"
             fig.suptitle(title, fontsize=16)
             plt.tight_layout()
 
@@ -285,13 +312,13 @@ class ValidationEvaluation:
             sns.heatmap(heatmap_data, annot=True, cmap="YlGnBu", fmt=".3f", cbar=True)
             plt.ylabel("Tuned by")
             plt.xlabel("Performance")
-            plt.xticks(ticks=list(np.arange(0.5, len(self.metrics), 1)), labels=self.metric_labels)
+            plt.xticks(ticks=list(np.arange(0.5, len(self.metrics), 1)), labels=self.metric_labels.values())
             plt.yticks(ticks=list(np.arange(0.5, len(heatmap_data), 1)), labels=group_df.tuned_by)
             
             # Title and layout
             title = "Validation Performance"
             if self.dp_sgd:
-                title += f" (ε = {eps}, δ = {delt})"
+                title += r" ($\varepsilon$ = " + str(eps) + r", $\delta$ = " + str(delt) + ")"
             plt.title(title, fontsize=16)
             plt.tight_layout()
 

@@ -65,13 +65,13 @@ def main():
     # --- Start logging this run ---
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
-        log_file.write(f"\n\n=== Run started at: {start_time} ===\n")
-        info_txt = f"Arguments: version={args.version}, tune_method={args.tune_method}"
+        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, tune_method={args.tune_method}"
         if args.version == 'sequential':
             info_txt += f", metric={args.metric}, random_size={args.random_size}\n"
         else:
             info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
         log_file.write(info_txt)
+    print(info_txt)
     
     try:
         # --- Load data ---
@@ -118,7 +118,7 @@ def main():
             )
         else:
             best_model, best_params, best_score = tuner.bo_tune(
-                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts
+                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=1
             )
 
         # --- Save the best hyperparameters ---
@@ -163,7 +163,8 @@ def main():
         metrics["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if os.path.exists(results_path):
             existing_df = pd.read_csv(results_path)
-            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("timestamp", ascending=True).drop_duplicates(subset=["version"], keep='last')
+            existing_df["version"] = existing_df["version"].astype(str)
+            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("version", ascending=True).drop_duplicates(subset=["version"], keep='last')
         else:
             metrics_df = pd.DataFrame([metrics])
         metrics_df.to_csv(results_path, index=False)

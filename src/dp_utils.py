@@ -10,7 +10,7 @@ def add_gaussian_noise(tensor, sigma):
     return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
 
 class DPSGDSanitizer:
-    def __init__(self, n, batch_size, target_epsilon, epochs, delta, c2=1.5):
+    def __init__(self, n, batch_size, target_epsilon, epochs, delta):
         """
         Initializes the DPSGDSanitizer with parameters for differential privacy.
         Parameters:
@@ -20,27 +20,18 @@ class DPSGDSanitizer:
         - epochs: int, the number of epochs for training.
         - delta: float, the target delta for differential privacy.
         """
+        self.n = n
+        self.batch_size = batch_size
+        self.epochs = epochs
         self.accountant = self._make_accountant()
         self.target_epsilon = target_epsilon
         self.delta = delta
         self.steps_taken = 0
-        self.c2 = c2
 
         # Compute the sampling probability
         self.q = batch_size / n  # the sampling probability
         if self.q > 1:
             raise app.UsageError('n must be larger than the batch size.')
-        
-        # Compute total training steps
-        self.T = int(math.ceil(epochs * n / batch_size))
-        
-        # Check epsilon feasibility
-        max_eps = self.q**2 * self.T
-        if self.target_epsilon >= max_eps:
-            raise ValueError(
-                f"Target epsilon = {self.target_epsilon:.4f} exceeds the theoretical max "
-                f"epsilon = {max_eps:.4f} for q = {self.q:.4f}, T = {self.T}."
-            )
 
     def _make_accountant(self):
         """
@@ -52,14 +43,31 @@ class DPSGDSanitizer:
         orders = np.linspace(1.1, 64.0, num=100)
         return dp_accounting.rdp.RdpAccountant(orders)
     
-    def compute_noise(self):
+    def _make_event(self, sigma, steps=None):
+        """
+        Creates a Gaussian event for differential privacy accounting.
+        Parameters:
+        - sigma: float, the noise scale for the Gaussian mechanism.
+        Returns:
+        - dp_accounting.GaussianDpEvent object
+        """
+        if steps is None:
+            steps = int(math.ceil(self.epochs * self.n / self.batch_size))
+        dp_event_obj = dp_accounting.SelfComposedDpEvent(
+            dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
+        )
+        return dp_event_obj
+    
+    def compute_noise_from_eps(self):
         """
         Computes the noise scale for the Gaussian mechanism based on the target epsilon and delta.
         Returns:
         - float, the computed noise scale sigma.
         """
         # Calculate target noise multiplier
-        target_noise = (self.c2 * self.q * math.sqrt(self.T * math.log(1 / self.delta))) / self.target_epsilon
+        target_noise = dp_accounting.calibrate_dp_mechanism(
+            self._make_accountant, self._make_event, self.target_epsilon, self.delta,
+            dp_accounting.LowerEndpointAndGuess(1, 2))
 
         return target_noise
 
@@ -71,9 +79,7 @@ class DPSGDSanitizer:
         - sigma: float, the noise scale for the Gaussian mechanism.
         - steps: int, the number of steps completed so far.
         """
-        dp_event_obj = dp_accounting.SelfComposedDpEvent(
-            dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
-        )
+        dp_event_obj = self._make_event(sigma, steps)
         self.accountant.compose(dp_event_obj)
         
         achieved_epsilon = self.accountant.get_epsilon(self.delta)
