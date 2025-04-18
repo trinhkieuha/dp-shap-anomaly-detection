@@ -105,3 +105,61 @@ Status: SUCCESS
 Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
 Run ended at: 2025-04-17 22:47:16.028867
 Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 02:30:44.526905 ===
+Arguments: version=202504180230, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-18 02:38:42.741434
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 02:38:47.706505 ===
+Arguments: version=202504180238, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-18 02:45:11.073417 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 02:59:46.150526
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 02:59:50.942076 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 03:14:15.759345
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 03:14:20.521556 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 03:27:38.675571
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 03:27:43.527408 ===
+Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 03:46:31.243567
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 16:48:37.237812 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 17:13:17.218251
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 17:13:22.033075 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 17:30:28.125766
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 17:30:33.069845 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 17:52:06.776864
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 17:52:11.543703 ===
+Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 18:13:50.870700
+Status: SUCCESS

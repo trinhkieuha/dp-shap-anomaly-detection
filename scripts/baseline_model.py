@@ -90,10 +90,10 @@ def main():
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
             'batch_size': [64, 128],
-            'dropout_rate': [0.0, 0.1, 0.2],
+            'dropout_rate': [0.0, 0.1, 0.2, 0.3, 0.4],
             'learning_rate': [0.1, 0.05, 0.02],
             'lam': [1e-4, 1e-3, 1e-2, 1e-1],
-            'gamma': [0.2, 0.25, 0.3, 0.35],
+            'gamma': [0.001, 0.999],
         }
 
         # --- Initialize tuner object ---

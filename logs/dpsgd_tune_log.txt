@@ -104,3 +104,21 @@ Status: SUCCESS
 Arguments: version=202504171746, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
 Run ended at: 2025-04-17 19:21:36.977516
 Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 00:51:50.751219 ===
+Arguments: version=202504171816, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 01:26:11.194812
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 01:29:03.276803 ===
+Arguments: version=202504171500, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-18 01:50:24.118958
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-18 01:53:08.457889 ===
+Arguments: version=202504180153, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-18 02:24:20.922974
+Status: SUCCESS

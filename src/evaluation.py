@@ -154,6 +154,7 @@ class ValidationEvaluation:
             scores = detector._compute_anomaly_scores(self.X_val)
             y_pred = detector._detect(scores, params["threshold"])
             perf = detector._evaluate(y_pred, self.y_val, scores)
+            perf.update(params)
             perf["version"] = str(version)
             eval_results = pd.concat([eval_results, pd.DataFrame([perf])], ignore_index=True)
 
