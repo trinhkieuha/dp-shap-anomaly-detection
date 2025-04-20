@@ -35,10 +35,10 @@ class ValidationEvaluation:
         self.dp_sgd = dp_sgd
 
         self.metric_labels = {
-            "accuracy": "Accuracy",
+            #"accuracy": "Accuracy",
             "precision": "Precision",
             "recall": "Recall",
-            "f1_score": "F1 Score",
+            "f1_score": "F1-Score",
             "auc": "AUC"
         }
         self.metrics = list(self.metric_labels.keys())
@@ -91,8 +91,8 @@ class ValidationEvaluation:
                 continue
 
             if self.dp_sgd:
-                epsilon = epsilon_match.group(1) if epsilon_match else None
-                delta = delta_match.group(1) if delta_match else None
+                epsilon = float(epsilon_match.group(1)) if epsilon_match else None
+                delta = float(delta_match.group(1)) if delta_match else None
                 key = (metric, epsilon, delta)
                 if key not in latest_versions or end_dt > latest_versions[key]["end_time"]:
                     latest_versions[key] = {
@@ -165,6 +165,13 @@ class ValidationEvaluation:
             eval_results["delta"] = eval_results["version"].apply(lambda x: version_info_dict[x][2])
 
         eval_results.set_index("version", inplace=True)
+
+        # Ensure 'tuned_by' is treated as a categorical column with the desired order
+        eval_results['tuned_by'] = pd.Categorical(eval_results['tuned_by'], categories=self.metric_labels.values(), ordered=True)
+
+        # Then sort the DataFrame accordingly
+        eval_results = eval_results.sort_values(by='tuned_by')
+        
         return eval_results
 
     def plot_bar(self, eval_results, save=True):
@@ -180,7 +187,7 @@ class ValidationEvaluation:
 
         for (eps, delt), group_df in groups:
             # Create subplots
-            fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(18, 10))
+            fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(10, 10))
             axs = axs.flatten()
 
             for i, metric in enumerate(self.metrics):
@@ -204,12 +211,12 @@ class ValidationEvaluation:
             # Title and layout
             title = "Validation Performance"
             if self.dp_sgd:
-                title += f" (ε = {eps}, δ = {delt})"
+                title += r" ($\varepsilon$ = " + str(eps) + r", $\delta$ = " + str(delt) + ")"
             fig.suptitle(title, fontsize=16)
             plt.tight_layout()
 
             # Save or show
-            if save is not None:
+            if save is True:
                 filename = f"../results/figures/dpsgd_hyperparam_tune_eps{eps}_delta{delt}.png" if self.dp_sgd else f"../results/figures/baseline_hyperparam_tune.png"
                 plt.savefig(filename)
             

@@ -3,10 +3,10 @@ import os
 import pandas as pd
 import warnings
 from datetime import datetime
-from IPython.display import display
-import numpy as np
 import argparse
 import pickle
+import warnings
+warnings.filterwarnings("ignore")
 
 # Set up system path
 sys.dont_write_bytecode = True
@@ -24,14 +24,17 @@ def main():
     # --- Argument parsing ---
     parser = argparse.ArgumentParser(description="Run Autoencoder hyperparameter tuning.")
     parser.add_argument("--version", type=str, default=None, help="Version identifier for the run")
-    parser.add_argument("--tune_method", type=str, choices=["sequential", "bayesian"], default="bayesian",
+    parser.add_argument("--tune_method", type=str, choices=["sequential", "bayesian", None], default=None,
                         help="Tuning method to use: 'sequential' or 'bayesian' (default: sequential)")
 
     # Add additional arguments after possibly loading from logs
-    parser.add_argument("--metric", type=str, default="auc", help="Metric to evaluate (default: auc)")
-    parser.add_argument("--random_size", type=int, default=5, help="Number of random samples (default: 5)")
-    parser.add_argument("--n_calls", type=int, default=30, help="Total number of optimization calls for Bayesian tuning")
-    parser.add_argument("--random_starts", type=int, default=5, help="Number of initial random points for Bayesian tuning")
+    parser.add_argument("--metric", type=str, default=None, help="Metric to evaluate (default: auc)")
+    parser.add_argument("--random_size", type=int, default=None, help="Number of random samples (default: 5)")
+    parser.add_argument("--n_calls", type=int, default=None, help="Total number of optimization calls for Bayesian tuning")
+    parser.add_argument("--random_starts", type=int, default=None, help="Number of initial random points for Bayesian tuning")
+    
+    # Add argument for continuing from the last run
+    parser.add_argument("--continue_run", type=bool, default=False, help="Continue from the last run")
     
     # Parse complete set of arguments
     args = parser.parse_args()
@@ -51,16 +54,40 @@ def main():
                 parts = version_lines[-1].strip().replace("Arguments: ", "").split(", ")
                 last_args = {kv.split("=")[0]: kv.split("=")[1] for kv in parts}
             # Override current args with previously used values
+            def get_value(current_val, key, default_val, cast_fn=lambda x: x):
+                """Helper to prioritize CLI arg > last run value > default."""
+                if args.continue_run:
+                    if key == "n_calls" and current_val is not None:    
+                        return current_val 
+                    elif key in last_args:
+                        return cast_fn(last_args[key])
+                    else:
+                        return default_val          
+                else:
+                    if current_val:
+                        return current_val
+                    elif key in last_args:
+                        return cast_fn(last_args[key])
+                    else:
+                        return default_val
+
             if last_args:
-                args.tune_method = last_args.get("tune_method", args.tune_method)
-                args.metric = last_args.get("metric", args.metric)
-                args.random_size = int(last_args.get("random_size", args.random_size))
-                args.n_calls = int(last_args.get("n_calls", args.n_calls))
-                args.random_starts = int(last_args.get("random_starts", args.random_starts))
+                print("Resuming previous run with version:", args.version)
+
+            args.tune_method = get_value(args.tune_method, "tune_method", "bayesian")
+            args.metric = get_value(args.metric, "metric", "auc")
+            args.random_size = get_value(args.random_size, "random_size", 5, int)
+            args.n_calls = get_value(args.n_calls, "n_calls", 30, int)
+            args.random_starts = get_value(args.random_starts, "random_starts", 5, int)
         except Exception as e:
             print(f"Warning: Could not load previous config for version {args.version} due to error: {e}")
     else:
         args.version = datetime.now().strftime("%Y%m%d%H%M")
+        args.tune_method = args.tune_method if args.tune_method else "bayesian"
+        args.metric = args.metric if args.metric else "auc"
+        args.random_size = args.random_size if args.random_size else 5
+        args.n_calls = args.n_calls if args.n_calls else 30
+        args.random_starts = args.random_starts if args.random_starts else 5
 
     # --- Start logging this run ---
     start_time = datetime.now()
@@ -108,7 +135,8 @@ def main():
             activation='relu',
             max_epochs=500,
             patience_limit=5,
-            version=args.version
+            version=args.version,
+            continue_run=args.continue_run,
         )
 
         # --- Perform tuning using selected strategy ---
@@ -164,7 +192,7 @@ def main():
         if os.path.exists(results_path):
             existing_df = pd.read_csv(results_path)
             existing_df["version"] = existing_df["version"].astype(str)
-            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values("version", ascending=True).drop_duplicates(subset=["version"], keep='last')
+            metrics_df = pd.concat([existing_df, pd.DataFrame([metrics])], ignore_index=True).sort_values(by=["version", "timestamp"], ascending=True).drop_duplicates(subset=["version"], keep='last')
         else:
             metrics_df = pd.DataFrame([metrics])
         metrics_df.to_csv(results_path, index=False)

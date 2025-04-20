@@ -6,8 +6,71 @@ import numpy as np
 import tensorflow_probability as tfp
 
 def add_gaussian_noise(tensor, sigma):
+    """
+    Adds Gaussian noise to a tensor.
+    Parameters:
+    - tensor: tf.Tensor, the input tensor to which noise will be added.
+    - sigma: float, the standard deviation of the Gaussian noise.
+    Returns:
+    - tf.Tensor, the tensor with added Gaussian noise.
+    """
     
     return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
+
+def add_lap_noise(tensor, scale):
+    """
+    Adds Laplace noise to a tensor.
+    Parameters:
+    - tensor: tf.Tensor, the input tensor to which noise will be added.
+    - scale: float, the scale of the Laplace noise.
+    Returns:
+    - tf.Tensor, the tensor with added Laplace noise.
+    """
+
+    lap = tfp.distributions.Laplace(loc=0.0, scale=scale)
+    return tensor + lap.sample(sample_shape=tf.shape(tensor))
+
+def compute_empirical_nsr(reference_scores, baseline_scores):
+    """
+    Computes the empirical noise-to-signal ratio (NSR) between two sets of reconstruction scores:
+    - reference_scores: from a DP-SGD or noisy model
+    - baseline_scores: from a non-private model
+
+    Returns:
+    - nsr: float, empirical noise-to-signal ratio
+    """
+    signal_std = np.std(baseline_scores)
+    noise = reference_scores - baseline_scores
+    noise_std = np.std(noise)
+
+    nsr = noise_std / signal_std
+    return nsr
+
+def compute_T_from_nsr(signal_std, epsilon, nsr_target, mechanism="gaussian", delta=None):
+    """
+    Computes the sensitivity threshold T such that the resulting noise achieves the desired NSR.
+
+    Parameters:
+    - signal_std: float, standard deviation of the original (non-private) reconstruction errors
+    - epsilon: float, DP epsilon
+    - nsr_target: float, desired noise-to-signal ratio
+    - mechanism: str, either 'laplace' or 'gaussian'
+    - delta: float or None, required for the Gaussian mechanism
+
+    Returns:
+    - T: float, calibrated threshold for PTR
+    """
+    if mechanism == "laplace":
+        scale = nsr_target * signal_std / np.sqrt(2)
+        T = epsilon * scale  # Since scale = T / ε
+    elif mechanism == "gaussian":
+        assert delta is not None, "Delta must be specified for the Gaussian mechanism."
+        sigma = nsr_target * signal_std
+        T = sigma * epsilon / np.sqrt(2 * np.log(1.25 / delta))  # From σ = T √(2log(1.25/δ)) / ε
+    else:
+        raise ValueError("Unsupported mechanism: choose 'laplace' or 'gaussian'.")
+
+    return T
 
 class DPSGDSanitizer:
     def __init__(self, n, batch_size, target_epsilon, epochs, delta):

@@ -1,124 +1,570 @@
 
 
-=== Run started at: 2025-04-17 15:19:43.926685 ===
-Arguments: version=202504171500, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 15:27:07.237939
-Status: SUCCESS
+=== Run started at: 2025-04-19 16:21:49.522445 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
 
 
-=== Run started at: 2025-04-17 15:27:52.212462 ===
-Arguments: version=202504171527, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 15:56:14.643212
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-17 16:01:45.559018 ===
-Arguments: version=202504171601, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-17 16:18:45.831342 ===
-Arguments: version=202504171618, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 16:18:45.892982
+=== Run started at: 2025-04-19 16:30:27.200745 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 16:30:27.261847
 Status: FAILED
-Error: can't multiply sequence by non-int of type 'str'
+Error: unterminated string literal (detected at line 1) (<string>, line 1)
 
 
-=== Run started at: 2025-04-17 16:20:07.347707 ===
-Arguments: version=202504171601, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 16:20:07.402731
+=== Run started at: 2025-04-19 16:33:51.251166 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 16:33:51.312997
 Status: FAILED
-Error: can't multiply sequence by non-int of type 'float'
+Error: unterminated string literal (detected at line 1) (<unknown>, line 1)
 
 
-=== Run started at: 2025-04-17 16:20:42.031734 ===
-Arguments: version=202504171601, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 16:35:00.068813
+=== Run started at: 2025-04-19 16:34:12.942403 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 16:34:13.000714
+Status: FAILED
+Error: '(' was never closed (<unknown>, line 1)
+
+
+=== Run started at: 2025-04-19 16:36:27.032350 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-19 17:07:08.383082 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-19 18:29:18.467594 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-19 18:48:32.362761 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 18:48:56.677715
+Status: FAILED
+Error: 'NoneType' object has no attribute 'items'
+
+
+=== Run started at: 2025-04-19 18:56:00.260598 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 18:57:05.756427
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 16:36:07.449094 ===
-Arguments: version=202504171636, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 16:43:20.815555
+=== Run started at: 2025-04-19 18:57:53.451509 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 18:58:58.339177
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 16:44:37.642127 ===
-Arguments: version=202504171527, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 16:53:31.402473
+=== Run started at: 2025-04-19 18:59:54.205711 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 19:00:43.180446
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 16:58:49.818348 ===
-Arguments: version=202504171658, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 17:08:27.986154
+=== Run started at: 2025-04-19 19:01:14.713908 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 19:02:18.074597
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 17:31:31.557713 ===
-Arguments: version=202504171731, tune_method=bayesian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-17 17:34:09.941887 ===
-Arguments: version=202504171731, tune_method=bayesian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 17:46:49.871376
+=== Run started at: 2025-04-19 19:03:03.174870 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 19:04:08.174223
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 17:46:54.636775 ===
-Arguments: version=202504171746, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 17:53:58.188781
+=== Run started at: 2025-04-19 19:04:40.361430 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 19:09:15.751914
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 17:54:03.098994 ===
-Arguments: version=202504171754, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 18:05:54.008084
+=== Run started at: 2025-04-19 19:13:16.566467 ===
+Arguments: version=202504191913, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 19:30:52.509097
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 18:05:58.906129 ===
-Arguments: version=202504171805, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 18:16:34.609827
+=== Run started at: 2025-04-19 19:52:41.851006 ===
+Arguments: version=202504191913, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 19:53:13.137881
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 18:16:39.983820 ===
-Arguments: version=202504171816, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-04-17 18:28:17.107176
+=== Run started at: 2025-04-19 19:58:19.892130 ===
+Arguments: version=202504191913, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-19 19:58:45.892980 ===
+Arguments: version=202504191913, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 20:25:47.696966
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 18:28:21.880994 ===
-Arguments: version=202504171828, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-04-17 18:42:21.000106
+=== Run started at: 2025-04-19 20:25:51.935746 ===
+Arguments: version=202504192025, tune_method=None, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=None
+Run ended at: 2025-04-19 20:25:51.991034
+Status: FAILED
+Error: '<' not supported between instances of 'NoneType' and 'int'
+
+
+=== Run started at: 2025-04-19 20:25:56.021961 ===
+Arguments: version=202504192025, tune_method=None, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=None
+Run ended at: 2025-04-19 20:25:56.072437
+Status: FAILED
+Error: '<' not supported between instances of 'NoneType' and 'int'
+
+
+=== Run started at: 2025-04-19 20:56:47.320273 ===
+Arguments: version=202504192056, tune_method=None, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=None
+Run ended at: 2025-04-19 20:56:47.370682
+Status: FAILED
+Error: '<' not supported between instances of 'NoneType' and 'int'
+
+
+=== Run started at: 2025-04-19 21:00:46.796812 ===
+Arguments: version=202504192100, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 21:17:46.720547
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 18:42:25.288541 ===
-Arguments: version=202504171842, tune_method=bayesian, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 18:46:27.495221
+=== Run started at: 2025-04-19 21:17:51.755257 ===
+Arguments: version=202504192100, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-19 21:23:36.810640 ===
+Arguments: version=202504192100, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 22:01:49.014589
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-17 19:03:39.955473 ===
-Arguments: version=202504171746, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
-Run ended at: 2025-04-17 19:21:36.977516
+=== Run started at: 2025-04-19 22:01:53.972383 ===
+Arguments: version=202504192201, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-19 22:26:00.413646 ===
+Arguments: version=202504192100, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 22:26:34.002625
+Status: FAILED
+Error: in user code:
+
+    File "/Users/trinhha/Documents/VU AMSTERDAM/STUDY/Thesis/Code/src/models.py", line 322, in train_step  *
+        sanitized_grad = sanitizer.sanitize(px_grad, sigma=noise_multiplier, l2norm_pct=self.l2norm_pct)
+
+    TypeError: outer_factory.<locals>.inner_factory.<locals>.tf__compute_noise_from_eps() got an unexpected keyword argument 'sigma'
+
+
+
+=== Run started at: 2025-04-19 22:26:38.887109 ===
+Arguments: version=202504192226, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-19 22:28:37.746313 ===
+Arguments: version=202504192100, tune_method=bayesian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 22:29:40.250641
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-18 00:51:50.751219 ===
-Arguments: version=202504171816, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 01:26:11.194812
+=== Run started at: 2025-04-19 22:30:28.533693 ===
+Arguments: version=202504192230, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5
+Run ended at: 2025-04-19 22:49:48.493311
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-18 01:29:03.276803 ===
-Arguments: version=202504171500, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-Run ended at: 2025-04-18 01:50:24.118958
+=== Run started at: 2025-04-19 22:52:04.052012 ===
+Arguments: version=202504192230, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5
+Run ended at: 2025-04-19 23:31:31.809352
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-18 01:53:08.457889 ===
-Arguments: version=202504180153, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 02:24:20.922974
+=== Run started at: 2025-04-19 23:44:49.940368 ===
+Arguments: version=202504192230, tune_method=bayesian, epsilon=1, delta=1e-5, metric=recall, n_calls=55, random_starts=5
+Run ended at: 2025-04-19 23:53:21.948322
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 00:08:11.572634 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 00:26:11.076287
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 00:27:49.787366 ===
+Arguments: version=202504191621, tune_method=bayesian, epsilon=1, delta=1e-05, metric=auc, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 00:28:59.285410
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 00:33:06.939521 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 00:40:38.827804
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 00:40:43.548418 ===
+Arguments: version=202504200040, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 01:01:55.144283
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 01:02:01.299990 ===
+Arguments: version=202504200102, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 01:18:27.078765
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 01:18:33.812066 ===
+Arguments: version=202504200118, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 01:33:53.182261
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 01:33:58.240493 ===
+Arguments: version=202504191913, tune_method=bayesian, epsilon=1, delta=1e-5, metric=precision, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 01:37:49.481009
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 01:47:26.636825 ===
+Arguments: version=202504200102, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 01:47:27.997387
+Status: FAILED
+Error: Point ([(64, 32), 150, 0.4, 0.0002598076211353, 0.0001, 0.1970679053990525, 95]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0002598076211353316, 0.005196152422706632), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 01:47:32.119342 ===
+Arguments: version=202504200118, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 01:47:32.411214
+Status: FAILED
+Error: Point ([(64, 32), 150, 0.185920785000142, 0.0002598076211353, 0.1, 0.001, 95]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0002598076211353316, 0.005196152422706632), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 01:47:36.542710 ===
+Arguments: version=202504200040, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 01:47:36.814959
+Status: FAILED
+Error: Point ([(64, 32), 150, 0.1859205509786758, 0.0002598076211353, 0.1, 0.001, 95]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0002598076211353316, 0.005196152422706632), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 01:47:40.870220 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 01:47:44.784361
+Status: FAILED
+Error: Point ([(64,), 64, 0.0, 0.0002598076211353, 0.1, 0.3335542890772863, 75]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0002598076211353316, 0.005196152422706632), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 01:53:03.380292 ===
+Arguments: version=202504200102, tune_method=bayesian, epsilon=3, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 02:08:23.355581
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 02:08:31.240904 ===
+Arguments: version=202504200118, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 02:28:11.776084
+Status: FAILED
+Error: in user code:
+
+    File "/Users/trinhha/Documents/VU AMSTERDAM/STUDY/Thesis/Code/src/models.py", line 322, in train_step  *
+        sanitized_grad = sanitizer.sanitize(px_grad, sigma=noise_multiplier, l2norm_pct=self.l2norm_pct)
+
+    TypeError: outer_factory.<locals>.inner_factory.<locals>.tf___make_event() got multiple values for argument 'sigma'
+
+
+
+=== Run started at: 2025-04-20 02:28:18.715873 ===
+Arguments: version=202504200040, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-20 02:38:47.596893 ===
+Arguments: version=202504200118, tune_method=bayesian, epsilon=3, delta=1e-5, metric=recall, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 02:39:41.579780
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 02:41:08.202199 ===
+Arguments: version=202504200040, tune_method=bayesian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 02:47:17.511043
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 02:48:33.731482 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-20 03:08:01.184454 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 03:10:13.106488
+Status: FAILED
+Error: cannot access local variable 'perturbed' where it is not associated with a value
+
+
+=== Run started at: 2025-04-20 03:12:31.133686 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 03:14:47.869074
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:15:28.635778 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 03:19:23.198379
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:21:13.181667 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-20 03:24:17.079209
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:24:55.335963 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 03:27:35.712197
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:29:09.669256 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 03:30:06.035084
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:30:55.287450 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 03:31:52.677527
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 03:34:38.100916 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 03:35:35.388612
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 09:06:04.856583 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-20 09:08:26.907048 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-20 09:13:37.899458 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 09:45:47.244839
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 09:47:39.732621 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-20 09:50:15.847260 ===
+Arguments: version=202504200033, tune_method=bayesian, epsilon=3, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 09:58:16.190835
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:03:22.611324 ===
+Arguments: version=202504201003, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 10:07:57.622417
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:08:02.590377 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-20 10:11:43.025853 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-04-20 10:12:55.519657 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:12:55.584168
+Status: FAILED
+Error: Point ([(64, 32), 130, 0.3108017755559122, 0.0003357834605153, 0.0174732609720464, 0.154774077363153, 77]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.001, 0.011), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 10:14:27.831428 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:14:27.897944
+Status: FAILED
+Error: Point ([(64, 32), 118, 0.1761028712256305, 0.001004717814763, 0.0712617851207373, 0.428007763856144, 81]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0011, 0.0109), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 10:15:23.516433 ===
+Arguments: version=202504201003, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:15:23.583270
+Status: FAILED
+Error: attempt to get argmax of an empty sequence
+
+
+=== Run started at: 2025-04-20 10:15:27.565262 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:15:27.621975
+Status: FAILED
+Error: attempt to get argmax of an empty sequence
+
+
+=== Run started at: 2025-04-20 10:17:03.038785 ===
+Arguments: version=202504201003, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:22:35.377867
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:22:41.103902 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:33:41.044559
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:34:22.913514 ===
+Arguments: version=202504201003, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 10:39:11.735793
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:39:16.497329 ===
+Arguments: version=202504201008, tune_method=bayesian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 10:42:46.689333
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:43:44.827188 ===
+Arguments: version=202504201043, tune_method=bayesian, epsilon=5, delta=1e-5, metric=precision, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 10:58:12.904219
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 10:58:19.896934 ===
+Arguments: version=202504201058, tune_method=bayesian, epsilon=5, delta=1e-5, metric=recall, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 11:13:10.642901
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 11:15:10.258137 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 11:27:05.570154
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 11:30:01.889381 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 11:49:03.856350
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 11:50:03.106894 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 12:02:30.492690
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 12:03:11.567684 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-20 12:19:21.886440
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 12:22:56.095843 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+Run ended at: 2025-04-20 12:23:54.142834
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 12:24:06.916760 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=55, random_starts=5
+Run ended at: 2025-04-20 12:40:27.194703
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 12:45:52.733199 ===
+Arguments: version=202504201003, tune_method=bayesian, epsilon=5, delta=1e-5, metric=auc, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 12:46:47.447520
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 13:17:31.453953 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 13:41:24.652977
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 13:56:45.665429 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 14:09:55.734048
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 14:12:00.804374 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5
+
+
+=== Run started at: 2025-04-20 14:21:28.458094 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 14:21:28.520634
+Status: FAILED
+Error: Point ([(64, 32), 101, 0.2763539420107447, 4.3830062030954624e-05, 0.0491627814499164, 0.7794677063882551, 83]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (0.0001, 99999.9999), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 14:22:39.925062 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 14:22:39.996051
+Status: FAILED
+Error: Point ([(64, 32), 118, 0.1761028712256305, -8.325470308728314e-05, 0.0712617851207373, 0.428007763856144, 81]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (1e-06, 0.0001), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 14:22:57.711957 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 14:22:57.775763
+Status: FAILED
+Error: Point ([(64, 32), 118, 0.1761028712256305, -8.325470308728314e-05, 0.0712617851207373, 0.428007763856144, 81]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (1e-06, 0.0001), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 14:41:35.000780 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 15:39:35.077982
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 16:55:08.044817 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=40, random_starts=5
+Run ended at: 2025-04-20 17:19:15.969232
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 17:20:34.428046 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 17:32:44.448009
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 17:33:52.262701 ===
+Arguments: version=202504201317, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=f1_score, n_calls=45, random_starts=5
+Run ended at: 2025-04-20 17:34:50.991192
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 17:56:33.751023 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-20 17:56:33.808443
+Status: FAILED
+Error: Point ([(64, 32), 101, 0.2763539420107447, 4.3830062030954624e-05, 0.0491627814499164, 0.7794677063882551, 83]) is not within the bounds of the space ([((64,), (64, 32)), (64, 150), (0.0, 0.4), (1e-06, 1e-05), (0.0001, 0.1), (0.001, 0.999), (75, 95)]).
+
+
+=== Run started at: 2025-04-20 17:58:42.376049 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-04-20 18:56:21.432441 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=20, random_starts=5
+Run ended at: 2025-04-20 19:19:28.782893
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-20 19:31:18.577859 ===
+Arguments: version=202504201115, tune_method=bayesian, epsilon=0.5, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-04-20 19:53:51.624863
 Status: SUCCESS

@@ -3,20 +3,18 @@ import pandas as pd
 import os
 import warnings
 import numpy as np
-from IPython.display import display
 import tensorflow as tf
 import random
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score
 from itertools import product
 import matplotlib.pyplot as plt
-import tensorflow.keras.backend as K
 from datetime import datetime
 from skopt import Optimizer
 from skopt.space import Real, Integer, Categorical
-from src.dp_utils import DPSGDSanitizer
-import gc
-import concurrent.futures
+from src.dp_utils import *
+from src.utils import *
 from joblib import Parallel, delayed
+import glob
 
 # Config
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
@@ -295,10 +293,18 @@ class AutoencoderTrainer:
             noise_multiplier = sanitizer.compute_noise_from_eps()
             if self.verbose:
                 print(f"Noise multiplier: {noise_multiplier:.4f}")
+        
         # Prepare log file to save privacy accounting history (iteration-wise)
         if self.save_privacy_tracking:
-            log_path = f"experiments/privacy_account/{self.version}_noise{noise_multiplier:.4f}.csv"
-            os.makedirs(os.path.dirname(log_path), exist_ok=True)
+            folder = "experiments/privacy_account"
+            os.makedirs(folder, exist_ok=True)
+
+            # Delete any existing files with the same version prefix
+            pattern = os.path.join(folder, f"{self.version}_noise*.csv")
+            for file in glob.glob(pattern):
+                os.remove(file)
+
+            log_path = os.path.join(folder, f"{self.version}_noise{noise_multiplier:.4f}.csv")
             with open(log_path, "w") as f:
                 f.write("epoch,spent_eps,train_loss,val_loss\n")
 
@@ -463,7 +469,10 @@ class AutoencoderTuner:
                  version=None,
                  dp_sgd=False,
                  target_epsilon=1,
-                 delta=1e-5):
+                 delta=1e-5,
+                 continue_run=False,
+                 post_hoc=False,
+                 noise_mechanism='gaussian'):
         """
         Initializes the hyperparameter tuner for the autoencoder.
 
@@ -482,6 +491,9 @@ class AutoencoderTuner:
         - dp_sgd: bool, if True, use differential privacy during training
         - target_epsilon: float, target epsilon for differential privacy
         - delta: float, target delta for differential privacy
+        - continue_run: bool, if True, continue from the last checkpoint
+        - post_hoc: bool, if True, use post-hoc analysis for hyperparameter tuning
+        - noise_mechanism: str, noise mechanism for differential privacy ('gaussian'/'laplace')
         """
         self.x_train = x_train
         self.x_train_val = x_train_val
@@ -500,8 +512,11 @@ class AutoencoderTuner:
             self.version = datetime.now().strftime("%Y%m%d%H%M")
         else:
             self.version = version
+        self.continue_run = continue_run
+        self.post_hoc = post_hoc
+        self.noise_mechanism = noise_mechanism
     
-    def _train_model(self, params, final=False):
+    def _train_model(self, params, final=False, dp_sgd=False):
         """
         Trains the autoencoder model with the specified hyperparameters.
         Parameters:
@@ -526,7 +541,7 @@ class AutoencoderTuner:
             max_epochs=self.max_epochs,
             patience_limit=self.patience_limit,
             verbose=verbose,
-            dp_sgd=self.dp_sgd,
+            dp_sgd=dp_sgd,
             target_epsilon=self.target_epsilon,
             delta=self.delta,
             save_privacy_tracking=privacy_tracking,
@@ -535,7 +550,7 @@ class AutoencoderTuner:
         )
         return trainer.train(self.x_train_val, self.x_val)
 
-    def _evaluate_model(self, model, metric, lam=1e-4, gamma=0.2):
+    def _evaluate_model(self, model, metric, lam=1e-4, gamma=0.2, T=1.0):
         """
         Evaluates the trained autoencoder model on the validation set.
         Parameters:
@@ -551,6 +566,24 @@ class AutoencoderTuner:
         # Compute reconstruction scores
         detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols, lam=lam, gamma=gamma)
         scores = detector._compute_anomaly_scores(self.x_val)
+
+        # Compute the noise scale T for the post-hoc model
+        if self.post_hoc:
+            # Convert scores to tensors
+            scores_tensor = tf.convert_to_tensor(scores, dtype=tf.float32)
+
+            # Add noise to the scores
+            if self.noise_mechanism == "laplace":
+                scale = T / self.epsilon
+                perturbed = add_lap_noise(scores_tensor, scale)
+            elif self.noise_mechanism == "gaussian":
+                assert self.delta is not None, "Delta is required for Gaussian mechanism."
+                sigma = T * np.sqrt(2 * np.log(1.25 / self.delta)) / self.epsilon
+                perturbed = add_gaussian_noise(scores_tensor, sigma)
+            else:
+                raise ValueError("Unsupported noise mechanism.")
+            scores = perturbed.numpy()
+
         eval_scores = []
         for q in np.linspace(0.70, 0.95, 5):
             threshold = np.quantile(scores, q)
@@ -650,7 +683,7 @@ class AutoencoderTuner:
                     trial_scores.append(scores[metric])
 
                     # Free memory
-                    K.clear_session()
+                    clear_tf_memory()
                     del model
 
                 # Compute mean validation score for the current value
@@ -683,12 +716,44 @@ class AutoencoderTuner:
         np.random.seed(seed)
         random.seed(seed)
 
-        model = tuner_self._train_model(config, final=False)
-        threshold, scores = tuner_self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
+        if tuner_self.post_hoc:
+            # Train both models with the same configuration
+            dpsgd_model = tuner_self._train_model(config, final=False, dp_sgd=True)
+            baseline_model = tuner_self._train_model(config, final=False, dp_sgd=True)
+            
+            # Evaluate both models
+            dpsgd_detector = AnomalyDetector(dpsgd_model, tuner_self.real_cols, tuner_self.binary_cols, tuner_self.all_cols, lam=config['lam'], gamma=config['gamma'])
+            dpsgd_scores = dpsgd_detector._compute_anomaly_scores(tuner_self.x_val)
+            baseline_detector = AnomalyDetector(baseline_model, tuner_self.real_cols, tuner_self.binary_cols, tuner_self.all_cols, lam=config['lam'], gamma=config['gamma'])
+            baseline_scores = baseline_detector._compute_anomaly_scores(tuner_self.x_val)
 
-        K.clear_session()
-        del model
-        gc.collect()
+            # Compute the mean score for both models
+            desired_nsr = compute_empirical_nsr(dpsgd_scores, baseline_scores)
+
+            # Compute the noise scale T for the post-hoc model
+            T = compute_T_from_nsr(
+                signal_std=np.std(baseline_scores),
+                epsilon=tuner_self.target_epsilon,
+                nsr_target=desired_nsr,
+                mechanism=tuner_self.noise_mechanism,
+                delta=tuner_self.delta,
+            )
+            
+            # Evaluate the model
+            threshold, scores = tuner_self._evaluate_model(baseline_model, metric, lam=config['lam'], gamma=config['gamma'], T=T)
+
+            clear_tf_memory()
+            del dpsgd_model, baseline_model, dpsgd_detector, baseline_detector
+
+        else: # For DP-SGD and baseline
+            # Train the specified type of model with the current configuration
+            model = tuner_self._train_model(config, final=False, dp_sgd=tuner_self.dp_sgd)
+            
+            # Evaluate the model
+            threshold, scores = tuner_self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
+
+            clear_tf_memory()
+            del model
 
         return scores[metric]
 
@@ -742,22 +807,47 @@ class AutoencoderTuner:
         # Initialize the Bayesian optimizer
         optimizer = Optimizer(dimensions=skopt_space,
                             n_initial_points=random_starts,
-                            random_state=123)
-
-        best_score = -float("inf")     # Track the best validation score found
-        best_config = None             # Track the best hyperparameter configuration
+                            random_state=123,
+                            base_estimator="RF")
 
         # Prepare log file to save trial history (iteration-wise)
         if self.dp_sgd:
             log_path = f"experiments/hyperparam_tune/dpsgd/bayes_{metric}_{self.version}.csv"
         else:
             log_path = f"experiments/hyperparam_tune/baseline/bayes_{metric}_{self.version}.csv"
-        os.makedirs(os.path.dirname(log_path), exist_ok=True)
-        with open(log_path, "w") as f:
-            f.write(",".join(list(param_space.keys()) + [metric]) + "\n")
+        os.makedirs(os.path.dirname(log_path), exist_ok=True) # Create directory if it doesn't exist
+        
+        # Initialize log file and evaluated set if checkpoint doesn't exist
+        completed_trials = set()
+        if self.continue_run and os.path.exists(log_path) and len(pd.read_csv(log_path)) > 0:
+            df_log = pd.read_csv(log_path)
+
+            for _, row in df_log.iterrows():
+                params = []
+                for k in param_space.keys():
+                    val = row[k]
+                    params.append(parse_param_value(val, k, param_space))
+                loss = -float(row[metric])
+                optimizer.tell(params, loss)
+                completed_trials.add(tuple(params))
+            # Get the best config and score from log
+            best_row = df_log.loc[df_log[metric].idxmax()]
+            best_config = {}
+            for k in param_space.keys():
+                val = best_row[k]
+                parsed_val = parse_param_value(val, k, param_space)
+                #best_config[k] = list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val
+                best_config[k] = decode_map[k][parsed_val] if k in decode_map else (list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val)
+            best_score = float(best_row[metric])
+        else:
+            # Create the log file with updated header
+            with open(log_path, "w") as f:
+                f.write(",".join(list(param_space.keys()) + [metric]) + "\n")
+            best_score = -float("inf")     # Track the best validation score found
+            best_config = None             # Track the best hyperparameter configuration
 
         # Perform the optimization loop
-        for i in range(n_calls):
+        for i in range(n_calls - len(completed_trials)):
             next_params = optimizer.ask()  # Suggest next set of hyperparameters
 
             # Evaluate the proposed parameters and get corresponding loss
@@ -773,7 +863,7 @@ class AutoencoderTuner:
             for k in param_space.keys():
                 val = str(trial_config[k])
                 if "," in val or '"' in val:
-                    val = '"' + val.replace('"', '""') + '"'  # Escape internal quotes and wrap in quotes
+                    val = '"' + val.replace('"', '""') + '"'  # Escape internal quotes
                 safe_values.append(val)
 
             with open(log_path, "a") as f:
@@ -792,7 +882,7 @@ class AutoencoderTuner:
 
         # Retrain and evaluate the best configuration
         print("Start training the final model with best config...")
-        final_model = self._train_model(decoded_final, final=True)
+        final_model = self._train_model(decoded_final, final=True, dp_sgd=self.dp_sgd)
         final_eval = self._evaluate_model(final_model, metric, lam=best_config['lam'], gamma=best_config['gamma'])
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
         final_score = final_eval[1]               # Store the full metric dictionary
