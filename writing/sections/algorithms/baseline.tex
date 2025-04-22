@@ -1,0 +1,33 @@
+\begin{algorithm}[!t]
+\footnotesize
+\caption{Baseline autoencoder training (non-private)} \label{alg:baseline}
+\begin{algorithmic}[1]
+\REQUIRE Training data $\mathbf{x} = \{\mathbf{x}^{(1)}, \dots, \mathbf{x}^{(m)}\}$, index sets $\mathcal{R}$ (real-valued features), $\mathcal{B}$ (binary features), learning rate $\alpha$, regularization $\lambda$, max epochs $E$, patience $p$, batch size $B$
+\ENSURE Trained weights $\mathbf{W}^{(l)}$, biases $\mathbf{b}^{(l)}$
+
+\STATE Initialize $\mathbf{W}^{(l)}, \mathbf{b}^{(l)}$ randomly
+\STATE Split data: $\mathbf{x}_{\text{train}}, \mathbf{x}_{\text{val}}$; set $best\_val\_loss \leftarrow \infty$, $patience \leftarrow 0$
+
+\FOR{epoch $= 1$ to $E$}
+    \STATE Shuffle $\mathbf{x}_{\text{train}}$
+    \STATE Partition $\mathbf{x}_{\text{train}}$ into mini-batches $\{\mathcal{B}_1, \dots, \mathcal{B}_{\lfloor m/B \rfloor}\}$
+    \FOR{each mini-batch $\mathcal{B}_j$}
+        \STATE \textbf{Forward pass:} propagate inputs through encoder and decoder using ReLU activations in hidden layers; apply mixed output activations (sigmoid for $\hat{\mathcal{B}}_{j,\mathcal{B}}$, linear for $\hat{\mathcal{B}}_{j,\mathcal{R}}$) to compute reconstruction $\hat{\mathcal{B}}_j$
+        \STATE \textbf{Loss:} compute $\mathcal{L}(\mathcal{B}_j)$ as a weighted combination of MSE for $\mathcal{R}$ (Eq.~\ref{eq:mse}) and cross-entropy for $\mathcal{B}$ (Eq.~\ref{eq:cee}), plus regularization
+        \STATE \textbf{Backpropagation and update:} $\mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \alpha \cdot \nabla_{\mathbf{W}^{(l)}} \mathcal{L}(\mathcal{B}_j)$ and similarly for $\mathbf{b}^{(l)}$
+    \ENDFOR
+
+    \STATE \textbf{Validation:} compute average loss $\mathcal{L}_{\text{val}}$ on $\mathbf{x}_{\text{val}}$
+    \IF{$\mathcal{L}_{\text{val}} < best\_val\_loss$}
+        \STATE $best\_val\_loss \leftarrow \mathcal{L}_{\text{val}}$, $patience \leftarrow 0$
+    \ELSE
+        \STATE $patience \leftarrow patience + 1$
+        \IF{$patience \geq p$}
+            \STATE \textbf{Break} (early stop)
+        \ENDIF
+    \ENDIF
+\ENDFOR
+
+\RETURN $\{\mathbf{W}^{(l)}, \mathbf{b}^{(l)}\}$
+\end{algorithmic}
+\end{algorithm}

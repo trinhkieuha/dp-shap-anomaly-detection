@@ -1,0 +1,17 @@
+\begin{table}[!t]
+    \centering
+    \caption{Validation performance (\%) of the baseline model under different tuning objectives}
+    \label{tab:baseline-validation}
+    \begin{tabular}{lccccc}
+    \toprule
+    \textbf{Tuning objectives} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{AUC} \\
+    \midrule
+    Precision  & \textbf{77.14} & 19.18 & 30.72 & 69.99 \\
+    Recall     & 43.26 & \textbf{64.51} & 51.79 & 79.63 \\
+    F1-Score   & 49.61 & 58.57 & 53.72 & 80.98 \\
+    AUC        & 49.94 & 58.96 & \textbf{54.08} & \textbf{81.29} \\
+    \bottomrule
+    \end{tabular}
+    \vspace{2mm}
+    \caption*{\footnotesize Validation performance for the baseline model is reported under four distinct tuning objectives: precision, recall, F1-score, and AUC. All values are in percentage points. The highlighted values indicate the best-performing metric in each column. The final hyperparameter configurations for each model are provided in \ref{a:hyper_select}.}
+\end{table}

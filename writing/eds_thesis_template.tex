@@ -1,0 +1,191 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% do not change the 12pt and
+%% a4paper setting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,12pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% START OF PREAMBLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\baselinestretch}{1.1}
+
+\usepackage{amsmath,amssymb,amsthm} 
+\usepackage[toc,page]{appendix}
+\usepackage{longtable,rotating,subcaption}
+\usepackage[margin=3cm]{geometry}
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{float}
+\usepackage[pdftex,hypertexnames=false,linktocpage=true]{hyperref}
+\usepackage{subfiles}
+\usepackage{xcolor}
+\usepackage{color,soul}
+\usepackage[labelfont=bf]{caption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{titlesec} % add in preamble if not already included
+
+\hypersetup{colorlinks=true,linkcolor=blue,anchorcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue,bookmarksnumbered=true,pdfview=FitB}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Analyzing the Explainability-Privacy Trade-off in \\
+Differentially Private Deep Learning for Anomaly Detection}
+\author{
+    Kieu Trinh Ha
+    (VU Student Number: 2841995)
+    \\[2ex]
+    Supervisor: dr. Janneke van Brummelen\\
+    Co-reader:
+    }
+\date{\today}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\clearpage
+\maketitle
+\thispagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+\noindent Here follows a max 150--200 words abstract that particularly highlights the contributions, what is new, etc., and the main findings.\\[1ex]
+\noindent\textbf{Key words: } here you put key words, separated by commas, and ended with a final point. 
+\end{abstract}
+
+\vfill
+\centerline{\includegraphics[width=0.5\textwidth]{vua.pdf}}
+\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Contents page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+{
+\pdfbookmark[1]{TABLE OF CONTENTS}{table}
+\tableofcontents
+}
+
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\addtocontents{lot}{~\hfill\textbf{Page}\par}
+\addtocontents{lof}{~\hfill\textbf{Page}\par}
+%%
+\addtocontents{toc}{\def\protect\@chapapp{}} \cleardoublepage \phantomsection
+%\listoffigures
+%\listoftables
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction} \label{s:intro}
+
+\subfile{sections/1_intro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Literature Review} \label{s:lit_rev}
+
+\subfile{sections/2_lit_rev}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background} \label{s:background}
+
+\subfile{sections/3_background}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methodology} \label{s:method}
+
+\subfile{sections/4_method}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Empirical Results} \label{s:emp}
+
+\subfile{sections/5_emp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion} \label{s:discuss}
+
+\subfile{sections/6_discuss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion} \label{s:concl}
+
+\subfile{sections/7_concl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{apa}
+\bibliography{eds_thesis_template}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Apendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\footnotesize
+\appendix
+\renewcommand{\thesection}{\Alph{section}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data} \label{a:data}
+
+\subsection{Description of the Dataset} \label{a:data_desc}
+
+\subfile{appendix/data_desc}
+
+\subsection{Preprocessing Protocols} \label{a:data_prep_rule}
+
+\subfile{appendix/data_prep_rule}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Hyperparameter Tuning} \label{a:hyper_tune}
+
+\subsection{Search Space Specification} \label{a:hyper_space}
+
+\subfile{appendix/hyper_space}
+
+\subsection{Selected Hyperparameter Configurations} \label{a:hyper_select}
+
+\subfile{appendix/hyper_select}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,17 @@
+\begin{table}[!t]
+    \centering
+    \caption{Dataset sizes and class proportions}
+    \label{tab:data-split}
+    \begin{tabular}{lccc}
+    \toprule
+    \textbf{Subset} & \textbf{Total size} & \textbf{Class 0 (\%)} & \textbf{Class 1 (\%)} \\
+    \midrule
+    Training              & 12,791 & 12,791 (100.0\%) & 0 (0.0\%) \\
+    Training validation   & 5,483  & 5,483 (100.0\%) & 0 (0.0\%) \\
+    Validation  & 11,457 & 9,152 (79.9\%)  & 2,305 (20.1\%) \\
+    Test        & 11,457 & 9,122 (79.9\%)  & 2,335 (20.1\%) \\
+    \bottomrule
+    \end{tabular}
+    \vspace{2mm}
+    \caption*{\footnotesize This table presents the sizes of the four disjoint subsets used throughout the modeling process, along with the class distributions in the labeled validation and test sets. The training and training-validation subsets contain only normal observations (class 0), while the labeled validation and test sets include both normal and anomalous samples.}
+\end{table}

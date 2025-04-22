@@ -1,0 +1,36 @@
+\begin{table}[!t]
+    \centering
+    \caption{Validation performance (\%) of DP-SGD models under different tuning objectives and privacy levels ($\delta = 10^{-5}$)}
+    \label{tab:dpsgd-validation}
+    \begin{tabular}{clcccc}
+    \toprule
+    $\boldsymbol{\varepsilon}$ & \textbf{Tuning Objective} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{AUC} \\
+    \midrule
+    \multirow[t]{3}{*}{0.5}
+    & Precision  & \textbf{71.90} & 17.87 & 28.63 & 63.35 \\
+    & Recall     & 34.86 & \textbf{51.97} & 41.73 & 67.82 \\
+    & F1-Score   & 38.66 & 45.64 & 41.86 & 65.01 \\
+    & AUC        & 49.88 & 43.38 & \textbf{46.40} & \textbf{68.95} \\
+    \midrule
+    \multirow[t]{4}{*}{1}
+    & Precision  & \textbf{57.77} & 14.36 & 23.00 & 63.14 \\
+    & Recall     & 40.18 & 59.91 & 48.10 & 74.14 \\
+    & F1-Score   & 45.75 & 53.83 & \textbf{49.40} & 73.70 \\
+    & AUC        & 40.70 & \textbf{60.69} & 48.73 & \textbf{75.21} \\
+    \midrule
+    \multirow[t]{4}{*}{3} 
+    & Precision  & \textbf{76.09} & 18.92 & 30.30 & 65.75 \\
+    & Recall     & 41.82 & \textbf{62.42} & 50.09 & \textbf{76.24} \\
+    & F1-Score   & 52.36 & 52.07 & \textbf{52.18} & 74.66 \\
+    & AUC        & 53.77 & 46.77 & 49.99 & 75.39 \\
+    \midrule
+    \multirow[t]{4}{*}{5} 
+    & Precision  & \textbf{74.69} & 18.56 & 29.75 & 65.82 \\
+    & Recall     & 44.43 & \textbf{64.90} & 52.63 & \textbf{76.97} \\
+    & F1-Score   & 51.89 & 59.06 & \textbf{55.27} & 74.97 \\
+    & AUC        & 57.77 & 50.23 & 53.79 & 75.48 \\
+    \bottomrule
+    \end{tabular}
+    \vspace{2mm}
+    \caption*{\footnotesize Validation performance of DP-SGD models is reported as percentages under four tuning objectives (Precision, Recall, F1-score, and AUC) and four privacy budgets ($\varepsilon = 0.5, 1, 3, 5$), with fixed $\delta = 10^{-5}$. All values are in percentage points. The highest value for each $\varepsilon$-specific tuning group is highlighted in bold. The final hyperparameter configurations are available in \ref{a:hyper_select}.}
+\end{table}

@@ -1,0 +1,20 @@
+\begin{table}[H]
+    \centering
+    \caption*{\textbf{Table B.1. Hyperparameter search space}}
+    \label{tab:hyperparameter-space}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Hyperparameter} & \textbf{Baseline} & \textbf{DP-SGD} \\
+    \midrule
+    Hidden dimensions       & \([64], [64, 32]\)                      & \([64], [64, 32]\) \\
+    Batch size              & \([64,\ 128]\)                          & \([64,\ 150]\) \\
+    Dropout rate            & \([0.0,\ 0.4]\)                         & \([0.0,\ 0.4]\) \\
+    Learning rate           & \([0.02,\ 0.1]\)                        & \([0.00005,\ 0.001] \cdot \varepsilon^{1.5}\) \\
+    \(\lambda\)             & \([0.0001,\ 0.1]\)                      & \([0.0001,\ 0.1]\) \\
+    \(\gamma\)              & \([0.001,\ 0.999]\)                     & \([0.001,\ 0.999]\) \\
+    \(l_2\)-norm clip       & –                                      & \([75,\ 95]\)-th percentile-based clipping \\
+    \bottomrule
+    \end{tabular}
+    \vspace{2mm}
+    \caption*{\footnotesize Summary of the hyperparameter search space used in Bayesian optimization. For continuous-valued parameters (e.g., learning rate, \(\gamma\), \(\lambda\)), the algorithm explores ranges rather than fixed values. In the DP-SGD setup, the learning rate is scaled by \(\varepsilon^{1.5}\), and gradient clipping is based on the empirical \(l_2\)-norm distribution across minibatches.}
+\end{table}
