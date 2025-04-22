@@ -89,7 +89,7 @@ class AutoencoderTrainer:
                  learning_rate=1e-3,
                  lam=1e-4,
                  gamma=0.2,
-                 max_epochs=100,
+                 max_epochs=500,
                  patience_limit=10,
                  batch_size=64,
                  activation='relu',
@@ -100,7 +100,7 @@ class AutoencoderTrainer:
                  target_epsilon=1,
                  delta=1e-5,
                  l2norm_pct=90.0,
-                 save_privacy_tracking=False,
+                 save_tracking=False,
                  version=None,
                  ):
         """
@@ -125,7 +125,7 @@ class AutoencoderTrainer:
         - target_epsilon: float, default = 0.1, target epsilon for differential privacy.
         - delta: float, default = 1e-5, target delta for differential privacy.
         - l2norm_pct: float, default = 90.0, percentile for clipping the gradients.
-        - save_privacy_tracking: boolean, default = False, if True, save the privacy tracking information.
+        - save_tracking: boolean, default = False, if True, save the privacy tracking information.
         - version: str, default = None, version identifier for the training run.
         """
         self.input_dim = input_dim
@@ -148,13 +148,12 @@ class AutoencoderTrainer:
             self.target_epsilon = None
             self.delta = None
             self.l2norm_pct = None
-            self.save_privacy_tracking = False
         else:
             self.target_epsilon = target_epsilon
             self.delta = delta
             self.l2norm_pct = l2norm_pct
-            self.save_privacy_tracking = save_privacy_tracking
-        if save_privacy_tracking:
+        self.save_tracking = save_tracking
+        if save_tracking:
             self.version = version if version else datetime.now().strftime("%Y%m%d%H%M")
 
         # Set seeds
@@ -295,18 +294,23 @@ class AutoencoderTrainer:
                 print(f"Noise multiplier: {noise_multiplier:.4f}")
         
         # Prepare log file to save privacy accounting history (iteration-wise)
-        if self.save_privacy_tracking:
-            folder = "experiments/privacy_account"
+        if self.save_tracking:
+            folder = "experiments/tracking"
             os.makedirs(folder, exist_ok=True)
 
             # Delete any existing files with the same version prefix
-            pattern = os.path.join(folder, f"{self.version}_noise*.csv")
+            pattern = os.path.join(folder, f"{self.version}_*.csv")
             for file in glob.glob(pattern):
                 os.remove(file)
 
-            log_path = os.path.join(folder, f"{self.version}_noise{noise_multiplier:.4f}.csv")
-            with open(log_path, "w") as f:
-                f.write("epoch,spent_eps,train_loss,val_loss\n")
+            if self.dp_sgd:
+                log_path = os.path.join(folder, f"{self.version}_noise{noise_multiplier:.4f}.csv")
+                with open(log_path, "w") as f:
+                    f.write("epoch,spent_eps,train_loss,val_loss\n")
+            else:
+                log_path = os.path.join(folder, f"{self.version}_baseline.csv")
+                with open(log_path, "w") as f:
+                    f.write("epoch,train_loss,val_loss\n")
 
         # Define a TensorFlow function for each training step
         @tf.function
@@ -344,19 +348,28 @@ class AutoencoderTrainer:
 
             # Compose the privacy event
             if self.dp_sgd:
-                # Update the privacy accountant with the current step
-                spent_eps = sanitizer.compose_privacy_event(noise_multiplier, epoch + 1)
-                if self.save_privacy_tracking:
-                    with open(f"experiments/privacy_account/{self.version}_noise{noise_multiplier:.4f}.csv", "a") as f:
+                spent_eps = sanitizer.compose_privacy_event(noise_multiplier, epoch + 1)                
+            
+            # Update the tracking log with the current step
+            if self.save_tracking:
+                if self.dp_sgd:
+                    with open(f"experiments/tracking/{self.version}_noise{noise_multiplier:.4f}.csv", "a") as f:
                         f.write(f"{epoch + 1},{spent_eps:.4f},{train_loss_tracker.result():.4f},{val_loss_tracker.result():.4f}\n")
-                if self.verbose and epoch % 10 == 0:
-                    print(f'Composed DP event (after {epoch + 1} steps): achieved epsilon = {spent_eps:.4f} for delta = {self.delta}')
-                
+                else:
+                    with open(f"experiments/tracking/{self.version}_baseline.csv", "a") as f:
+                        f.write(f"{epoch + 1},{train_loss_tracker.result():.4f},{val_loss_tracker.result():.4f}\n")
+
+            # Print the training and validation loss and privacy event
             if self.verbose:
-                if self.dp_sgd and spent_eps > self.target_epsilon:
-                    print(f"\tWARNING: achieved epsilon {spent_eps:.4f} exceeds target epsilon {self.target_epsilon:.4f}.")
-                    break
+                if self.dp_sgd:
+                    if epoch % 10 == 0:
+                        print(f'Composed DP event (after {epoch + 1} steps): achieved epsilon = {spent_eps:.4f} for delta = {self.delta}')
+                    if spent_eps > self.target_epsilon:
+                        print(f"\tWARNING: achieved epsilon {spent_eps:.4f} exceeds target epsilon {self.target_epsilon:.4f}.")
+                        break
                 print(f"Epoch {epoch+1} → Train Loss: {train_loss_tracker.result():.4f}, Val Loss: {val_loss_tracker.result():.4f}")
+            
+            # Append the losses to the history
             train_loss_history.append(train_loss_tracker.result().numpy())
             val_loss_history.append(val_loss_tracker.result().numpy())
 
@@ -376,6 +389,7 @@ class AutoencoderTrainer:
                             print(f"Early stopping triggered at epoch {epoch+1}.")
                         break
 
+        # Restore the best weights
         self.autoencoder.set_weights(best_weights)
         
         # Plot the trajectory of the losses
@@ -464,7 +478,7 @@ class AutoencoderTuner:
                  x_val, y_val,
                  real_cols, binary_cols, all_cols,
                  activation='relu',
-                 max_epochs=100,
+                 #max_epochs=100,
                  patience_limit=10,
                  version=None,
                  dp_sgd=False,
@@ -503,7 +517,7 @@ class AutoencoderTuner:
         self.binary_cols = binary_cols
         self.all_cols = all_cols
         self.activation = activation
-        self.max_epochs = max_epochs
+        #self.max_epochs = max_epochs
         self.patience_limit = patience_limit
         self.dp_sgd = dp_sgd
         self.target_epsilon = target_epsilon
@@ -538,13 +552,13 @@ class AutoencoderTuner:
             binary_cols=self.binary_cols,
             all_cols=self.all_cols,
             activation=self.activation,
-            max_epochs=self.max_epochs,
+            #max_epochs=self.max_epochs,
             patience_limit=self.patience_limit,
             verbose=verbose,
             dp_sgd=dp_sgd,
             target_epsilon=self.target_epsilon,
             delta=self.delta,
-            save_privacy_tracking=privacy_tracking,
+            save_tracking=privacy_tracking,
             version=self.version,
             **params
         )
@@ -802,13 +816,15 @@ class AutoencoderTuner:
             else:
                 # Handle categorical lists (e.g., hidden_dims like [64, 32])
                 safe_values = [tuple(i) if isinstance(i, list) else i for i in v]
-                skopt_space.append(Categorical(safe_values, name=k, transform="identity"))
+                skopt_space.append(Categorical(safe_values, name=k, transform="onehot"))
 
         # Initialize the Bayesian optimizer
         optimizer = Optimizer(dimensions=skopt_space,
                             n_initial_points=random_starts,
                             random_state=123,
-                            base_estimator="RF")
+                            #base_estimator="ET",
+                            #acq_func_kwargs={"xi": 0.05}
+                            )
 
         # Prepare log file to save trial history (iteration-wise)
         if self.dp_sgd:
@@ -828,7 +844,14 @@ class AutoencoderTuner:
                     val = row[k]
                     params.append(parse_param_value(val, k, param_space))
                 loss = -float(row[metric])
-                optimizer.tell(params, loss)
+                try:
+                    optimizer.tell(params, loss)
+                except Exception as e:
+                    print("Failed to tell optimizer:", e)
+                    # Remove the row from the log file
+                    df_log.drop(index=row.name, inplace=True)
+                    df_log.to_csv(log_path, index=False)
+                    continue
                 completed_trials.add(tuple(params))
             # Get the best config and score from log
             best_row = df_log.loc[df_log[metric].idxmax()]
@@ -836,8 +859,7 @@ class AutoencoderTuner:
             for k in param_space.keys():
                 val = best_row[k]
                 parsed_val = parse_param_value(val, k, param_space)
-                #best_config[k] = list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val
-                best_config[k] = decode_map[k][parsed_val] if k in decode_map else (list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val)
+                best_config[k] = list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val
             best_score = float(best_row[metric])
         else:
             # Create the log file with updated header

@@ -207,61 +207,130 @@ Run ended at: 2025-04-20 21:54:58.395930
 Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 21:58:15.394947 ===
-Arguments: version=202504202158, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 21:59:35.654531
+=== Run started at: 2025-04-21 00:54:21.832393 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 00:55:38.704732
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:12:33.557207 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-21 17:13:07.041908
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:13:11.725300 ===
+Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
+Run ended at: 2025-04-21 17:14:18.982288
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:14:23.762667 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+
+
+=== Run started at: 2025-04-21 17:19:38.143005 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-21 17:20:14.607974
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:21:43.455060 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-21 17:22:10.897916
 Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+Error: cannot access local variable 'spent_eps' where it is not associated with a value
 
 
-=== Run started at: 2025-04-20 21:59:40.430731 ===
-Arguments: version=202504202159, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:01:00.385877
-Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+=== Run started at: 2025-04-21 17:22:15.491984 ===
+Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
 
 
-=== Run started at: 2025-04-20 22:01:05.295699 ===
-Arguments: version=202504202201, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:02:24.844177
-Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+=== Run started at: 2025-04-21 17:26:06.823296 ===
+Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
+Run ended at: 2025-04-21 17:26:41.818315
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:02:29.712211 ===
-Arguments: version=202504202202, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:03:51.323176
-Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+=== Run started at: 2025-04-21 17:26:46.547017 ===
+Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
+Run ended at: 2025-04-21 17:27:53.109045
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:04:25.719008 ===
-Arguments: version=202504202204, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:05:45.174476
-Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+=== Run started at: 2025-04-21 17:27:57.851523 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:29:15.843583
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:05:49.901210 ===
-Arguments: version=202504202205, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
+=== Run started at: 2025-04-21 17:29:20.512558 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:30:00.323091
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:15:27.765162 ===
-Arguments: version=202504202215, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:16:47.683913
-Status: FAILED
-Error: name 'c' is not defined
+=== Run started at: 2025-04-21 17:33:37.220461 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:34:54.466879
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:17:04.108556 ===
-Arguments: version=202504202217, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:18:24.563087
-Status: FAILED
-Error: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (5,) + inhomogeneous part.
+=== Run started at: 2025-04-21 17:34:59.138211 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:35:37.650991
+Status: SUCCESS
 
 
-=== Run started at: 2025-04-20 22:21:12.635746 ===
-Arguments: version=202504202221, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-20 22:22:32.444477
-Status: FAILED
-Error: operands could not be broadcast together with shapes (7,) (6,) (6,) 
+=== Run started at: 2025-04-21 17:36:33.286526 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:37:52.629658
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:38:45.906868 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:40:03.277992
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:40:21.235099 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:41:01.997117
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:41:59.374654 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:42:41.498173
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:45:07.376050 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:45:47.551518
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:46:22.091094 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:47:01.833463
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:47:30.444015 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:48:06.826488
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:48:15.368538 ===
+Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:48:54.061708
+Status: SUCCESS
+
+
+=== Run started at: 2025-04-21 17:49:26.081744 ===
+Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
+Run ended at: 2025-04-21 17:50:43.210980
+Status: SUCCESS

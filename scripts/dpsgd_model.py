@@ -136,6 +136,7 @@ def main():
             'lam': [1e-4, 1e-3, 1e-2, 1e-1],
             'gamma': [0.001, 0.999],
             'l2norm_pct': [75, 95],
+            'max_epochs': [300, 700],
         }
 
         # --- Initialize tuner object ---
