@@ -95,17 +95,7 @@ The dataset contains a total of 20 input attributes, including 10 numerical, 7 c
 
 A detailed list of variables, along with their description and statistical properties, is provided in \ref{a:data_desc}. Several numerical features exhibit notable departures from normality. Variables such as \texttt{duration}, \texttt{campaign}, and \texttt{previous} are highly right-skewed, indicating the presence of long-tailed behavior or rare large values. In contrast, features like \texttt{emp.var.rate}, \texttt{cons.price.idx}, and \texttt{nr.employed} show relatively symmetric distributions with low skewness and limited dispersion, characteristic of stable macroeconomic indicators. The observed skewness and kurtosis patterns informed the choice of transformation and imputation strategies, where logarithmic transformations were applied to heavy-tailed features, while median imputation was preferred over the mean to reduce sensitivity to extreme values.
 
-\begin{figure}[!t]
-    \centering
-    \footnotesize
-    \includegraphics[width=0.75\linewidth]{figures/raw_tsne.png}
-    \caption{Two-dimensional t-SNE projection of the input feature space}
-    \label{fig:tsne_input}
-    \vspace{1mm}
-    \begin{minipage}{\columnwidth}
-        The projection exhibits class separability between normal and anomalous observations. The plot was obtained using the t-distributed stochastic neighbor embedding (t-SNE) algorithm with two output dimensions and a fixed random seed for reproducibility. The input data was imputed, transformed through bucketing or logarithmic scaling where appropriate, and subsequently encoded for modeling. The scatter plot displays the embedded features color-coded by label, where anomalies (\texttt{y} = 1) are plotted in red and normal samples (\texttt{y} = 0) in green. The embedding was computed using the \texttt{sklearn.manifold} module.
-    \end{minipage}
-\end{figure}
+\subfile{figures/tsne_input}
 
 The t-SNE dimensionality reduction visualization demonstrated in Figure~\ref{fig:tsne_input} reveals that while the majority of anomalies (depicted in red) are dispersed throughout the plot, they tend to cluster near the boundaries of densely populated regions of normal data (in green). This spatial arrangement indicates that anomalous instances are not entirely isolated from the normal data manifold, but instead lie just off its surface. Such a pattern is consistent with the presence of subtle irregularities in the anomalous cases and provides empirical support for the use of reconstruction-based methods, such as autoencoders, for AD, which are designed to model the core structure of normal behavior.
 
