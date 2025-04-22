@@ -13,8 +13,8 @@ This project investigates how differentially private mechanisms, particularly **
   - `01_EDA.ipynb` – Initial exploratory data analysis  
   - `02_Preprocessing.ipynb` – Feature engineering and dataset preparation  
   - `03_Baseline_Model.ipynb` – Training and evaluating the non-private model  
-  - `04_DPSGD_Model.ipynb` – Training the DP-SGD model  
-  - `05_PostHoc_DP_Model.ipynb` – Applying post-hoc DP to baseline outputs  
+  - `04_DPSGD_Model.ipynb` – Training and evaluating the DP-SGD model  
+  - `05_PostHoc_DP_Model.ipynb` – Training and evaluating the output-perturbed model
   - `06_Explainability.ipynb` – Generating and analyzing SHAP explanations  
   - `07_Results_Analysis.ipynb` – Comparative analysis across models
 
@@ -44,8 +44,4 @@ This project investigates how differentially private mechanisms, particularly **
 
 ## 📊 Results
 
-Final outputs including performance metrics and SHAP-based explainability scores can be found in the `results/` directory.
-
-## 📦 Requirements
-
-Dependencies are specified in the project’s environment file (not included here). For setup, ensure TensorFlow, SHAP, scikit-learn, and Optuna are installed.
+Final outputs (on the test set) including performance metrics and SHAP-based explainability scores can be found in the `results/` directory.
