@@ -24,14 +24,12 @@ def main():
     # --- Argument parsing ---
     parser = argparse.ArgumentParser(description="Run Autoencoder hyperparameter tuning.")
     parser.add_argument("--version", type=str, default=None, help="Version identifier for the run")
-    parser.add_argument("--tune_method", type=str, choices=["sequential", "bayesian", None], default=None,
-                        help="Tuning method to use: 'sequential' or 'bayesian' (default: sequential)")
-
+    
     # Add additional arguments after possibly loading from logs
     parser.add_argument("--metric", type=str, default=None, help="Metric to evaluate (default: auc)")
-    parser.add_argument("--random_size", type=int, default=None, help="Number of random samples (default: 5)")
     parser.add_argument("--n_calls", type=int, default=None, help="Total number of optimization calls for Bayesian tuning")
     parser.add_argument("--random_starts", type=int, default=None, help="Number of initial random points for Bayesian tuning")
+    parser.add_argument("--bo_estimator", type=str, default=None, help="Bayesian optimization estimator (default: GP)")
     
     # Add argument for continuing from the last run
     parser.add_argument("--continue_run", type=bool, default=False, help="Continue from the last run")
@@ -74,29 +72,24 @@ def main():
             if last_args:
                 print("Resuming previous run with version:", args.version)
 
-            args.tune_method = get_value(args.tune_method, "tune_method", "bayesian")
             args.metric = get_value(args.metric, "metric", "auc")
-            args.random_size = get_value(args.random_size, "random_size", 5, int)
             args.n_calls = get_value(args.n_calls, "n_calls", 30, int)
             args.random_starts = get_value(args.random_starts, "random_starts", 5, int)
+            args.bo_estimator = get_value(args.bo_estimator, "bo_estimator", "GP")
         except Exception as e:
             print(f"Warning: Could not load previous config for version {args.version} due to error: {e}")
     else:
         args.version = datetime.now().strftime("%Y%m%d%H%M")
-        args.tune_method = args.tune_method if args.tune_method else "bayesian"
         args.metric = args.metric if args.metric else "auc"
-        args.random_size = args.random_size if args.random_size else 5
         args.n_calls = args.n_calls if args.n_calls else 30
         args.random_starts = args.random_starts if args.random_starts else 5
+        args.bo_estimator = args.bo_estimator if args.bo_estimator else "GP"
 
     # --- Start logging this run ---
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
-        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, tune_method={args.tune_method}"
-        if args.version == 'sequential':
-            info_txt += f", metric={args.metric}, random_size={args.random_size}\n"
-        else:
-            info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
+        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}"
+        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
         log_file.write(info_txt)
     print(info_txt)
     
@@ -137,17 +130,13 @@ def main():
             patience_limit=5,
             version=args.version,
             continue_run=args.continue_run,
+            bo_estimator=args.bo_estimator,
         )
 
         # --- Perform tuning using selected strategy ---
-        if args.tune_method == "sequential":
-            best_model, best_params, best_score = tuner.sequential_tune(
-                param_grid, metric=args.metric, random_size=args.random_size
-            )
-        else:
-            best_model, best_params, best_score = tuner.bo_tune(
-                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=1
-            )
+        best_model, best_params, best_score = tuner.bo_tune(
+            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=1
+        )
 
         # --- Save the best hyperparameters ---
         with open("hyperparams/baseline/{}.pkl".format(args.version), "wb") as f:

@@ -25,14 +25,12 @@ def main():
     # --- Argument parsing ---
     parser = argparse.ArgumentParser(description="Run DP-SGD Autoencoder hyperparameter tuning.")
     parser.add_argument("--version", type=str, default=None, help="Version identifier for the run")
-    parser.add_argument("--tune_method", type=str, choices=["sequential", "bayesian", None], default=None,
-                        help="Tuning method to use: 'sequential' or 'bayesian' (default: sequential)")
-
+    
     # Add additional arguments after possibly loading from logs
     parser.add_argument("--metric", type=str, default=None, help="Metric to evaluate (default: auc)")
-    parser.add_argument("--random_size", type=int, default=None, help="Number of random samples (default: 5)")
     parser.add_argument("--n_calls", type=int, default=None, help="Total number of optimization calls for Bayesian tuning")
     parser.add_argument("--random_starts", type=int, default=None, help="Number of initial random points for Bayesian tuning")
+    parser.add_argument("--bo_estimator", type=str, default=None, help="Bayesian optimization estimator (default: GP)")
 
     # Add arguments for differential privacy
     parser.add_argument("--epsilon", type=str, default=None, help="Epsilon value for differential privacy")
@@ -80,34 +78,29 @@ def main():
                     else:
                         return default_val
 
-            args.tune_method = get_value(args.tune_method, "tune_method", "bayesian")
             args.metric = get_value(args.metric, "metric", "auc")
-            args.random_size = get_value(args.random_size, "random_size", 5, int)
             args.n_calls = get_value(args.n_calls, "n_calls", 30, int)
             args.random_starts = get_value(args.random_starts, "random_starts", 5, int)
             args.epsilon = get_value(args.epsilon, "epsilon", "1")
             print(f"Using epsilon: {args.epsilon}")
             args.delta = get_value(args.delta, "delta", "1e-5")
+            args.bo_estimator = get_value(args.bo_estimator, "bo_estimator", "GP")
         except Exception as e:
             print(f"Warning: Could not load previous config for version {args.version} due to error: {e}")
     else:
         args.version = datetime.now().strftime("%Y%m%d%H%M")
-        args.tune_method = args.tune_method if args.tune_method else "bayesian"
         args.metric = args.metric if args.metric else "auc"
-        args.random_size = args.random_size if args.random_size else 5
         args.n_calls = args.n_calls if args.n_calls else 30
         args.random_starts = args.random_starts if args.random_starts else 5
         args.epsilon = args.epsilon if args.epsilon else "1"
         args.delta = args.delta if args.delta else "1e-5"
+        args.bo_estimator = args.bo_estimator if args.bo_estimator else "GP"
 
     # --- Start logging this run ---
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
-        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, tune_method={args.tune_method}, epsilon={args.epsilon}, delta={args.delta}"
-        if args.version == 'sequential':
-            info_txt += f", metric={args.metric}, random_size={args.random_size}\n"
-        else:
-            info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
+        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, epsilon={args.epsilon}, delta={args.delta}"
+        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
         log_file.write(info_txt)
     print(info_txt)
     
@@ -126,17 +119,17 @@ def main():
 
         # --- Define hyperparameter grid ---
         base_grid = [0.001, 0.00005]
-        scaled_grid = [round(l * float(args.epsilon) ** 1.5, 3) for l in base_grid]
+        scaled_grid = [round(l * float(args.epsilon) ** 1.8, 3) for l in base_grid]
         learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-6)]
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
-            'batch_size': [64, 128, 150],
-            'dropout_rate': [0.0, 0.1, 0.2, 0.3, 0.4],
+            'batch_size': [64, 150],
+            'dropout_rate': [0.0, 0.4],
             'learning_rate': learning_rate_grid,
-            'lam': [1e-4, 1e-3, 1e-2, 1e-1],
+            'lam': [1e-4, 1e-1],
             'gamma': [0.001, 0.999],
             'l2norm_pct': [75, 95],
-            'max_epochs': [300, 700],
+            'max_epochs': [150, 700],
         }
 
         # --- Initialize tuner object ---
@@ -149,24 +142,19 @@ def main():
             binary_cols=binary_cols,
             all_cols=all_cols,
             activation='relu',
-            max_epochs=500,
             patience_limit=10,
             version=args.version,
             dp_sgd=True,
             target_epsilon=float(args.epsilon),
             delta=float(args.delta),
             continue_run=args.continue_run,
+            bo_estimator=args.bo_estimator,
         )
 
         # --- Perform tuning using selected strategy ---
-        if args.tune_method == "sequential":
-            best_model, best_params, best_score = tuner.sequential_tune(
-                param_grid, metric=args.metric, random_size=args.random_size
-            )
-        else:
-            best_model, best_params, best_score = tuner.bo_tune(
-                param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=int(max(1, 6-float(args.epsilon)))
-            )
+        best_model, best_params, best_score = tuner.bo_tune(
+            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=int(max(2, 6-float(args.epsilon)))
+        )
 
         # --- Save the best hyperparameters ---
         os.makedirs("hyperparams/dpsgd", exist_ok=True)  # Ensure hyperparams/dpsgd directory exists

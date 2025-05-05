@@ -1,0 +1,44 @@
+
+
+=== Run started at: 2025-05-05 17:36:32.639893 ===
+Arguments: version=202505051736, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-05-05 17:38:14.132722 ===
+Arguments: version=202505051738, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-05-05 17:43:41.224626 ===
+Arguments: version=202505051743, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-05-05 17:43:41.280852
+Status: FAILED
+Error: the lower bound 500 has to be less than the upper bound 500
+
+
+=== Run started at: 2025-05-05 17:47:00.920613 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-05-05 17:51:01.408000
+Status: FAILED
+Error: 'AutoencoderTuner' object has no attribute 'epsilon'
+
+
+=== Run started at: 2025-05-05 18:04:19.086254 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-05-05 18:04:58.904399 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+
+
+=== Run started at: 2025-05-05 18:13:17.782084 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-05-05 20:14:14.380140 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
+Run ended at: 2025-05-05 20:54:08.264475
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-05 20:54:47.904658 ===
+Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5

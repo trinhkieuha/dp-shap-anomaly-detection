@@ -334,3 +334,23 @@ Status: SUCCESS
 Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
 Run ended at: 2025-04-21 17:50:43.210980
 Status: SUCCESS
+
+
+=== Run started at: 2025-05-05 17:56:35.112132 ===
+Arguments: version=202505051756, metric=auc, n_calls=30, random_starts=5
+
+
+=== Run started at: 2025-05-05 21:44:53.588382 ===
+Arguments: version=202505052144, metric=auc, n_calls=30, random_starts=5
+Run ended at: 2025-05-05 22:10:31.705268
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-05 22:10:35.992549 ===
+Arguments: version=202505052210, metric=f1_score, n_calls=30, random_starts=5
+Run ended at: 2025-05-05 22:27:29.471034
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-05 22:27:33.702297 ===
+Arguments: version=202505052227, metric=precision, n_calls=30, random_starts=5

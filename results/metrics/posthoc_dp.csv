@@ -1,0 +1,2 @@
+accuracy,precision,recall,f1_score,auc,version,eps,delta,timestamp
+0.7961944662651654,0.0,0.0,0.0,0.6478975928022096,202505051747,1,1e-5,2025-05-05 20:54:08

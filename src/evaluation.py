@@ -15,7 +15,7 @@ plt.rcParams['font.family'] = 'serif'  # or 'DejaVu Serif'
 plt.rcParams['font.serif'] = ['Times New Roman']  # 'DejaVu Serif' serif' 'Times'
 
 class ValidationEvaluation:
-    def __init__(self, X_val, y_val, real_cols, binary_cols, all_cols, dp_sgd=False):
+    def __init__(self, X_val, y_val, real_cols, binary_cols, all_cols, dp_sgd=False, post_hoc=False):
         """
         Initialize the ValidationEvaluation class.
         Parameters:
@@ -25,6 +25,7 @@ class ValidationEvaluation:
         - binary_cols: list of str, names of binary columns
         - all_cols: list of str, names of all columns
         - dp_sgd: bool, whether to use differential privacy settings
+        - post_hoc: bool, whether to use post-hoc evaluation
         """
 
         self.X_val = X_val
@@ -33,9 +34,9 @@ class ValidationEvaluation:
         self.binary_cols = binary_cols
         self.all_cols = all_cols
         self.dp_sgd = dp_sgd
+        self.post_hoc = post_hoc
 
         self.metric_labels = {
-            #"accuracy": "Accuracy",
             "precision": "Precision",
             "recall": "Recall",
             "f1_score": "F1-Score",
@@ -72,23 +73,18 @@ class ValidationEvaluation:
 
             # Parse values
             version_match = re.search(r"version=(\d+)", args_line)
-            method_match = re.search(r"tune_method=(\w+)", args_line)
             metric_match = re.search(r"metric=(\w+)", args_line)
             epsilon_match = re.search(r"epsilon=([\d\.]+)", args_line) if self.dp_sgd else None
             delta_match = re.search(r"delta=([\deE\.\-]+)", args_line) if self.dp_sgd else None
             end_time = re.search(r"Run ended at: (.*)", end_line).group(1).strip()
             status = re.search(r"Status: (\w+)", status_line).group(1).strip()
 
-            if not (version_match and method_match and metric_match and status == "SUCCESS"):
+            if not (version_match and metric_match and status == "SUCCESS"):
                 continue
 
             version = version_match.group(1)
-            method = method_match.group(1)
             metric = metric_match.group(1)
             end_dt = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
-
-            if method != "bayesian":
-                continue
 
             if self.dp_sgd:
                 epsilon = float(epsilon_match.group(1)) if epsilon_match else None
@@ -132,6 +128,9 @@ class ValidationEvaluation:
         if self.dp_sgd:
             model_path_prefix="../models/dpsgd"
             hyperparam_path_prefix="../hyperparams/dpsgd"
+        elif self.post_hoc:
+            model_path_prefix="../models/posthoc_dp"
+            hyperparam_path_prefix="../hyperparams/posthoc_dp"
         else:
             model_path_prefix="../models/baseline"
             hyperparam_path_prefix="../hyperparams/baseline"
@@ -202,7 +201,7 @@ class ValidationEvaluation:
                 margin = (y_max - y_min) * 0.1 if y_max != y_min else 0.05
                 ax.set_ylim(y_min - margin, y_max + margin)
                 ax.tick_params(axis='x', rotation=45)
-                ax.bar_label(bars, fmt="%.3f", padding=3)
+                ax.bar_label(bars, fmt="%.4f", padding=3)
 
             # Remove unused axes
             for j in range(len(self.metrics), len(axs)):
