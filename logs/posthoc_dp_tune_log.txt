@@ -1,44 +1,188 @@
 
 
-=== Run started at: 2025-05-05 17:36:32.639893 ===
-Arguments: version=202505051736, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-05-05 17:38:14.132722 ===
-Arguments: version=202505051738, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-05-05 17:43:41.224626 ===
-Arguments: version=202505051743, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 17:43:41.280852
-Status: FAILED
-Error: the lower bound 500 has to be less than the upper bound 500
-
-
-=== Run started at: 2025-05-05 17:47:00.920613 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 17:51:01.408000
-Status: FAILED
-Error: 'AutoencoderTuner' object has no attribute 'epsilon'
-
-
-=== Run started at: 2025-05-05 18:04:19.086254 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-
-
-=== Run started at: 2025-05-05 18:04:58.904399 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-
-
-=== Run started at: 2025-05-05 18:13:17.782084 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-05-05 20:14:14.380140 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=40, random_starts=5
-Run ended at: 2025-05-05 20:54:08.264475
+=== Run started at: 2025-05-09 00:42:33.949351 ===
+Arguments: version=202505090042, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 01:23:38.470990
 Status: SUCCESS
 
 
-=== Run started at: 2025-05-05 20:54:47.904658 ===
-Arguments: version=202505051747, dp_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5
+=== Run started at: 2025-05-09 01:23:43.682641 ===
+Arguments: version=202505090123, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 01:52:19.860831
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 01:52:24.091535 ===
+Arguments: version=202505090152, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 02:28:07.926573
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 02:28:12.698070 ===
+Arguments: version=202505090228, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 03:03:42.978488
+Status: FAILED
+Error: cannot compute AddV2 as input #1(zero-based) was expected to be a float tensor but is a double tensor [Op:AddV2] name: 
+
+
+=== Run started at: 2025-05-09 03:03:47.412701 ===
+Arguments: version=202505090303, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 03:37:19.997938
+Status: FAILED
+Error: cannot compute AddV2 as input #1(zero-based) was expected to be a float tensor but is a double tensor [Op:AddV2] name: 
+
+
+=== Run started at: 2025-05-09 03:37:24.151656 ===
+Arguments: version=202505090337, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 04:26:39.707838
+Status: FAILED
+Error: cannot compute AddV2 as input #1(zero-based) was expected to be a float tensor but is a double tensor [Op:AddV2] name: 
+
+
+=== Run started at: 2025-05-09 04:26:43.931209 ===
+Arguments: version=202505090426, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 05:08:01.821137
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 05:08:06.616274 ===
+Arguments: version=202505090508, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 05:43:32.336949
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 05:43:37.047619 ===
+Arguments: version=202505090543, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 11:42:06.992036
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 11:43:44.758968 ===
+Arguments: version=202505091143, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-09 12:29:25.093642 ===
+Arguments: version=202505091229, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 13:09:35.854563
+Status: FAILED
+Error: cannot compute AddV2 as input #1(zero-based) was expected to be a float tensor but is a double tensor [Op:AddV2] name: 
+
+
+=== Run started at: 2025-05-09 13:09:40.163963 ===
+Arguments: version=202505091309, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-09 13:11:31.068214 ===
+Arguments: version=202505091311, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-09 13:12:37.308556 ===
+Arguments: version=202505091312, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 14:02:26.674412
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 14:02:32.495516 ===
+Arguments: version=202505091402, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-09 14:11:27.706726 ===
+Arguments: version=202505091411, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 15:06:29.081849
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 15:06:34.214102 ===
+Arguments: version=202505091506, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 15:50:23.125940
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 15:50:27.514456 ===
+Arguments: version=202505091550, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 16:30:29.523076
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 16:30:34.356707 ===
+Arguments: version=202505091630, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 17:16:04.312637
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 17:16:08.611658 ===
+Arguments: version=202505091716, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 17:51:23.863192
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 17:51:28.173464 ===
+Arguments: version=202505091751, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 18:28:04.987627
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 19:48:11.014904 ===
+Arguments: version=202505091948, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 20:26:36.491865
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 20:26:41.303821 ===
+Arguments: version=202505092026, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 21:02:34.656940
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 21:02:39.460243 ===
+Arguments: version=202505092102, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-09 21:46:48.823062
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-09 21:46:53.080980 ===
+Arguments: version=202505092146, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 00:28:40.459893
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 00:28:44.761824 ===
+Arguments: version=202505100028, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 01:06:55.289090
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 01:07:00.108044 ===
+Arguments: version=202505100107, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 02:05:37.851975
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 02:05:42.112032 ===
+Arguments: version=202505100205, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 02:47:10.828404
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 02:47:15.636266 ===
+Arguments: version=202505100247, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 03:39:04.056578
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 03:39:08.452600 ===
+Arguments: version=202505100339, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 04:25:15.291718
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 04:25:19.520309 ===
+Arguments: version=202505100425, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 05:06:20.816987
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-10 05:06:25.038259 ===
+Arguments: version=202505100506, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-10 05:44:43.819945
+Status: SUCCESS

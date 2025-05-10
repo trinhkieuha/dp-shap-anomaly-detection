@@ -27,8 +27,10 @@ def add_lap_noise(tensor, scale):
     - tf.Tensor, the tensor with added Laplace noise.
     """
 
-    lap = tfp.distributions.Laplace(loc=0.0, scale=scale)
-    return tensor + lap.sample(sample_shape=tf.shape(tensor))
+    dtype = tensor.dtype  # get the data type of the input tensor
+    lap = tfp.distributions.Laplace(loc=tf.constant(0.0, dtype=dtype), scale=tf.constant(scale, dtype=dtype))
+    noise = lap.sample(sample_shape=tf.shape(tensor))
+    return tensor + noise
 
 def compute_empirical_nsr(reference_scores, baseline_scores):
     """

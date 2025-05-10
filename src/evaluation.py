@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from math import pi
+import os
+from src.dp_utils import *
 
 plt.rcParams['text.usetex'] = False
 plt.rcParams['mathtext.fontset'] = 'stix'  # or other, 'dejavuserif'
@@ -74,8 +76,9 @@ class ValidationEvaluation:
             # Parse values
             version_match = re.search(r"version=(\d+)", args_line)
             metric_match = re.search(r"metric=(\w+)", args_line)
-            epsilon_match = re.search(r"epsilon=([\d\.]+)", args_line) if self.dp_sgd else None
-            delta_match = re.search(r"delta=([\deE\.\-]+)", args_line) if self.dp_sgd else None
+            epsilon_match = re.search(r"epsilon=([\d\.]+)", args_line) if self.dp_sgd or self.post_hoc else None
+            delta_match = re.search(r"delta=([\deE\.\-]+)", args_line) if self.dp_sgd or self.post_hoc else None
+            noise_mechanism_match = re.search(r"noise_mechanism=(\w+)", args_line) if self.post_hoc else None
             end_time = re.search(r"Run ended at: (.*)", end_line).group(1).strip()
             status = re.search(r"Status: (\w+)", status_line).group(1).strip()
 
@@ -86,31 +89,50 @@ class ValidationEvaluation:
             metric = metric_match.group(1)
             end_dt = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S.%f")
 
-            if self.dp_sgd:
+            if self.dp_sgd or self.post_hoc:
                 epsilon = float(epsilon_match.group(1)) if epsilon_match else None
                 delta = float(delta_match.group(1)) if delta_match else None
-                key = (metric, epsilon, delta)
+                if self.post_hoc:
+                    noise_mechanism = noise_mechanism_match.group(1) if noise_mechanism_match else None
+                    key = (metric, epsilon, delta, noise_mechanism)
+                else:
+                    key = (metric, epsilon, delta)
                 if key not in latest_versions or end_dt > latest_versions[key]["end_time"]:
-                    latest_versions[key] = {
-                        "version": version,
-                        "end_time": end_dt,
-                        "metric": metric,
-                        "epsilon": epsilon,
-                        "delta": delta
-                    }
+                    if self.post_hoc:
+                        latest_versions[key] = {
+                            "version": version,
+                            "end_time": end_dt,
+                            "metric": metric,
+                            "epsilon": epsilon,
+                            "delta": delta,
+                            "noise_mechanism": noise_mechanism
+                        }
+                    else:
+                        latest_versions[key] = {
+                            "version": version,
+                            "end_time": end_dt,
+                            "metric": metric,
+                            "epsilon": epsilon,
+                            "delta": delta
+                        }
             else:
                 if metric not in latest_versions or end_dt > latest_versions[metric][1]:
                     latest_versions[metric] = (version, end_dt)
 
         if self.dp_sgd:
             return {
-                v["version"]: (self.metric_labels.get(v["metric"], v["metric"]), v["epsilon"], v["delta"])
+                v["version"]: (self.metric_labels.get(v["metric"], v["metric"]), v["epsilon"], v["delta"], v["end_time"])
+                for v in latest_versions.values()
+            }
+        elif self.post_hoc:
+            return {
+                v["version"]: (self.metric_labels.get(v["metric"], v["metric"]), v["epsilon"], v["delta"], v["noise_mechanism"], v["end_time"])
                 for v in latest_versions.values()
             }
         else:
             return {
-                version: self.metric_labels[metric]
-                for metric, (version, _) in latest_versions.items()
+                version: (self.metric_labels[metric], end_time)
+                for metric, (version, end_time) in latest_versions.items()
             }
 
     def evaluate_model_performance(self, version_info_dict):
@@ -125,6 +147,7 @@ class ValidationEvaluation:
         """
         eval_results = pd.DataFrame(columns=["version"] + self.metrics)
 
+        # Determine model and hyperparameter paths
         if self.dp_sgd:
             model_path_prefix="../models/dpsgd"
             hyperparam_path_prefix="../hyperparams/dpsgd"
@@ -137,6 +160,22 @@ class ValidationEvaluation:
 
         for version in version_info_dict.keys():
             print(f"Evaluating version {version}")
+
+            model_info = version_info_dict[version]
+            if self.dp_sgd:
+                metric, epsilon, delta, end_dt = model_info
+                noise_mechanism = None
+                print(f"Metric: {metric}, Epsilon: {epsilon}, Delta: {delta}")
+            elif self.post_hoc:
+                metric, epsilon, delta, noise_mechanism, end_dt = model_info
+                print(f"Metric: {metric}, Epsilon: {epsilon}, Delta: {delta}, Noise Mechanism: {noise_mechanism}")
+            else:
+                metric, end_dt = model_info
+                epsilon, delta = None, None
+                noise_mechanism = None
+                print(f"Metric: {metric}")
+
+            # Load model and hyperparameters
             model = tf.keras.models.load_model(f"{model_path_prefix}/{version}")
             with open(f"{hyperparam_path_prefix}/{version}.pkl", "rb") as f:
                 params = pickle.load(f)
@@ -147,21 +186,37 @@ class ValidationEvaluation:
                 binary_cols=self.binary_cols,
                 all_cols=self.all_cols,
                 lam=params["lam"],
-                gamma=params["gamma"]
+                gamma=params["gamma"],
+                post_hoc=self.post_hoc,
+                noise_mechanism=noise_mechanism,
+                target_epsilon=float(epsilon), delta=float(delta)
             )
 
-            scores = detector._compute_anomaly_scores(self.X_val)
+            if self.post_hoc:
+                for file in os.listdir(f"../experiments/scores/posthoc_dp/"):
+                    if f"{version}_noise" in file and file.endswith(".feather"):
+                        noise_multiplier = float(re.search(r'noise(\d+(\.\d+)?)', file).group(1))
+                        break
+                if noise_multiplier is None:
+                    raise ValueError(f"Noise multiplier not found for version {version}")
+            else:
+                noise_multiplier = 0
+
+            # Compute scores using the baseline model
+            scores = detector._compute_anomaly_scores(self.X_val, noise_multiplier=noise_multiplier)
+            
             y_pred = detector._detect(scores, params["threshold"])
             perf = detector._evaluate(y_pred, self.y_val, scores)
             perf.update(params)
             perf["version"] = str(version)
+            perf["tuned_by"] = metric
+            if self.dp_sgd or self.post_hoc:
+                perf["delta"] = delta
+                perf["epsilon"] = epsilon
+                if self.post_hoc:
+                    perf["noise_mechanism"] = noise_mechanism
+            perf["end_time"] = end_dt
             eval_results = pd.concat([eval_results, pd.DataFrame([perf])], ignore_index=True)
-
-        # Metadata: metric label, epsilon, delta
-        eval_results["tuned_by"] = eval_results["version"].apply(lambda x: version_info_dict[x][0] if self.dp_sgd else version_info_dict[x])
-        if self.dp_sgd:
-            eval_results["epsilon"] = eval_results["version"].apply(lambda x: version_info_dict[x][1])
-            eval_results["delta"] = eval_results["version"].apply(lambda x: version_info_dict[x][2])
 
         eval_results.set_index("version", inplace=True)
 
@@ -182,9 +237,16 @@ class ValidationEvaluation:
         - save: bool, whether to save the plots
         """
         # Determine grouping
-        groups = [((None, None), eval_results)] if not self.dp_sgd else eval_results.groupby(["epsilon", "delta"])
+        groups = [((None, None), eval_results)] if not self.dp_sgd and not self.post_hoc else eval_results.groupby(["epsilon", "delta"] if self.dp_sgd else ["epsilon", "delta", "noise_mechanism"])
 
-        for (eps, delt), group_df in groups:
+        for model_info, group_df in groups:
+            if self.dp_sgd:
+                eps, delt = model_info
+            elif self.post_hoc:
+                eps, delt, noise_mechanism = model_info
+            else:
+                eps, delt = None, None
+
             # Create subplots
             fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(10, 10))
             axs = axs.flatten()
@@ -209,14 +271,16 @@ class ValidationEvaluation:
 
             # Title and layout
             title = "Validation Performance"
-            if self.dp_sgd:
+            if self.dp_sgd or self.post_hoc:
                 title += r" ($\varepsilon$ = " + str(eps) + r", $\delta$ = " + str(delt) + ")"
+                if self.post_hoc:
+                    title += f" - {noise_mechanism.capitalize()}"
             fig.suptitle(title, fontsize=16)
             plt.tight_layout()
 
             # Save or show
             if save is True:
-                filename = f"../results/figures/dpsgd_hyperparam_tune_eps{eps}_delta{delt}.png" if self.dp_sgd else f"../results/figures/baseline_hyperparam_tune.png"
+                filename = f"../results/figures/dpsgd_hyperparam_tune_eps{eps}_delta{delt}.png" if self.dp_sgd else f"../results/figures/posthoc_dp_hyperparam_tune_eps{eps}_delta{delt}_{noise_mechanism}.png" if self.post_hoc else f"../results/figures/baseline_hyperparam_tune.png"
                 plt.savefig(filename)
             
             plt.show()

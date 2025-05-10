@@ -89,7 +89,7 @@ def main():
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
         info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}"
-        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
+        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}, bo_estimator={args.bo_estimator}\n"
         log_file.write(info_txt)
     print(info_txt)
     
@@ -109,7 +109,7 @@ def main():
         # --- Define hyperparameter grid ---
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
-            'batch_size': [64, 128],
+            'batch_size': [64, 150],
             'dropout_rate': [0.0, 0.1, 0.2, 0.3, 0.4],
             'learning_rate': [0.1, 0.05, 0.02],
             'lam': [1e-4, 1e-3, 1e-2, 1e-1],
@@ -126,7 +126,7 @@ def main():
             binary_cols=binary_cols,
             all_cols=all_cols,
             activation='relu',
-            max_epochs=500,
+            max_epochs=1000,
             patience_limit=5,
             version=args.version,
             continue_run=args.continue_run,
@@ -135,7 +135,7 @@ def main():
 
         # --- Perform tuning using selected strategy ---
         best_model, best_params, best_score = tuner.bo_tune(
-            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=1
+            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=2
         )
 
         # --- Save the best hyperparameters ---

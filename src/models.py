@@ -103,6 +103,7 @@ class AutoencoderTrainer:
                  l2norm_pct=90.0,
                  save_tracking=False,
                  version=None,
+                 raise_convergence_error=True
                  ):
         """
         Initializes the trainer and constructs the encoder-decoder architecture.
@@ -129,6 +130,7 @@ class AutoencoderTrainer:
         - l2norm_pct: float, default = 90.0, percentile for clipping the gradients.
         - save_tracking: boolean, default = False, if True, save the privacy tracking information.
         - version: str, default = None, version identifier for the training run.
+        - raise_convergence_error: boolean, default = True, if True, raise an error if the model does not converge.
         """
         self.input_dim = input_dim
         self.real_cols = real_cols
@@ -158,6 +160,7 @@ class AutoencoderTrainer:
         self.save_tracking = save_tracking
         if save_tracking:
             self.version = version if version else datetime.now().strftime("%Y%m%d%H%M")
+        self.raise_convergence_error = raise_convergence_error
 
         # Build model
         self.encoder, self.decoder = self._build_autoencoder()
@@ -365,10 +368,10 @@ class AutoencoderTrainer:
             # Update the tracking log with the current step
             if self.save_tracking:
                 if self.dp_sgd:
-                    with open(f"experiments/tracking/{self.version}_noise{noise_multiplier:.4f}.csv", "a") as f:
+                    with open(log_path, "a") as f:
                         f.write(f"{epoch + 1},{spent_eps:.4f},{train_loss_tracker.result():.4f},{val_loss_tracker.result():.4f}\n")
                 else:
-                    with open(f"experiments/tracking/{self.version}_baseline.csv", "a") as f:
+                    with open(log_path, "a") as f:
                         f.write(f"{epoch + 1},{train_loss_tracker.result():.4f},{val_loss_tracker.result():.4f}\n")
             
             # Append the losses to the history
@@ -397,12 +400,12 @@ class AutoencoderTrainer:
         tail_len = 20 #int(0.1 * n)
 
         # Ensure tail_len is at least 2 to compute slope
-        if n < tail_len:
+        if n < 2:
             raise ValueError("Too few points in the tail to compute slope.")
 
         # Compute the slope of the last 10% of the loss history
         y = loss_history[-tail_len:]
-        x = np.arange(tail_len)
+        x = np.arange(min(tail_len, n))
 
         # Fit a line to the last 10% of the loss history
         slope = np.polyfit(x, y, 1)[0]  # degree 1 polynomial fit  
@@ -411,8 +414,11 @@ class AutoencoderTrainer:
         converged = (slope > -0.003)
 
         if not converged:
-            # Raise error if the model did not converge
-            raise ValueError(f"The model did not converge (slope = {slope}). Please check the training parameters.")
+            if self.raise_convergence_error:
+                # Raise error if the model did not converge
+                raise ValueError(f"The model did not converge (slope = {slope}). Please check the training parameters.")
+            else:
+                print(f"The model did not converge (slope = {slope}). Please check the training parameters.")
 
         # Restore the best weights
         self.autoencoder.set_weights(best_weights)
@@ -454,44 +460,43 @@ class AnomalyDetector:
         self.delta = delta
         self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
-    def _compute_anomaly_scores(self, x, T=1.0):
+    def _compute_anomaly_scores(self, x, **kwargs):
         """
-        Computes per-sample reconstruction losses using HybridLoss.
+        Computes anomaly scores, with optional post-hoc differential privacy.
+        
+        If self.post_hoc is True, this method internally computes the noise scale T and 
+        uses the baseline (non-private) reconstruction scores, adding calibrated noise.
+        Otherwise, it uses the model's reconstruction loss directly.
 
         Parameters:
         - x: pd.DataFrame or np.ndarray, input data
-        - T: float, empirical noise-to-signal ratio
+        - kwargs: if post_hoc=True, must include arguments for _compute_sensitivity
 
         Returns:
-        - scores: np.ndarray, reconstruction losses (anomaly scores)
+        - scores: np.ndarray of shape (n_samples,), anomaly scores (possibly perturbed)
         """
+        # Standard scoring using trained model
         x_tensor = tf.convert_to_tensor(x.values.astype(np.float32))
         x_hat = self.model(x_tensor, training=False)
-        per_sample_loss = self.loss_fn.call(x_tensor, x_hat).numpy()
+        scores = self.loss_fn.call(x_tensor, x_hat).numpy()
 
-        if len(per_sample_loss.shape) == 0:
-            per_sample_loss = np.array([per_sample_loss])
-
-        scores = per_sample_loss.copy()
-
-        # Compute the noise scale T for the post-hoc model
         if self.post_hoc:
-            # Convert scores to tensors
-            scores_tensor = tf.convert_to_tensor(scores, dtype=tf.float32)
-
-            # Add noise to the scores
+            # Compute the noise scale
             if self.noise_mechanism == "laplace":
-                scale = T / self.target_epsilon
-                print(f"Scale: {scale}")
-                perturbed = add_lap_noise(scores_tensor, scale)
+                noise = add_lap_noise(tf.convert_to_tensor(scores, dtype=tf.float32), kwargs['noise_multiplier'])
             elif self.noise_mechanism == "gaussian":
-                assert self.delta is not None, "Delta is required for Gaussian mechanism."
-                sigma = T * np.sqrt(2 * np.log(1.25 / self.delta)) / self.target_epsilon
-                print(f"Sigma: {sigma}")
-                perturbed = add_gaussian_noise(scores_tensor, sigma)
+                if self.delta is None:
+                    raise ValueError("Delta must be set for Gaussian mechanism.")
+                noise = add_gaussian_noise(tf.convert_to_tensor(scores, dtype=tf.float32), kwargs['noise_multiplier'])
             else:
-                raise ValueError("Unsupported noise mechanism.")
-            scores = perturbed.numpy()            
+                raise ValueError(f"Unsupported noise mechanism: {self.noise_mechanism}")
+
+            scores = noise.numpy()
+
+        else:
+            if np.isscalar(scores):
+                scores = np.array([scores])
+            noise_multiplier = 0
 
         return scores
         
@@ -532,82 +537,6 @@ class AnomalyDetector:
             'auc': auc
         }
     
-def compute_sensitivity(
-    x_train, x_train_val, x_val,
-    real_cols, binary_cols, all_cols,
-    activation='relu', patience_limit=10, version=None,
-    target_epsilon=1, delta=1e-5,
-    noise_mechanism='gaussian', config=None
-):
-    """
-    Computes the noise scale T for post-hoc DP by training a DP-SGD and baseline autoencoder
-    and calculating the empirical noise-to-signal ratio (NSR).
-
-    Parameters:
-    - x_train, x_train_val, x_val: pd.DataFrame, data splits
-    - real_cols, binary_cols, all_cols: list, feature type partitions
-    - activation: str, activation function used in the models
-    - patience_limit: int, early stopping patience
-    - version: str or None, experiment version for tracking
-    - target_epsilon, delta: float, differential privacy parameters
-    - noise_mechanism: str, 'gaussian' or 'laplace'
-    - config: dict, includes model hyperparameters like 'lam', 'gamma', etc.
-
-    Returns:
-    - T: float, empirical noise-to-signal ratio
-    """
-
-    def _train_model(use_dp_sgd):
-        trainer = AutoencoderTrainer(
-            input_dim=x_train.shape[1],
-            real_cols=real_cols,
-            binary_cols=binary_cols,
-            all_cols=all_cols,
-            activation=activation,
-            patience_limit=patience_limit,
-            verbose=False,
-            dp_sgd=use_dp_sgd,
-            post_hoc=False,
-            target_epsilon=target_epsilon,
-            delta=delta,
-            save_tracking=False,
-            version=version,
-            **config
-        )
-        if use_dp_sgd:
-            return trainer.train(x_train, x_train_val)
-        else:
-            return trainer.train(x_train, x_train_val)
-
-    # Train both models
-    dpsgd_model = _train_model(use_dp_sgd=True)
-    baseline_model = _train_model(use_dp_sgd=False)
-
-    # Evaluate both models
-    dpsgd_scores = AnomalyDetector(
-        dpsgd_model, real_cols, binary_cols, all_cols,
-        lam=config['lam'], gamma=config['gamma']
-    )._compute_anomaly_scores(x_val)
-
-    baseline_scores = AnomalyDetector(
-        baseline_model, real_cols, binary_cols, all_cols,
-        lam=config['lam'], gamma=config['gamma']
-    )._compute_anomaly_scores(x_val)
-
-    # Compute NSR and derive noise scale
-    desired_nsr = compute_empirical_nsr(dpsgd_scores, baseline_scores)
-
-    T = compute_T_from_nsr(
-        signal_std=np.std(baseline_scores),
-        epsilon=target_epsilon,
-        nsr_target=desired_nsr,
-        mechanism=noise_mechanism,
-        delta=delta,
-    )
-
-    del dpsgd_model, dpsgd_scores, baseline_scores
-
-    return T, baseline_model
     
 class AutoencoderTuner:
     def __init__(self, x_train, x_train_val,
@@ -683,9 +612,11 @@ class AutoencoderTuner:
         if final:
             privacy_tracking = True
             verbose = True
+            raise_convergence_error = False
         else:
             privacy_tracking = False
             verbose = False
+            raise_convergence_error = True
 
         if self.max_epochs:
             params['max_epochs'] = self.max_epochs
@@ -704,29 +635,48 @@ class AutoencoderTuner:
             delta=self.delta,
             save_tracking=privacy_tracking,
             version=self.version,
+            raise_convergence_error=raise_convergence_error,
             **params
         )
         
         return trainer.train(self.x_train, self.x_train_val)
 
-    def _evaluate_model(self, model, metric, lam=1e-4, gamma=0.2, T=1.0):
+    def _evaluate_model(self, metric, model, params, final=False, noise_multiplier=None):
         """
         Evaluates the trained autoencoder model on the validation set.
         Parameters:
         - model: trained autoencoder model
         - metric: str, performance metric to evaluate (e.g., 'auc', 'f1_score')
-        - lam: float, L2 regularization coefficient
-        - gamma: float, weight of MSE
-        - T: float, empirical noise-to-signal ratio (for post-hoc analysis)
+        - params: dict, hyperparameters for the autoencoder
+        - final: bool, if True, saves the final reconstruction scores
+        - noise_multiplier: float, noise multiplier for differential privacy
         Returns:
         - threshold: float, optimal threshold for anomaly detection
         - eval_scores: dict, evaluation metrics (accuracy, precision, recall, f1, auc)
         """
-        # Compute reconstruction scores
-        detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols, lam=lam, gamma=gamma
+        
+        detector = AnomalyDetector(model, self.real_cols, self.binary_cols, self.all_cols, lam=params["lam"], gamma=params["gamma"]
                                    , post_hoc=self.post_hoc, noise_mechanism=self.noise_mechanism,
                                    target_epsilon=self.target_epsilon, delta=self.delta)
-        scores = detector._compute_anomaly_scores(self.x_val, T=T)
+        if self.post_hoc:
+            scores = detector._compute_anomaly_scores(x=self.x_val,
+                                                      noise_multiplier=noise_multiplier)
+            if final == True:
+                os.makedirs(os.path.dirname("experiments/scores/posthoc_dp/"), exist_ok=True)
+                score_path = f"experiments/scores/posthoc_dp/{self.version}_noise{noise_multiplier}.feather"
+        else:
+            scores = detector._compute_anomaly_scores(x=self.x_val)
+            if final == True:
+                if self.dp_sgd:
+                    os.makedirs(os.path.dirname("experiments/scores/dpsgd/"), exist_ok=True)
+                    score_path = f"experiments/scores/dpsgd/{self.version}.feather"
+                else:
+                    os.makedirs(os.path.dirname("experiments/scores/baseline/"), exist_ok=True)
+                    score_path = f"experiments/scores/baseline/{self.version}.feather"
+
+        # Save the final reconstruction scores
+        if final:
+            pd.DataFrame(scores, columns=['score']).to_feather(score_path)
 
         eval_scores = []
         for q in np.linspace(0.70, 0.95, 5):
@@ -739,45 +689,29 @@ class AutoencoderTuner:
         return max_score[0], max_score[1]
     
     @staticmethod
-    def run_trial(seed, config, tuner_self, metric):
+    def run_trial(seed, config, tuner_self, metric, noise_multiplier=None):
         tf.random.set_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
 
+        # Train the model
         if tuner_self.post_hoc:
-            T, baseline_model = compute_sensitivity(
-                tuner_self.x_train,
-                tuner_self.x_train_val,
-                tuner_self.x_val,
-                tuner_self.real_cols,
-                tuner_self.binary_cols,
-                tuner_self.all_cols,
-                activation=tuner_self.activation,
-                patience_limit=tuner_self.patience_limit,
-                version=tuner_self.version,
-                target_epsilon=tuner_self.target_epsilon,
-                delta=tuner_self.delta,
-                noise_mechanism=tuner_self.noise_mechanism,
-                config=config)
-            
-            # Evaluate the model
-            threshold, scores = tuner_self._evaluate_model(baseline_model, metric, lam=config['lam'], gamma=config['gamma'], T=T)
-
-            clear_tf_memory()
+            # Train the baseline model with the current configuration
+            model = tuner_self._train_model(config, final=False, dp_sgd=False)
 
         else: # For DP-SGD and baseline
             # Train the specified type of model with the current configuration
             model = tuner_self._train_model(config, final=False, dp_sgd=tuner_self.dp_sgd)
             
-            # Evaluate the model
-            threshold, scores = tuner_self._evaluate_model(model, metric, lam=config['lam'], gamma=config['gamma'])
+        # Evaluate the model
+        threshold, scores = tuner_self._evaluate_model(metric, model, config, noise_multiplier=noise_multiplier)
 
-            clear_tf_memory()
-            del model
+        clear_tf_memory()
+        del model
 
         return scores[metric]
 
-    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3):
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=True):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
 
@@ -786,6 +720,7 @@ class AutoencoderTuner:
         - metric: str, performance metric to optimize (default = "auc").
         - n_calls: int, total number of hyperparameter evaluations (random + model-based).
         - random_starts: int, number of initial random evaluations before using surrogate model.
+        - warm_start: bool, whether to continue from previous trials (default = True).
 
         Returns:
         - final_model: trained autoencoder with best config.
@@ -794,13 +729,40 @@ class AutoencoderTuner:
         - pd.DataFrame: complete results table.
         """
 
+        # Compute the sensitivity value T for the noise scale    
+        if self.post_hoc:
+            # Load the sensitivity file
+            sensitivity_df = pd.read_csv("experiments/perf_summary/sensitivity.csv")
+
+            # Get the sensitivity value for the epsilon, delta, and noise mechanism
+            T = sensitivity_df.loc[
+                (sensitivity_df['epsilon'] == self.target_epsilon) &
+                (sensitivity_df['delta'] == self.delta) &
+                (sensitivity_df['noise_mechanism'] == self.noise_mechanism) &
+                (sensitivity_df['metric'] == metric),
+                'sensitivity'
+            ].values[0]
+            # Compute the noise scale
+            if self.noise_mechanism == "laplace":
+                noise_multiplier = T / self.target_epsilon
+                print(f"Using noise scale = {T} for Laplace mechanism.")
+            elif self.noise_mechanism == "gaussian":
+                if self.delta is None:
+                    raise ValueError("Delta must be set for Gaussian mechanism.")
+                noise_multiplier = T * np.sqrt(2 * np.log(1.25 / self.delta)) / self.target_epsilon
+                print(f"Using noise sigma = {T} for Gaussian mechanism.")
+            else:
+                raise ValueError(f"Unsupported noise mechanism: {self.noise_mechanism}")
+        else:
+            noise_multiplier = None
+
         # Objective function for skopt: maps hyperparameter config to negative metric score
         def objective(params):
             config = dict(zip(param_space.keys(), params))  # Build dictionary from params
             try:
                 seeds = [1234 + i for i in range(eval_num)]
                 results = Parallel(n_jobs=2)(
-                    delayed(AutoencoderTuner.run_trial)(seed, config, self, metric) for seed in seeds
+                    delayed(AutoencoderTuner.run_trial)(seed, config, self, metric, noise_multiplier) for seed in seeds
                 )
                 results = [r for r in results if r is not None]
                 if not results or len(results) == 0:
@@ -811,6 +773,16 @@ class AutoencoderTuner:
                 print("Failed config:", config)
                 print("Error:", e)
                 return 1.0
+            
+        # Prepare log file to save trial history (iteration-wise)
+        if self.dp_sgd:
+            model_type = "dpsgd"
+        elif self.post_hoc:
+            model_type = "posthoc_dp"
+        else:
+            model_type = "baseline"
+        log_path = f"experiments/hyperparam_tune/{model_type}/bayes_{metric}_{self.version}.csv"
+        os.makedirs(os.path.dirname(log_path), exist_ok=True) # Create directory if it doesn't exist
 
         # Define skopt-compatible hyperparameter search space
         skopt_space = []
@@ -825,24 +797,33 @@ class AutoencoderTuner:
                 skopt_space.append(Categorical(safe_values, name=k, transform="onehot"))
 
         # Initialize the Bayesian optimizer
-        if self.bo_estimator == 'GP':
-            acq_func_kwargs = None
-        elif self.bo_estimator == 'ET':
-            acq_func_kwargs = {"xi": 0.05}
+        if self.continue_run:
+            random_starts = 0
+        elif warm_start == True:
+            perf_sum = pd.read_csv(f"experiments/perf_summary/{model_type}_val_results.csv")
+            metric_match = perf_sum[perf_sum["tuned_by"].str.lower().str.replace("-", "_") == metric]
+            if self.dp_sgd or self.post_hoc:
+                metric_match = metric_match[metric_match["epsilon"] == self.target_epsilon]
+                metric_match = metric_match[metric_match["delta"] == self.delta]
+                if self.post_hoc:
+                    metric_match = metric_match[metric_match["noise_mechanism"] == self.noise_mechanism]
+            if len(metric_match) > 0:
+                prev_version = metric_match["version"].tolist()[0]
+                if os.path.exists(f"experiments/hyperparam_tune/{model_type}/bayes_{metric}_{prev_version}.csv"):
+                    k = random_starts
+                    random_starts = 0
+                else:
+                    prev_version = None
+            else:
+                prev_version = None
+        
+        # Initialize the Bayesian optimizer
         optimizer = Optimizer(dimensions=skopt_space,
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
-                            acq_func_kwargs=acq_func_kwargs
+                            acq_func="PI",                # to promote exploration
+                            acq_func_kwargs={"xi": 0.5} # to promote exploration
                             )
-
-        # Prepare log file to save trial history (iteration-wise)
-        if self.dp_sgd:
-            log_path = f"experiments/hyperparam_tune/dpsgd/bayes_{metric}_{self.version}.csv"
-        elif self.post_hoc:
-            log_path = f"experiments/hyperparam_tune/posthoc_dp/bayes_{metric}_{self.version}.csv"
-        else:
-            log_path = f"experiments/hyperparam_tune/baseline/bayes_{metric}_{self.version}.csv"
-        os.makedirs(os.path.dirname(log_path), exist_ok=True) # Create directory if it doesn't exist
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
         completed_trials = set()
@@ -855,14 +836,15 @@ class AutoencoderTuner:
                     val = row[k]
                     params.append(parse_param_value(val, k, param_space))
                 loss = -float(row[metric])
-                try:
-                    optimizer.tell(params, loss)
-                except Exception as e:
-                    print("Failed to tell optimizer:", e)
-                    # Remove the row from the log file
-                    df_log.drop(index=row.name, inplace=True)
-                    df_log.to_csv(log_path, index=False)
-                    continue
+                if len(df_log) < n_calls:
+                    try:
+                        optimizer.tell(params, loss)
+                    except Exception as e:
+                        print("Failed to tell optimizer:", e)
+                        # Remove the row from the log file
+                        df_log.drop(index=row.name, inplace=True)
+                        df_log.to_csv(log_path, index=False)
+                        continue
                 completed_trials.add(tuple(params))
             # Get the best config and score from log
             best_row = df_log.loc[df_log[metric].idxmax()]
@@ -878,6 +860,45 @@ class AutoencoderTuner:
                 f.write(",".join(list(param_space.keys()) + [metric]) + "\n")
             best_score = -float("inf")     # Track the best validation score found
             best_config = None             # Track the best hyperparameter configuration
+
+        # If warm_start is True, load the previous best configurations
+        if warm_start and not self.continue_run and prev_version:
+            # Load the previous best configurations
+            top_configs_df = pd.read_csv(f"experiments/hyperparam_tune/{model_type}/bayes_{metric}_{prev_version}.csv").sort_values(metric, ascending=False).head(k)
+
+            for i, row in top_configs_df.iterrows():
+                x0 = []
+                for k in param_space.keys():
+                    val = parse_param_value(row[k], k, param_space)
+                    x0.append(val)
+                y0 = objective(x0)  # Skopt uses loss, not score
+                top_configs_df.at[i, metric] = -y0
+                try:
+                    optimizer.tell(x0, y0)
+                    completed_trials.add(tuple(x0))
+
+                    # Log the warm-start trial to current log file
+                    safe_values = []
+                    for k in param_space.keys():
+                        val = str(parse_param_value(row[k], k, param_space))
+                        if "," in val or '"' in val:
+                            val = '"' + val.replace('"', '""') + '"'  # Escape internal quotes
+                        safe_values.append(val)
+
+                    with open(log_path, "a") as f:
+                        f.write(",".join(safe_values) + f",{-y0}\n")
+                except Exception as e:
+                    print("Failed warm-start config:", x0)
+                    print("Error:", e)
+
+            # Get the best config and score from log
+            best_row = top_configs_df.loc[top_configs_df[metric].idxmax()]
+            best_config = {}
+            for k in param_space.keys():
+                val = best_row[k]
+                parsed_val = parse_param_value(val, k, param_space)
+                best_config[k] = list(parsed_val) if isinstance(param_space[k][0], list) else parsed_val
+            best_score = float(best_row[metric])
 
         # Perform the optimization loop
         for i in range(n_calls - len(completed_trials)):
@@ -915,8 +936,18 @@ class AutoencoderTuner:
 
         # Retrain and evaluate the best configuration
         print("Start training the final model with best config...")
-        final_model = self._train_model(decoded_final, final=True, dp_sgd=self.dp_sgd)
-        final_eval = self._evaluate_model(final_model, metric, lam=best_config['lam'], gamma=best_config['gamma'])
+        
+        # Train the model
+        if self.post_hoc: # For post-hoc model
+            # Train the baseline model with the current configuration
+            final_model = self._train_model(decoded_final, final=True, dp_sgd=False)
+
+        else: # For DP-SGD and baseline
+            # Train the specified type of model with the current configuration
+            final_model = self._train_model(decoded_final, final=True, dp_sgd=self.dp_sgd)
+            
+        # Evaluate the model
+        final_eval = self._evaluate_model(metric, final_model, best_config, final=True, noise_multiplier=noise_multiplier)
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
         final_score = final_eval[1]               # Store the full metric dictionary
 

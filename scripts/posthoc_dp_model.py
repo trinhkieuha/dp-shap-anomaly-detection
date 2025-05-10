@@ -6,6 +6,8 @@ from datetime import datetime
 import argparse
 import pickle
 import math
+import tensorflow as tf
+import re
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -16,6 +18,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import relevant packages
 from src.eda import data_info
 from src.models import AnomalyDetector, AutoencoderTuner
+from src.dp_utils import add_lap_noise, add_gaussian_noise
 
 # Config
 pd.set_option('display.max_columns', None)
@@ -33,7 +36,7 @@ def main():
     parser.add_argument("--bo_estimator", type=str, default=None, help="Bayesian optimization estimator (default: GP)")
 
     # Add arguments for differential privacy
-    parser.add_argument("--dp_mechanism", type=str, default=None, help="Differential privacy mechanism (default: gaussian)")
+    parser.add_argument("--noise_mechanism", type=str, default=None, help="Differential privacy mechanism (default: gaussian)")
     parser.add_argument("--epsilon", type=str, default=None, help="Epsilon value for differential privacy")
     parser.add_argument("--delta", type=str, default=None, help="Delta value for differential privacy")
 
@@ -82,7 +85,7 @@ def main():
             args.metric = get_value(args.metric, "metric", "auc")
             args.n_calls = get_value(args.n_calls, "n_calls", 30, int)
             args.random_starts = get_value(args.random_starts, "random_starts", 5, int)
-            args.dp_mechanism = get_value(args.dp_mechanism, "dp_mechanism", "gaussian")
+            args.noise_mechanism = get_value(args.noise_mechanism, "noise_mechanism", "gaussian")
             args.epsilon = get_value(args.epsilon, "epsilon", "1")
             print(f"Using epsilon: {args.epsilon}")
             args.delta = get_value(args.delta, "delta", "1e-5")
@@ -94,7 +97,7 @@ def main():
         args.metric = args.metric if args.metric else "auc"
         args.n_calls = args.n_calls if args.n_calls else 30
         args.random_starts = args.random_starts if args.random_starts else 5
-        args.dp_mechanism = args.dp_mechanism if args.dp_mechanism else "gaussian"
+        args.noise_mechanism = args.noise_mechanism if args.noise_mechanism else "gaussian"
         args.epsilon = args.epsilon if args.epsilon else "1"
         args.delta = args.delta if args.delta else "1e-5"
         args.bo_estimator = args.bo_estimator if args.bo_estimator else "GP"
@@ -102,8 +105,8 @@ def main():
     # --- Start logging this run ---
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
-        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, dp_mechanism={args.dp_mechanism}, epsilon={args.epsilon}, delta={args.delta}"
-        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
+        info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, noise_mechanism={args.noise_mechanism}, epsilon={args.epsilon}, delta={args.delta}"
+        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}, bo_estimator={args.bo_estimator}\n"
         log_file.write(info_txt)
     print(info_txt)
 
@@ -133,7 +136,6 @@ def main():
             'learning_rate': [max_rate, min_rate],
             'lam': [1e-4, 1e-1],
             'gamma': [0.001, 0.999],
-            'l2norm_pct': [75, 95],
             'max_epochs': [150, 700],
         }
 
@@ -154,12 +156,17 @@ def main():
             delta=float(args.delta),
             continue_run=args.continue_run,
             post_hoc=True,
+            noise_mechanism=args.noise_mechanism,
             bo_estimator=args.bo_estimator,
         )
 
         # --- Perform tuning using selected strategy ---
         best_model, best_params, best_score = tuner.bo_tune(
-            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=int(max(2, 6-float(args.epsilon)))
+            param_grid,
+            metric=args.metric,
+            n_calls=args.n_calls,
+            random_starts=args.random_starts,
+            eval_num=2,
         )
 
         # --- Save the best hyperparameters ---
@@ -188,10 +195,21 @@ def main():
             all_cols=all_cols,
             lam=best_params['lam'],
             gamma=best_params['gamma'],
+            post_hoc=True,
+            noise_mechanism=args.noise_mechanism,
+            target_epsilon=float(args.epsilon), delta=float(args.delta)
         )
 
-        # Compute scores
-        scores = detector._compute_anomaly_scores(X_test)
+        # Extract noise multiplier
+        for file in os.listdir(f"experiments/scores/posthoc_dp/"):
+            if f"{args.version}_noise" in file and file.endswith(".feather"):
+                noise_multiplier = float(re.search(r'noise(\d+(\.\d+)?)', file).group(1))
+                break
+        if noise_multiplier is None:
+            raise ValueError(f"Noise multiplier not found for version {args.version}")
+
+        # Compute scores using the baseline model
+        scores = detector._compute_anomaly_scores(X_test, noise_multiplier=noise_multiplier)
 
         # Detect
         y_pred = detector._detect(scores, best_params['threshold'])

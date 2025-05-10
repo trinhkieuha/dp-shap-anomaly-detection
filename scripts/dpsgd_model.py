@@ -100,7 +100,7 @@ def main():
     start_time = datetime.now()
     with open(log_path, "a") as log_file:
         info_txt = f"\n\n=== Run started at: {start_time} ===\nArguments: version={args.version}, epsilon={args.epsilon}, delta={args.delta}"
-        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}\n"
+        info_txt += f", metric={args.metric}, n_calls={args.n_calls}, random_starts={args.random_starts}, bo_estimator={args.bo_estimator}\n"
         log_file.write(info_txt)
     print(info_txt)
     
