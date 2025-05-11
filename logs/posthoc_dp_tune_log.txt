@@ -186,3 +186,7 @@ Status: SUCCESS
 Arguments: version=202505100506, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
 Run ended at: 2025-05-10 05:44:43.819945
 Status: SUCCESS
+
+
+=== Run started at: 2025-05-11 21:08:42.914461 ===
+Arguments: version=202505100205, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP

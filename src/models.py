@@ -411,7 +411,7 @@ class AutoencoderTrainer:
         slope = np.polyfit(x, y, 1)[0]  # degree 1 polynomial fit  
         
         # Check if the slope is close to zero (indicating convergence)
-        converged = (slope > -0.003)
+        converged = (slope > -0.003) & (slope < 0.003)
 
         if not converged:
             if self.raise_convergence_error:
@@ -821,8 +821,8 @@ class AutoencoderTuner:
         optimizer = Optimizer(dimensions=skopt_space,
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
-                            acq_func="PI",                # to promote exploration
-                            acq_func_kwargs={"xi": 0.5} # to promote exploration
+                            acq_func="EI",                # to promote exploration
+                            acq_func_kwargs={"xi": 1} # to promote exploration
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist

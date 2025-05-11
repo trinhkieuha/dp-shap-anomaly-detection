@@ -52,7 +52,7 @@ def compute_sensitivity(version, x_train, x_train_val, x_val,
         ).train(x_train, x_train_val)
     
     # Evaluate both models
-    baseline_scores, noise_multiplier = AnomalyDetector(
+    baseline_scores = AnomalyDetector(
         baseline_model, real_cols, binary_cols, all_cols,
         lam=config['lam'], gamma=config['gamma']
     )._compute_anomaly_scores(x_val)
@@ -73,7 +73,6 @@ def compute_sensitivity(version, x_train, x_train_val, x_val,
     )
 
     del baseline_model
-    del noise_multiplier
     del baseline_scores
     del dpsgd_scores
     del desired_nsr
@@ -107,19 +106,21 @@ if __name__ == "__main__":
         sensitivity_df = pd.read_csv(sensitivity_file_path)
     else:
         # Create an empty file if the file does not exist using with open
+        print("Creating new sensitivity file...")
         sensitivity_df = pd.DataFrame(columns=['version', 'metric', 'epsilon', 'delta', 'noise_mechanism', 'sensitivity', 'compute_time'])
 
     # --- Check which versions that have not been computed yet or recently updated (compute_time < end_time) ---
     merge_df = pd.merge(dpsgd_versions, sensitivity_df[['version', 'noise_mechanism', 'compute_time', 'sensitivity']], on=['version', 'noise_mechanism'], how='left')
-    merge_df = merge_df[merge_df['compute_time'].isnull() | (merge_df['compute_time'] < merge_df['end_time'])]
+    new_versions = merge_df[merge_df['compute_time'].isnull() | (merge_df['compute_time'] < merge_df['end_time'])]
 
     # --- Filter out versions that have already been computed ---
     sensitivity_df = merge_df[merge_df['compute_time'].notnull() & (merge_df['compute_time'] >= merge_df['end_time'])][['version', 'tuned_by', 'epsilon', 'delta', 'noise_mechanism', 'sensitivity', 'compute_time']]
     sensitivity_df.rename(columns={'tuned_by': 'metric'}, inplace=True)
+    sensitivity_df['metric'] = sensitivity_df['metric'].str.lower().str.replace('-', '_')
     sensitivity_df.to_csv(sensitivity_file_path, index=False)
     
     # --- Compute sensitivity for each model ---
-    for i, row in merge_df.iterrows():
+    for i, row in new_versions.iterrows():
         version = row['version']
         metric = row['tuned_by'].lower().replace('-', '_')
         epsilon = row['epsilon']

@@ -91,6 +91,8 @@ class ValidationEvaluation:
 
             if self.dp_sgd or self.post_hoc:
                 epsilon = float(epsilon_match.group(1)) if epsilon_match else None
+                if epsilon < 1:
+                    continue
                 delta = float(delta_match.group(1)) if delta_match else None
                 if self.post_hoc:
                     noise_mechanism = noise_mechanism_match.group(1) if noise_mechanism_match else None
