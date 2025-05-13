@@ -40,11 +40,20 @@ class ShapKernelExplainer:
         self.model_info = pd.read_csv(f"experiments/perf_summary/{model_type}_val_results.csv")
         self.model_info["version"] = self.model_info["version"].astype(str)
 
+        # Filter the model information based on the model type
+        if self.model_info.empty:
+            raise ValueError(f"No model information found for model type {model_type}.")
+
     def _version_info_extract(self, version=None):
+
+
+        if version is None:
+            raise ValueError("Version must be provided for model extraction.")
 
         # Load the model and parameters
         model = tf.keras.models.load_model(f"models/{self.model_type}/{version}")
-    
+
+        # Check if the version is provided
         version_info = self.model_info[self.model_info["version"] == version]
         if version_info.empty:
             raise ValueError(f"No model information found for version {version}.")
@@ -115,7 +124,7 @@ class ShapKernelExplainer:
         explainer = shap.KernelExplainer(anomaly_scorer, background)
 
         # Compute SHAP values for all test instances
-        shap_values = explainer.shap_values(self.X_test, nsamples='auto')
+        shap_values = explainer.shap_values(self.X_test, nsamples=100)
 
         return shap_values, explainer
     

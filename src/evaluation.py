@@ -173,7 +173,7 @@ class ValidationEvaluation:
                 print(f"Metric: {metric}, Epsilon: {epsilon}, Delta: {delta}, Noise Mechanism: {noise_mechanism}")
             else:
                 metric, end_dt = model_info
-                epsilon, delta = None, None
+                epsilon, delta = 0, 0
                 noise_mechanism = None
                 print(f"Metric: {metric}")
 

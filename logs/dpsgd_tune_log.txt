@@ -2472,3 +2472,66 @@ Status: SUCCESS
 Arguments: version=202505070955, epsilon=3, delta=1e-5, metric=precision, n_calls=100, random_starts=7, bo_estimator=GP
 Run ended at: 2025-05-11 18:37:15.838894
 Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:32:47.077075 ===
+Arguments: version=202505070326, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:32:47.406354
+Status: FAILED
+Error: Unsupported event: SelfComposedDpEvent(event=SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=65, event=GaussianDpEvent(noise_multiplier=1)), count=70253). Error: [neighboring_relation must be `REPLACE_ONE` for `SampledWithoutReplacementDpEvent`. Found NeighboringRelation.ADD_OR_REMOVE_ONE.] caused by subevent SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=65, event=GaussianDpEvent(noise_multiplier=1)).
+
+
+=== Run started at: 2025-05-12 16:32:51.576837 ===
+Arguments: version=202505070348, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:32:51.903899
+Status: FAILED
+Error: Unsupported event: SelfComposedDpEvent(event=SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=150, event=GaussianDpEvent(noise_multiplier=1)), count=39312). Error: [neighboring_relation must be `REPLACE_ONE` for `SampledWithoutReplacementDpEvent`. Found NeighboringRelation.ADD_OR_REMOVE_ONE.] caused by subevent SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=150, event=GaussianDpEvent(noise_multiplier=1)).
+
+
+=== Run started at: 2025-05-12 16:32:55.958555 ===
+Arguments: version=202505070407, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:32:56.283593
+Status: FAILED
+Error: Unsupported event: SelfComposedDpEvent(event=SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=138, event=GaussianDpEvent(noise_multiplier=1)), count=21875). Error: [neighboring_relation must be `REPLACE_ONE` for `SampledWithoutReplacementDpEvent`. Found NeighboringRelation.ADD_OR_REMOVE_ONE.] caused by subevent SampledWithoutReplacementDpEvent(source_dataset_size=12791, sample_size=138, event=GaussianDpEvent(noise_multiplier=1)).
+
+
+=== Run started at: 2025-05-12 16:34:36.467744 ===
+Arguments: version=202505070326, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:37:46.361834
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:37:51.263027 ===
+Arguments: version=202505070348, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:38:07.664970
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:38:11.970131 ===
+Arguments: version=202505070407, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:39:53.404534
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:43:42.215501 ===
+Arguments: version=202505070326, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:45:13.633558
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:45:18.318078 ===
+Arguments: version=202505070348, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:46:07.720956
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:46:11.969369 ===
+Arguments: version=202505070407, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:46:51.268114
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-12 16:49:14.980038 ===
+Arguments: version=202505070348, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-12 16:50:04.212416
+Status: SUCCESS

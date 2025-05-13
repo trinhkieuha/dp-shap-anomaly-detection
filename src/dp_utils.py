@@ -106,20 +106,24 @@ class DPSGDSanitizer:
         """
         # Create a new RDP accountant with specified orders
         orders = np.linspace(1.1, 64.0, num=100)
-        return dp_accounting.rdp.RdpAccountant(orders)
+        return dp_accounting.rdp.RdpAccountant(orders,
+                                               neighboring_relation=dp_accounting.NeighboringRelation.REPLACE_ONE
+                                               )
     
     def _make_event(self, sigma, steps=None):
         """
         Creates a Gaussian event for differential privacy accounting.
         Parameters:
         - sigma: float, the noise scale for the Gaussian mechanism.
+        - steps: int, the number of steps completed so far.
         Returns:
         - dp_accounting.GaussianDpEvent object
         """
         if steps is None:
             steps = int(math.ceil(self.epochs * self.n / self.batch_size))
         dp_event_obj = dp_accounting.SelfComposedDpEvent(
-            dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
+            #dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
+            dp_accounting.SampledWithoutReplacementDpEvent(self.n, self.batch_size, dp_accounting.GaussianDpEvent(sigma)), steps
         )
         return dp_event_obj
     
@@ -143,6 +147,9 @@ class DPSGDSanitizer:
         Parameters:
         - sigma: float, the noise scale for the Gaussian mechanism.
         - steps: int, the number of steps completed so far.
+        Returns:
+            dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
+        - float, the achieved epsilon for the given delta.
         """
         dp_event_obj = self._make_event(sigma, steps)
         self.accountant.compose(dp_event_obj)

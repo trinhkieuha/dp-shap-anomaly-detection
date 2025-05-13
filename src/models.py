@@ -616,7 +616,10 @@ class AutoencoderTuner:
         else:
             privacy_tracking = False
             verbose = False
-            raise_convergence_error = True
+            if self.dp_sgd:
+                raise_convergence_error = True
+            else:
+                raise_convergence_error = False
 
         if self.max_epochs:
             params['max_epochs'] = self.max_epochs
@@ -822,7 +825,7 @@ class AutoencoderTuner:
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
                             acq_func="EI",                # to promote exploration
-                            acq_func_kwargs={"xi": 1} # to promote exploration
+                            acq_func_kwargs={"xi": 0.1} # to promote exploration
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
