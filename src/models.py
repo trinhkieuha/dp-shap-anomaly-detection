@@ -269,6 +269,22 @@ class AutoencoderTrainer:
         # Prepare data for TensorFlow
         train_data = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
         train_data = train_data.cache().batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
+        """sampling_prob = self.batch_size / len(x_train)  # Poisson sampling probability
+
+        # Create full dataset
+        full_dataset = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
+
+        # Poisson sampling: keep each example with probability q
+        def poisson_sample(x):
+            return tf.random.uniform(()) < sampling_prob
+
+        # Apply sampling and batching
+        train_data = (
+            full_dataset
+            .filter(poisson_sample)  # Poisson sampling
+            .batch(self.batch_size)
+            .prefetch(tf.data.AUTOTUNE)
+        )"""
         val_data = tf.convert_to_tensor(x_val.values.astype(np.float32))
 
         # Initialize the training
@@ -460,7 +476,7 @@ class AnomalyDetector:
         self.delta = delta
         self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
-    def _compute_anomaly_scores(self, x, **kwargs):
+    def _compute_anomaly_scores(self, x, test_set=False, **kwargs):
         """
         Computes anomaly scores, with optional post-hoc differential privacy.
         
@@ -498,8 +514,11 @@ class AnomalyDetector:
                 scores = np.array([scores])
             noise_multiplier = 0
 
-        return scores
-        
+        if test_set:
+            return scores, x_hat.numpy()
+        else:
+            return scores
+    
     def _detect(self, scores, threshold=0.01):
         """
         Detects anomalies in the input based on the reconstruction loss.
@@ -714,7 +733,7 @@ class AutoencoderTuner:
 
         return scores[metric]
 
-    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=True):
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=False):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
 
@@ -825,7 +844,7 @@ class AutoencoderTuner:
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
                             acq_func="EI",                # to promote exploration
-                            acq_func_kwargs={"xi": 0.1} # to promote exploration
+                            acq_func_kwargs={"xi": 0.5} # to promote exploration
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist

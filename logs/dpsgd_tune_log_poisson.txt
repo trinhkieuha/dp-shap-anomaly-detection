@@ -1,0 +1,6 @@
+
+
+=== Run started at: 2025-05-16 22:33:27.265319 ===
+Arguments: version=202505162233, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=7, bo_estimator=GP
+Run ended at: 2025-05-16 23:47:36.177357
+Status: SUCCESS

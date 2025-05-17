@@ -5,31 +5,30 @@ sys.dont_write_bytecode = True
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import relevant packages
-from src.eda import data_info
-from src.models import AutoencoderTrainer, AnomalyDetector, AutoencoderTuner
 from src.explainability import ShapKernelExplainer
 
 # Import necessary libraries
-import shap
-import numpy as np
-import pandas as pd
-import tensorflow as tf
-import pickle
-import pandas as pd
+from datetime import datetime
+import argparse
+import warnings
+warnings.filterwarnings("ignore")
 
 def main():
-    dpsgd_versions = pd.read_csv('experiments/perf_summary/dpsgd_val_results.csv')
-    dpsgd_versions = dpsgd_versions[dpsgd_versions["tuned_by"]=='AUC'][1:]
-    dpsgd_explainer = ShapKernelExplainer(model_type='dpsgd')
-    for version in dpsgd_versions["version"].tolist():
-        print("Starting Kernel SHAP explanation for version:", version)
-        # Explain the model
-        shap_values, explainer = dpsgd_explainer.explain(version=str(version), background_size=50)
-        # Save the SHAP values
-        os.makedirs("results/explainability/dpsgd/", exist_ok=True)
-        with open(f"results/explainability/dpsgd/{version}.pkl", "wb") as f:
-            pickle.dump(shap_values, f)
-        print("Kernel SHAP explanation completed for version:", version)
+    # --- Argument parsing ---
+    parser = argparse.ArgumentParser(description="Run SHAP explanations.")
+    parser.add_argument("--metric", type=str, default="F1-Score", help="Tuning objective used to select the best model.")
+    parser.add_argument("--model_type", type=str, default="baseline", help="Type of the model to explain.")
+
+    # --- Parse arguments ---
+    args = parser.parse_args()
+    metric = args.metric
+    model_type = args.model_type
+
+    # --- Run SHAP explanations ---
+    shap_init = ShapKernelExplainer(model_type=model_type, metric=metric)
+    shap_init.explain_all_versions()
+
+    return print(f"SHAP explanations for {model_type} model with {metric} metric have been generated at {datetime.now()}.")
 
 if __name__ == "__main__":
     main()

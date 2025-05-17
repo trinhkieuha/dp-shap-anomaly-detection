@@ -263,7 +263,8 @@ class ValidationEvaluation:
                 y_min = group_df[metric].min()
                 y_max = group_df[metric].max()
                 margin = (y_max - y_min) * 0.1 if y_max != y_min else 0.05
-                ax.set_ylim(y_min - margin, y_max + margin)
+                #ax.set_ylim(y_min - margin, y_max + margin)
+                ax.set_ylim(0, y_max + 0.1)
                 ax.tick_params(axis='x', rotation=45)
                 ax.bar_label(bars, fmt="%.4f", padding=3)
 
@@ -396,3 +397,14 @@ class ValidationEvaluation:
             plt.tight_layout()
 
             plt.show()
+
+def compute_fidelity(baseline_prediction, prediction):
+    """
+    Computes the fidelity of a model's predictions.
+    Parameters:
+    - baseline_prediction: np.ndarray, baseline model predictions
+    - prediction: np.ndarray, new model predictions
+    Returns:
+    - fidelity: float, fidelity score
+    """
+    return np.mean(baseline_prediction == prediction)

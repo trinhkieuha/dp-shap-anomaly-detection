@@ -118,9 +118,9 @@ def main():
         binary_cols = var_info[var_info["var_type"] == "binary"]["var_name"].tolist()
 
         # --- Define hyperparameter grid ---
-        base_grid = [0.001, 0.00005]
-        scaled_grid = [round(l * float(args.epsilon) ** 1.8, 3) for l in base_grid]
-        learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-6)]
+        base_grid = [0.0001, 0.00001]
+        scaled_grid = [round(l * float(args.epsilon), 3) for l in base_grid]
+        learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-7)]
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
             'batch_size': [64, 150],
@@ -185,10 +185,16 @@ def main():
         )
 
         # Compute scores
-        scores = detector._compute_anomaly_scores(X_test)
+        scores, x_hat = detector._compute_anomaly_scores(X_test, test_set=True)
+
+        # Save reconstructed data
+        pd.DataFrame(x_hat, columns=all_cols).to_feather(f"experiments/predictions/dpsgd/{args.version}_recons.feather")
 
         # Detect
         y_pred = detector._detect(scores, best_params['threshold'])
+
+        # Save predictions
+        pd.DataFrame(y_pred, columns=["anomaly"]).to_feather(f"experiments/predictions/dpsgd/{args.version}_pred.feather")
 
         # Evaluate
         metrics = detector._evaluate(y_pred, y_test, scores)
