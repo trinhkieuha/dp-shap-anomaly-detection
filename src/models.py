@@ -733,7 +733,7 @@ class AutoencoderTuner:
 
         return scores[metric]
 
-    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=False):
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=True):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
 
