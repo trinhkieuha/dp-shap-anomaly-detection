@@ -12,6 +12,7 @@ import os
 import re
 from tqdm import tqdm
 import gc
+from sklearn.preprocessing import MinMaxScaler
 
 class ShapKernelExplainer:
     """
@@ -302,3 +303,107 @@ class ShapKernelExplainer:
             else:
                 self._explain(version=version, background_size=background_size, nsamples=nsamples, background_method=background_method)
                 break
+
+def shap_gap(baseline_shap, dp_shap, gap_type="euclidean"):
+    """
+    Computes the ShapGAP distance between two sets of SHAP values.
+
+    Parameters:
+    - baseline_shap: np.ndarray of shape (n_samples, n_features), SHAP values without DP
+    - dp_shap: np.ndarray of shape (n_samples, n_features), SHAP values with DP
+    - gap_type: str, type of distance to compute (default is "euclidean"). Options are "euclidean" or "cosine".
+
+    Returns:
+    - float, average distance across all samples
+    """
+    # Ensure input shapes are compatible
+    assert baseline_shap.shape == dp_shap.shape, "SHAP value arrays must have the same shape."
+
+    # Compute distance per sample
+    if gap_type == "euclidean":
+        shapgap_dist = np.linalg.norm(baseline_shap - dp_shap, axis=1)
+    elif gap_type == "cosine":
+        # Compute dot product and norms for each sample
+        dot_products = np.sum(baseline_shap * dp_shap, axis=1)
+        norms_before = np.linalg.norm(baseline_shap, axis=1)
+        norms_after = np.linalg.norm(dp_shap, axis=1)
+
+        # Avoid division by zero
+        denom = norms_before * norms_after + 1e-10
+
+        # Cosine similarity and distance
+        cosine_sim = dot_products / denom
+        shapgap_dist = 1.0 - cosine_sim
+    else:
+        raise ValueError("Invalid type. Use 'euclidean' or 'cosine'.")
+
+    # Return average distance
+    return shapgap_dist
+
+def shap_length(shap: np.ndarray, threshold=0.9) -> np.ndarray:
+    """
+    Computes SHAP Length (SL) for each sample in a dataset.
+
+    Parameters:
+    - shap: np.ndarray of shape (n_samples, n_features), SHAP values
+    - threshold: float in (0, 1), cumulative mass threshold (e.g., 0.9 for 90%)
+
+    Returns:
+    - np.ndarray of shape (n_samples,), SL_{th%} values for each sample
+    """
+    n_samples, n_features = shap.shape
+    shap_lengths = np.zeros(n_samples, dtype=int)
+
+    for i in range(n_samples):
+        phi = np.abs(shap[i])
+        total_mass = np.sum(phi)
+        ordering = np.argsort(-phi)
+        cum_norm_mass = np.cumsum(phi[ordering]) / total_mass
+
+        # Find how many top features are needed to reach threshold
+        for j in range(n_features):
+            if cum_norm_mass[j] > threshold:
+                shap_lengths[i] = j + 1  # 1-based count
+                break
+        else:
+            shap_lengths[i] = n_features
+
+    return shap_lengths
+
+def normalize_shap(shap_values: np.ndarray, method: str = "l2") -> np.ndarray:
+    """
+    Normalize SHAP values to a consistent scale for fair comparison across models.
+
+    Parameters:
+    - shap_values: np.ndarray of shape (n_samples, n_features)
+    - method: str, one of ["l2", "l1", "minmax", "zscore"]
+        - "l2": normalize each SHAP vector to unit L2 norm (per sample)
+        - "l1": normalize each SHAP vector to sum to 1 (L1 norm, per sample)
+        - "minmax": scale each feature (column) to [0, 1] using MinMaxScaler
+        - "zscore": apply z-score standardization per feature
+
+    Returns:
+    - np.ndarray of same shape, normalized SHAP values
+    """
+    eps = 1e-10  # small constant to avoid division by zero
+
+    if method == "l2":
+        norms = np.linalg.norm(shap_values, axis=1, keepdims=True)
+        return shap_values / (norms + eps)
+
+    elif method == "l1":
+        abs_vals = np.abs(shap_values)
+        sums = np.sum(abs_vals, axis=1, keepdims=True)
+        return abs_vals / (sums + eps)
+
+    elif method == "minmax":
+        scaler = MinMaxScaler(feature_range=(0, 1))
+        return scaler.fit_transform(shap_values)
+
+    elif method == "zscore":
+        mean = np.mean(shap_values, axis=0, keepdims=True)
+        std = np.std(shap_values, axis=0, keepdims=True)
+        return (shap_values - mean) / (std + eps)
+
+    else:
+        raise ValueError(f"Unknown normalization method: '{method}'. Choose from ['l2', 'l1', 'minmax', 'zscore'].")
