@@ -11,21 +11,25 @@ import pickle
 import os
 import re
 from tqdm import tqdm
+import gc
 
 class ShapKernelExplainer:
     """
     Class to handle SHAP KernelExplainer for anomaly detection models.
     """
 
-    def __init__(self, model_type='baseline', metric='F1-Score'):
+    def __init__(self, model_type='baseline', metric='F1-Score', continue_run=False):
         """
         Initializes the ShapKernelExplainer with model type and loads test data.
 
         Parameters: 
         - model_type: str, type of the model to be used (default is 'baseline')
+        - metric: str, tuning objective used to select the best model (default is 'F1-Score')
+        - continue_run: bool, whether to continue a previous run (default is False)
         """
         # Set the model type
         self.model_type = model_type
+        self.continue_run = continue_run
 
         # Read relevant files
         self.X_train = pd.read_feather("data/processed/X_train.feather")
@@ -99,23 +103,9 @@ class ShapKernelExplainer:
             epsilon = None
             delta = None
 
-        # Initialize the anomaly detector
-        detector = AnomalyDetector(
-            model=model,
-            real_cols=self.real_cols,
-            binary_cols=self.binary_cols,
-            all_cols=self.all_cols,
-            lam=params["lam"],
-            gamma=params["gamma"],
-            post_hoc=(self.model_type == "posthoc_dp"),
-            noise_mechanism=noise_mechanism,
-            target_epsilon=epsilon,
-            delta=delta
-        )
-
         return model, params
 
-    def _sample_background_set(self, x_anomaly, num_background=100):
+    def _sample_iw_background_set(self, x_anomaly, num_background=100):
         """
         Samples a background set for SHAP KernelExplainer using influence weights.
         Parameters:
@@ -125,6 +115,8 @@ class ShapKernelExplainer:
         - background_set: array-like, sampled background set
         - influence_weights: array-like, influence weights for the background set
         """
+        rng = np.random.default_rng(seed=42)
+
         # Ensure x_anomaly is 2D and X_train is an array
         x_anomaly = np.atleast_2d(x_anomaly)  # ensure shape (1, d)
         X_train = np.asarray(self.X_train)    # ensure array
@@ -139,10 +131,36 @@ class ShapKernelExplainer:
         influence_weights = rho / np.sum(rho)
 
         # Sample with replacement using influence weights
-        indices = np.random.choice(len(X_train), size=num_background, p=influence_weights, replace=True)
+        indices = rng.choice(len(X_train), size=num_background, p=influence_weights, replace=True)
         background_set = X_train[indices]
 
-        return background_set, influence_weights
+        return background_set
+    
+    def _sample_fixed_background_set(self, num_background=100):
+        """
+        Samples a fixed background set for SHAP KernelExplainer using uniform sampling.
+        This should be called once and reused for all SHAP explanations.
+
+        Parameters:
+        - num_background: int, number of samples to use as background
+
+        Returns:
+        - background_set: array-like, sampled background set
+        """
+        rng = np.random.default_rng(seed=42)
+        
+        # Ensure X_train is 2D and convert to numpy array
+        X_train = np.asarray(self.X_train)  # ensure array
+        n_train = X_train.shape[0]
+
+        # Sample background set
+        if num_background >= n_train:
+            background_set = X_train  # use entire training set if small
+        else:
+            indices = rng.choice(n_train, size=num_background, replace=False)
+            background_set = X_train[indices]
+
+        return background_set
     
     def _compute_reconstruction_error(self, x_anomaly, x_recon, params):
         eps = 1e-7
@@ -162,7 +180,7 @@ class ShapKernelExplainer:
 
         return errors
 
-    def _explain_with_kernelshap(self, x_anomaly, model, params, background_size=100, noise_multiplier=None):
+    def _explain_with_kernelshap(self, x_anomaly, model, params, background_set=None, nsamples=500, noise_multiplier=None):
         """
         Applies SHAP KernelExplainer to anomaly scores from a detector.
 
@@ -170,7 +188,8 @@ class ShapKernelExplainer:
         - x_anomaly: array-like, the instance to explain
         - model: AnomalyDetector object, the anomaly detection model
         - params: dict, parameters for the model
-        - background_size: int, number of samples to use as background
+        - background_set: array-like, the background set to use for SHAP
+        - nsamples: int, number of samples to use for SHAP
         - noise_multiplier: float, noise multiplier if applicable
         Returns:
         - shap_values: list of arrays, SHAP values for each test instance
@@ -192,9 +211,6 @@ class ShapKernelExplainer:
         m = np.searchsorted(cumsum, 0.85 * total_error) + 1
         top_features = sorted_idx[:m]
 
-        # Sample background set
-        background_set, influence_weights = self._sample_background_set(x_anomaly, num_background=background_size)
-
         # Define local prediction wrapper using TensorFlow model
         def predict_fn(X):
             X_tensor = tf.convert_to_tensor(X.astype(np.float32))
@@ -204,54 +220,85 @@ class ShapKernelExplainer:
 
         # Fit SHAP KernelExplainer
         explainer = shap.KernelExplainer(model=predict_fn, data=background_set)
-        shap_values = explainer.shap_values(x_anomaly, silent=True)
+        shap_values = explainer.shap_values(x_anomaly, silent=True, gc_collect=True, nsamples=nsamples)
 
         return shap_values
     
-    def _explain(self, version=None, background_size=100):
+    def _explain(self, version=None, background_size=100, nsamples=500, background_method="iw"):
         """
         Main method to explain the model using SHAP KernelExplainer.
 
         Parameters:
         - version: str, version of the model to be explained
         - background_size: int, number of samples to use as background
+        - nsamples: int, number of samples to use for SHAP
+        - background_method: str, method to sample the background set (default is "iw"). Options are "fixed" or "iw".
 
         Returns:
         - None, but saves the SHAP values to a CSV file
         """
-        # Get the anomaly predictions and the corresponding data
-        y_pred = pd.read_feather(f"experiments/predictions/{self.model_type}/{version}_pred.feather")
-        X_anomaly = self.X_test[y_pred['anomaly']==1].values
+        # Get the test data and the corresponding data
+        X_test = self.X_test.values
 
         # Initialize the file to save the results
         os.makedirs(f"results/explainability/{self.model_type}", exist_ok=True)
-        with open(f"results/explainability/{self.model_type}/{version}.csv", "w") as f:
-            f.write(",".join(self.all_cols))
-            f.write("\n")
+        file_path = f"results/explainability/{self.model_type}/{version}_{background_method}.csv"
 
         # Load the model and parameters
         model, params = self._version_info_extract(version=version)
 
+        if self.continue_run:
+            n_done = len(pd.read_csv(file_path)) if os.path.exists(file_path) else 0
+        else:
+            with open(file_path, "w") as f:
+                f.write(",".join(self.all_cols))
+                f.write("\n")
+            n_done = 0
+
+        # Sample background set
+        if background_method == "fixed":
+            background_set = self._sample_fixed_background_set(num_background=background_size)
+        else:
+            background_set = None
+
         # Loop through each anomaly and compute SHAP values
-        for x_anomaly in tqdm(X_anomaly, desc=f"Explaining anomalies for {self.model_type} model version: {version}"):
+        for x_anomaly in tqdm(X_test[n_done : n_done + 1000], desc=f"Explaining anomalies for {self.model_type} model version: {version}"):
             # Compute the SHAP values for the current anomaly
-            shap_values = self._explain_with_kernelshap(x_anomaly, model, params, background_size=background_size)
-            
+            if background_method == "iw":
+                background_set = self._sample_iw_background_set(x_anomaly, num_background=background_size)
+            shap_values = self._explain_with_kernelshap(x_anomaly, model, params, background_set=background_set, nsamples=nsamples)
+
             # Save the SHAP values to a CSV file
-            with open(f"results/explainability/{self.model_type}/{version}.csv", "a") as f:
+            with open(file_path, "a") as f:
                 f.write(",".join([str(val) for val in shap_values.reshape(-1)]))
                 f.write("\n")
 
-    def explain_all_versions(self, background_size=100):
+            # Manually free memory
+            del shap_values
+            gc.collect()
+        
+        if n_done + 1000 >= len(X_test):
+            # Convert the CSV file to Feather format
+            pd.read_csv(file_path).to_feather(file_path.replace(".csv", ".feather"))
+            # Remove the CSV file after conversion
+            os.remove(file_path)
+
+    def explain_all_versions(self, background_size=100, nsamples=500, background_method="iw"):
         """
         Explains all versions of the model using SHAP KernelExplainer.
 
         Parameters:
         - background_size: int, number of samples to use as background
+        - nsamples: int, number of samples to use for SHAP
+        - background_method: str, method to sample the background set (default is "iw"). Options are "fixed" or "iw".
 
         Returns:
         - None, but saves the SHAP values for each version to a CSV file
         """
         # Loop through each version and explain
         for version in self.model_info["version"].unique():
-            self._explain(version=version, background_size=background_size)
+            if os.path.exists(f"results/explainability/{self.model_type}/{version}_{background_method}.feather") and not os.path.exists(f"results/explainability/{self.model_type}/{version}_{background_method}.csv") and self.continue_run:
+                print(f"SHAP values for version {version} already computed. Skipping...")
+            else:
+                self._explain(version=version, background_size=background_size, nsamples=nsamples, background_method=background_method)
+                break

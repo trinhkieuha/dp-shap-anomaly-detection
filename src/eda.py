@@ -14,6 +14,11 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
 warnings.filterwarnings("ignore")
 
+plt.rcParams['text.usetex'] = True
+plt.rcParams['mathtext.fontset'] = 'stix'  # or other, 'dejavuserif'
+plt.rcParams['font.family'] = 'serif'  # or 'DejaVu Serif'
+plt.rcParams['font.serif'] = ['Times New Roman']  # 'DejaVu Serif' serif' 'Times'
+
 # ----------------------------------------
 # Function to detect variable types
 # ----------------------------------------
