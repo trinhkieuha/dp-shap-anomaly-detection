@@ -13,6 +13,7 @@ import re
 from tqdm import tqdm
 import gc
 from sklearn.preprocessing import MinMaxScaler
+from joblib import Parallel, delayed, cpu_count
 
 class ShapKernelExplainer:
     """
@@ -137,7 +138,7 @@ class ShapKernelExplainer:
 
         return background_set
     
-    def _sample_fixed_background_set(self, num_background=100):
+    def _sample_fixed_background_set(self, num_background=200):
         """
         Samples a fixed background set for SHAP KernelExplainer using uniform sampling.
         This should be called once and reused for all SHAP explanations.
@@ -180,6 +181,54 @@ class ShapKernelExplainer:
         errors[:, self.binary_idx] = -x_b * np.log(xhat_b + eps) - (1 - x_b) * np.log(1 - xhat_b + eps)
 
         return errors
+    
+    def _predict_fn(self, model, params, top_features):
+        """
+        Returns a prediction function that computes anomaly scores using selected top features.
+
+        Parameters:
+        - model: the trained TensorFlow anomaly detection model
+        - params: dictionary of model parameters
+        - top_features: list or array of feature indices to include in the anomaly score
+
+        Returns:
+        - predict_fn: Callable that takes input X and returns anomaly scores
+        """
+        
+        def predict_fn(X):
+            X_tensor = tf.convert_to_tensor(X.astype(np.float32))
+            X_recon = model(X_tensor, training=False).numpy()
+            errors = self._compute_reconstruction_error(X, X_recon, params)
+            return np.sum(errors[:, top_features], axis=1)
+        
+        return predict_fn
+    
+    def _compute_top_features(self, x_anomaly, model, params):
+        """
+        Computes the top features contributing to the anomaly score.
+
+        Parameters:
+        - x_anomaly: array-like, the instance to explain
+        - model: AnomalyDetector object, the anomaly detection model
+        - params: dict, parameters for the model
+
+        Returns:
+        - top_features: list of indices of the top features
+        """
+        # Compute reconstruction and per-feature error
+        x_tensor = tf.convert_to_tensor(x_anomaly)
+        x_recon_tensor = model(x_tensor, training=False)
+        x_recon = x_recon_tensor.numpy()
+
+        # Compute the total error
+        errors = self._compute_reconstruction_error(x_anomaly, x_recon, params).flatten()
+        total_error = np.sum(errors)
+        sorted_idx = np.argsort(errors)[::-1]
+        cumsum = np.cumsum(errors[sorted_idx])
+        m = np.searchsorted(cumsum, 0.85 * total_error) + 1
+        top_features = sorted_idx[:m]
+
+        return top_features
 
     def _explain_with_kernelshap(self, x_anomaly, model, params, background_set=None, nsamples=500, noise_multiplier=None):
         """
@@ -199,25 +248,11 @@ class ShapKernelExplainer:
         # Ensure x_anomaly is 2D and X_train is an array
         x_anomaly = np.atleast_2d(x_anomaly)  # ensure shape (1, d)
 
-        # Compute reconstruction and per-feature error
-        x_tensor = tf.convert_to_tensor(x_anomaly)
-        x_recon_tensor = model(x_tensor, training=False)
-        x_recon = x_recon_tensor.numpy()
+        # Get top features
+        top_features = self._compute_top_features(x_anomaly, model, params)
 
-        # Compute the total error
-        errors = self._compute_reconstruction_error(x_anomaly, x_recon, params).flatten()
-        total_error = np.sum(errors)
-        sorted_idx = np.argsort(errors)[::-1]
-        cumsum = np.cumsum(errors[sorted_idx])
-        m = np.searchsorted(cumsum, 0.85 * total_error) + 1
-        top_features = sorted_idx[:m]
-
-        # Define local prediction wrapper using TensorFlow model
-        def predict_fn(X):
-            X_tensor = tf.convert_to_tensor(X.astype(np.float32))
-            X_recon = model(X_tensor, training=False).numpy()
-            errors = self._compute_reconstruction_error(X, X_recon, params)
-            return np.sum(errors[:, top_features], axis=1)
+        # Create a prediction function
+        predict_fn = self._predict_fn(model, params, top_features)
 
         # Fit SHAP KernelExplainer
         explainer = shap.KernelExplainer(model=predict_fn, data=background_set)
@@ -238,6 +273,7 @@ class ShapKernelExplainer:
         Returns:
         - None, but saves the SHAP values to a CSV file
         """
+        explain_size = 500
         # Get the test data and the corresponding data
         X_test = self.X_test.values
 
@@ -263,7 +299,7 @@ class ShapKernelExplainer:
             background_set = None
 
         # Loop through each anomaly and compute SHAP values
-        for x_anomaly in tqdm(X_test[n_done : n_done + 1000], desc=f"Explaining anomalies for {self.model_type} model version: {version}"):
+        for x_anomaly in tqdm(X_test[n_done : n_done + explain_size], desc=f"Explaining anomalies for {self.model_type} model version: {version}"):
             # Compute the SHAP values for the current anomaly
             if background_method == "iw":
                 background_set = self._sample_iw_background_set(x_anomaly, num_background=background_size)
@@ -278,7 +314,7 @@ class ShapKernelExplainer:
             del shap_values
             gc.collect()
         
-        if n_done + 1000 >= len(X_test):
+        if n_done + explain_size >= len(X_test):
             # Convert the CSV file to Feather format
             pd.read_csv(file_path).to_feather(file_path.replace(".csv", ".feather"))
             # Remove the CSV file after conversion
@@ -340,36 +376,6 @@ def shap_gap(baseline_shap, dp_shap, gap_type="euclidean"):
     # Return average distance
     return shapgap_dist
 
-def shap_length(shap: np.ndarray, threshold=0.9) -> np.ndarray:
-    """
-    Computes SHAP Length (SL) for each sample in a dataset.
-
-    Parameters:
-    - shap: np.ndarray of shape (n_samples, n_features), SHAP values
-    - threshold: float in (0, 1), cumulative mass threshold (e.g., 0.9 for 90%)
-
-    Returns:
-    - np.ndarray of shape (n_samples,), SL_{th%} values for each sample
-    """
-    n_samples, n_features = shap.shape
-    shap_lengths = np.zeros(n_samples, dtype=int)
-
-    for i in range(n_samples):
-        phi = np.abs(shap[i])
-        total_mass = np.sum(phi)
-        ordering = np.argsort(-phi)
-        cum_norm_mass = np.cumsum(phi[ordering]) / total_mass
-
-        # Find how many top features are needed to reach threshold
-        for j in range(n_features):
-            if cum_norm_mass[j] > threshold:
-                shap_lengths[i] = j + 1  # 1-based count
-                break
-        else:
-            shap_lengths[i] = n_features
-
-    return shap_lengths
-
 def normalize_shap(shap_values: np.ndarray, method: str = "l2") -> np.ndarray:
     """
     Normalize SHAP values to a consistent scale for fair comparison across models.
@@ -407,3 +413,302 @@ def normalize_shap(shap_values: np.ndarray, method: str = "l2") -> np.ndarray:
 
     else:
         raise ValueError(f"Unknown normalization method: '{method}'. Choose from ['l2', 'l1', 'minmax', 'zscore'].")
+    
+class ExplainabilityEvaluator:
+    def __init__(self, model_type='baseline', metric='F1-Score', background_method='iw', continue_run=False):
+        """
+        Initializes the ExplainabilityEvaluator with model type and loads test data.
+        Parameters:
+        - model_type: str, type of the model to be used (default is 'baseline')
+        - metric: str, tuning objective used to select the best model (default is 'F1-Score')
+        - background_method: str, method to sample the background set (default is 'iw'). Options are "fixed" or "iw".
+        - continue_run: bool, whether to continue a previous run (default is False)
+        """
+        # Set the model type and other parameters
+        self.model_type = model_type
+        self.metric = metric
+        self.background_method = background_method
+        self.continue_run = continue_run
+
+        # Initialize SHAP KernelExplainer
+        self.shap_init = ShapKernelExplainer(model_type=model_type, metric=metric, continue_run=False)
+
+        # Find the background size and number of samples from the log file
+        config = self._get_best_run_config(model_type=self.model_type, metric=self.metric, background_method=self.background_method)
+        self.background_size = config.get("background_size", 100)  # Default to 100 if not found
+        self.nsamples = config.get("nsamples", 100)  # Default to 100 if not found
+
+    def _get_best_run_config(self, model_type, metric, background_method):
+        """
+        Extracts the best run configuration from the log file.
+        Parameters:
+        - model_type: str, type of the model
+        - metric: str, tuning objective used to select the best model
+        - background_method: str, method used for background sampling
+        Returns:
+        - best_config: dict, best configuration found in the log
+        """
+
+        log_path = "logs/explain_log.txt"
+        with open(log_path, "r") as f:
+            log = f.read()
+
+        # Split log entries
+        entries = log.split("=== Run started at:")
+        best_config = None
+        for entry in reversed(entries):  # Reverse to get most recent successful run first
+            if "Status: SUCCESS" not in entry:
+                continue
+
+            args_match = re.search(r"Arguments:\s*(.*)", entry)
+            if not args_match:
+                continue
+
+            args_line = args_match.group(1)
+            args_dict = dict(
+                arg.split("=") for arg in args_line.strip().split(", ") if "=" in arg
+            )
+
+            if (
+                args_dict.get("model_type") == model_type
+                and args_dict.get("metric") == metric
+                and args_dict.get("background_method") == background_method
+            ):
+                best_config = {
+                    "background_size": int(args_dict["background_size"]),
+                    "nsamples": int(args_dict["nsamples"])
+                }
+                break
+
+        return best_config
+
+    def _noisy_baseline_perturbation(self, x, sigma=0.1, baseline="zero", n_samples=100) -> np.ndarray:
+        """
+        Generates a perturbation vector I = x - z0, where z0 = baseline + Gaussian noise.
+
+        Parameters:
+        - x: np.ndarray, input point x ∈ ℝ^d
+        - sigma: float, standard deviation of Gaussian noise
+        - baseline: str, 'zero' or 'mean' (default 'zero')
+
+        Returns:
+        - I: np.ndarray, perturbation vector
+        """
+        d = x.shape[1]
+        # Generate all perturbations in one batch: shape (n_samples, d)
+        if baseline == "zero":
+            x0 = np.zeros((n_samples, d))
+        elif baseline == "mean":
+            x0 = np.mean(x, axis=1, keepdims=True).repeat(d, axis=1)
+        else:
+            raise ValueError("Unsupported baseline type.")
+
+        noise = np.random.normal(0.0, sigma, size=(n_samples, d))
+        z0 = x0 + noise
+        return x - z0  # shape (n_samples, d)
+
+    def _compute_infidelity(self, x, shap, predict_fn, original_score, n_samples=100):
+        """
+        Computes the infidelity of SHAP values using perturbation.
+        Parameters:
+        - x: array-like, the instance to explain
+        - shap: np.ndarray, SHAP values for the instance
+        - predict_fn: function, prediction function for the model
+        - original_score: float, original score of the input sample
+        - n_samples: int, number of samples to use for perturbation
+        Returns:
+        - float, average infidelity across all samples
+        """
+        I = self._noisy_baseline_perturbation(x, n_samples=n_samples)  # shape (n_samples, d)
+        
+        # Compute predictions for x - I
+        x_perturbed = x - I  # shape (n_samples, d)
+        fx_perturbed = predict_fn(x_perturbed)  # shape (n_samples,)
+
+        # Compute errors vectorized
+        dot_products = I @ shap  # shape (n_samples,)
+        errors = (dot_products - (original_score - fx_perturbed)) ** 2
+
+        return np.mean(errors)
+
+    def _compute_sensitivity(self, x, shap, model, params, background_set, r=1e-2, n_samples=20):
+        """
+        Computes the sensitivity of SHAP values using perturbation.
+        Parameters:
+        - x: array-like, the instance to explain
+        - shap: np.ndarray, SHAP values for the instance
+        - model: the model used for predictions
+        - params: parameters for the model
+        - background_set: np.ndarray, background dataset for SHAP
+        - r: float, standard deviation of Gaussian noise
+        - n_samples: int, number of samples to use for perturbation
+
+        Returns:
+        - float, maximum sensitivity across all samples
+        """
+        def compute_single(delta):
+            x_perturbed = x + delta
+            phi_y = self.shap_init._explain_with_kernelshap(x_perturbed, model, params,
+                                                            background_set=background_set,
+                                                            nsamples=self.nsamples)
+            return np.linalg.norm(phi_y - shap)
+
+        # Generate perturbations
+        deltas = [np.random.normal(0, r, size=x.shape) for _ in range(n_samples)]
+
+        # Run in parallel
+        diffs = Parallel(n_jobs=min(8, cpu_count()))(
+            delayed(compute_single)(delta) for delta in deltas
+        )
+
+        return max(diffs)
+    
+    def _compute_aopc(self, x, shap, predict_fn, original_score, n_steps=50, patch_size=1):
+        """
+        Computes the Area Over the Perturbation Curve (AOPC) using the MoRF strategy.
+
+        Parameters:
+        - x: np.ndarray, input sample to explain
+        - shap: np.ndarray, SHAP values corresponding to the input
+        - predict_fn: function, prediction function for the model
+        - original_score: float, original score of the input sample
+        - n_steps: int, number of perturbation steps
+        - patch_size: int, number of features to perturb at each step
+
+        Returns:
+        - float, AOPC value
+        """
+        # Get the absolute SHAP values
+        phi = np.abs(shap)
+        # Sort the features by their absolute SHAP values
+        order = np.argsort(-phi)  # Most relevant features first
+        
+        # Compute the number of perturbation steps
+        perturbation_steps = min(n_steps, len(x) // patch_size) # Ensure we don't exceed the number of features
+        scores = []
+
+        # Loop through the perturbation steps
+        for i in range(perturbation_steps + 1):
+            # Perturb the features
+            x_perturbed = np.copy(x)
+            if i > 0:
+                indices_to_perturb = order[:i * patch_size]
+                x_perturbed[0][indices_to_perturb] = 0.0  # Uniform perturbation to 0
+            # Compute the score for the perturbed instance
+            score = predict_fn(np.atleast_2d(x_perturbed))[0]
+            scores.append(original_score - score)
+
+        return np.mean(scores)
+
+    def _compute_shap_length(self, shap, threshold=0.85):
+        """
+        Computes SHAP Length (SL) for each sample in a dataset.
+
+        Parameters:
+        - shap: np.ndarray of shape (n_features), SHAP values
+        - threshold: float in (0, 1), cumulative mass threshold (e.g., 0.9 for 90%)
+
+        Returns:
+        - int, the SHAP Length (SL) for the given threshold
+        """
+        phi = np.abs(shap)
+        total_mass = np.sum(phi)
+        ordering = np.argsort(-phi)
+        cum_norm_mass = np.cumsum(phi[ordering]) / (total_mass + 1e-10)
+
+        for j, cum_mass in enumerate(cum_norm_mass):
+            if cum_mass > threshold:
+                return j + 1  # 1-based index
+
+        return len(shap)
+    
+    def _evaluate(self, version):
+        """
+        Evaluates the explainability of SHAP values using infidelity and sensitivity.
+
+        Parameters:
+        - x: array-like, the instance to explain
+        - n_samples: int, number of samples to use for evaluation
+
+        Returns:
+        - infidelity: float, average infidelity across all samples
+        - sensitivity: float, maximum sensitivity across all samples
+        """
+        eval_size = 500
+
+        # Load the model and parameters
+        model, params = self.shap_init._version_info_extract(version=version)
+
+        # Sample background set
+        if self.background_method == "fixed":
+            background_set = self.shap_init._sample_fixed_background_set(num_background=self.background_size)
+        else:
+            background_set = None
+        
+        # Load SHAP values
+        shap_values = pd.read_feather(f"results/explainability/{self.model_type}/{version}_{self.background_method}.feather").values
+        
+        # Get the test data and the corresponding data
+        X_test = self.shap_init.X_test.values
+
+        # Initialize the file to save the results
+        os.makedirs(f"results/explainability/{self.model_type}", exist_ok=True)
+        file_path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.csv"
+
+        if self.continue_run:
+            n_done = len(pd.read_csv(file_path)) if os.path.exists(file_path) else 0
+        else:
+            with open(file_path, "w") as f:
+                f.write("infidelity,sensitivity,aopc,shap_length")
+                f.write("\n")
+            n_done = 0
+
+        j = n_done
+
+        # Loop through each anomaly and compute SHAP values
+        for x in tqdm(X_test[n_done : n_done + eval_size], desc=f"Evaluating the explainability for {self.model_type} model version: {version}"):
+            x = np.atleast_2d(x)  # ensure shape (1, d)
+            
+            # Compute the original score
+            top_features = self.shap_init._compute_top_features(x, model, params)
+            predict_fn = self.shap_init._predict_fn(model, params, top_features)
+            original_score = predict_fn(x)[0]
+
+            # Compute infidelity and sensitivity
+            aopc = self._compute_aopc(x, shap_values[j], predict_fn=predict_fn, original_score=original_score, n_steps=50, patch_size=1)
+            infidelity = self._compute_infidelity(x, shap_values[j], predict_fn=predict_fn, original_score=original_score)
+            sensitivity = self._compute_sensitivity(x, shap_values[j], model, params, background_set, r=1e-2)
+            shap_length = self._compute_shap_length(shap_values[j])
+
+            # Save the results
+            with open(file_path, "a") as f:
+                f.write(f"{infidelity},{sensitivity},{aopc},{shap_length}\n")
+
+            # Manually free memory
+            del infidelity, sensitivity, aopc, shap_length
+            gc.collect()
+            j += 1
+
+        if n_done + eval_size >= len(X_test):
+            # Convert the CSV file to Feather format
+            pd.read_csv(file_path).to_feather(file_path.replace(".csv", ".feather"))
+            # Remove the CSV file after conversion
+            os.remove(file_path)
+
+    def evaluate_all_versions(self):
+        """
+        Evaluates all versions of the model using infidelity and sensitivity.
+
+        Parameters:
+        - n_samples: int, number of samples to use for evaluation
+
+        Returns:
+        - None, but saves the evaluation results for each version to a CSV file
+        """
+        # Loop through each version and evaluate
+        for version in self.shap_init.model_info["version"].unique():
+            if os.path.exists(f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.feather") and not os.path.exists(f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.csv") and self.continue_run:
+                print(f"Evaluation results for version {version} already computed. Skipping...")
+            else:
+                self._evaluate(version=version)
+                break
