@@ -178,7 +178,8 @@ class ShapKernelExplainer:
         if self.binary_idx:
             x_b = x_anomaly[:, self.binary_idx]
             xhat_b = x_recon[:, self.binary_idx]
-        errors[:, self.binary_idx] = -x_b * np.log(xhat_b + eps) - (1 - x_b) * np.log(1 - xhat_b + eps)
+            xhat_b = np.clip(xhat_b, eps, 1 - eps)
+            errors[:, self.binary_idx] = -x_b * np.log(xhat_b) - (1 - x_b) * np.log(1 - xhat_b)
 
         return errors
     
@@ -199,6 +200,7 @@ class ShapKernelExplainer:
             X_tensor = tf.convert_to_tensor(X.astype(np.float32))
             X_recon = model(X_tensor, training=False).numpy()
             errors = self._compute_reconstruction_error(X, X_recon, params)
+
             return np.sum(errors[:, top_features], axis=1)
         
         return predict_fn
@@ -247,7 +249,7 @@ class ShapKernelExplainer:
         """
         # Ensure x_anomaly is 2D and X_train is an array
         x_anomaly = np.atleast_2d(x_anomaly)  # ensure shape (1, d)
-
+        
         # Get top features
         top_features = self._compute_top_features(x_anomaly, model, params)
 
@@ -548,20 +550,22 @@ class ExplainabilityEvaluator:
         """
         def compute_single(delta):
             x_perturbed = x + delta
+            if not np.isfinite(x_perturbed).all():
+                return 0.0
             phi_y = self.shap_init._explain_with_kernelshap(x_perturbed, model, params,
                                                             background_set=background_set,
                                                             nsamples=self.nsamples)
             return np.linalg.norm(phi_y - shap)
 
         # Generate perturbations
-        deltas = [np.random.normal(0, r, size=x.shape) for _ in range(n_samples)]
+        deltas = np.random.normal(0, r, size=(n_samples, *x.shape))
 
         # Run in parallel
         diffs = Parallel(n_jobs=min(8, cpu_count()))(
             delayed(compute_single)(delta) for delta in deltas
         )
 
-        return max(diffs)
+        return np.max(diffs)
     
     def _compute_aopc(self, x, shap, predict_fn, original_score, n_steps=50, patch_size=1):
         """
@@ -587,16 +591,18 @@ class ExplainabilityEvaluator:
         perturbation_steps = min(n_steps, len(x) // patch_size) # Ensure we don't exceed the number of features
         scores = []
 
-        # Loop through the perturbation steps
-        for i in range(perturbation_steps + 1):
-            # Perturb the features
-            x_perturbed = np.copy(x)
-            if i > 0:
-                indices_to_perturb = order[:i * patch_size]
-                x_perturbed[0][indices_to_perturb] = 0.0  # Uniform perturbation to 0
-            # Compute the score for the perturbed instance
-            score = predict_fn(np.atleast_2d(x_perturbed))[0]
-            scores.append(original_score - score)
+        # Prepare all perturbation masks
+        x_replicated = np.repeat(x, perturbation_steps + 1, axis=0)
+
+        for i in range(1, perturbation_steps + 1):
+            indices_to_perturb = order[:i * patch_size]
+            x_replicated[i, indices_to_perturb] = 0.0
+
+        # Get model scores in batch
+        scores_batch = predict_fn(x_replicated)
+
+        # Compute score differences
+        scores = original_score - scores_batch
 
         return np.mean(scores)
 
@@ -655,11 +661,11 @@ class ExplainabilityEvaluator:
         os.makedirs(f"results/explainability/{self.model_type}", exist_ok=True)
         file_path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.csv"
 
-        if self.continue_run:
+        if os.path.exists(file_path) and self.continue_run:
             n_done = len(pd.read_csv(file_path)) if os.path.exists(file_path) else 0
         else:
             with open(file_path, "w") as f:
-                f.write("infidelity,sensitivity,aopc,shap_length")
+                f.write("infidelity,aopc,shap_length")
                 f.write("\n")
             n_done = 0
 
@@ -674,18 +680,28 @@ class ExplainabilityEvaluator:
             predict_fn = self.shap_init._predict_fn(model, params, top_features)
             original_score = predict_fn(x)[0]
 
-            # Compute infidelity and sensitivity
+            # Compute AOPC
             aopc = self._compute_aopc(x, shap_values[j], predict_fn=predict_fn, original_score=original_score, n_steps=50, patch_size=1)
+            #print("AOPC:", aopc)
+            
+            # Compute infidelity
             infidelity = self._compute_infidelity(x, shap_values[j], predict_fn=predict_fn, original_score=original_score)
-            sensitivity = self._compute_sensitivity(x, shap_values[j], model, params, background_set, r=1e-2)
+            #print("Infidelity:", infidelity)
+
+            # Compute sensitivity
+            #sensitivity = self._compute_sensitivity(x, shap_values[j], model, params, background_set, r=1e-2)
+            #print("Sensitivity:", sensitivity)
+
+            # Compute SHAP Length
             shap_length = self._compute_shap_length(shap_values[j])
+            #print("SHAP Length:", shap_length)
 
             # Save the results
             with open(file_path, "a") as f:
-                f.write(f"{infidelity},{sensitivity},{aopc},{shap_length}\n")
+                f.write(f"{infidelity},{aopc},{shap_length}\n")
 
             # Manually free memory
-            del infidelity, sensitivity, aopc, shap_length
+            del infidelity, aopc, shap_length
             gc.collect()
             j += 1
 
