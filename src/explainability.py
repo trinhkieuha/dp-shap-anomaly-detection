@@ -666,6 +666,7 @@ class ExplainabilityEvaluator:
         else:
             with open(file_path, "w") as f:
                 f.write("infidelity,aopc,shap_length")
+                #f.write("sensitivity")
                 f.write("\n")
             n_done = 0
 
@@ -699,9 +700,11 @@ class ExplainabilityEvaluator:
             # Save the results
             with open(file_path, "a") as f:
                 f.write(f"{infidelity},{aopc},{shap_length}\n")
+                #f.write(f"{sensitivity}\n")
 
             # Manually free memory
             del infidelity, aopc, shap_length
+            #del sensitivity
             gc.collect()
             j += 1
 

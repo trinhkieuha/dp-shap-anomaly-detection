@@ -1079,3 +1079,1149 @@ Status: SUCCESS
 Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
 Run ended at: 2025-05-22 21:17:11.189276
 Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 21:55:17.732940 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=False, background_method=fixed
+
+
+=== Run started at: 2025-05-22 21:55:48.631312 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=False, background_method=fixed
+
+
+=== Run started at: 2025-05-22 22:28:35.517543 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=False, background_method=fixed
+Run ended at: 2025-05-22 22:33:47.281597
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:33:55.351155 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:37:23.737720
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:37:29.602264 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:40:54.170093
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:40:59.913863 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:46:28.611553
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:46:35.909935 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:50:09.513810
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:50:15.436805 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:53:50.860468
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:53:56.675483 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 22:57:34.540065
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 22:57:40.473824 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:01:15.039100
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:01:21.047471 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:04:55.533399
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:05:01.500785 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:08:37.348759
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:08:43.250952 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:12:41.703253
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:12:48.118773 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:16:28.145796
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:16:34.155636 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:20:13.148418
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:20:19.187598 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:24:00.179719
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:24:05.954651 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:30:08.444140
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:30:15.815365 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:34:10.494772
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:34:16.346339 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:38:04.758437
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:38:10.649542 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:41:57.687424
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:42:03.680086 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:45:56.223269
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:46:02.074852 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:49:47.218644
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:49:53.934614 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:54:07.214287
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:54:13.237542 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-22 23:58:03.532550
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-22 23:58:09.597169 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:01:59.796723
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:02:05.663880 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:05:54.963496
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:06:00.713994 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:09:52.792066
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:09:58.676635 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:14:13.064712
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:14:19.130461 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:18:08.557431
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:18:14.402657 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:22:05.606803
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:22:11.445715 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:25:57.943956
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:26:03.697999 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:30:24.567343
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:30:31.605731 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:34:16.242414
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:34:22.311798 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:38:08.615708
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:38:14.433717 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:41:52.502905
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:41:58.380075 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:45:45.215135
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:45:51.098626 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:49:35.606361
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:49:41.396182 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:55:23.505970
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:55:30.894190 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 00:59:06.822355
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 00:59:12.682997 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:02:49.829702
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:02:55.773662 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:06:31.408333
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:06:37.315420 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:10:14.868493
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:10:20.799394 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:14:01.798689
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:14:07.803884 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:17:41.970523
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:17:47.816774 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:21:24.325388
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:21:30.313351 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:25:06.702388
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:25:12.602442 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:28:49.237206
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:28:55.112321 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:32:40.428668
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:32:46.246081 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:36:26.130990
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:36:32.002865 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:40:10.656747
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:40:16.694530 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:43:55.749899
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:44:01.559550 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:47:41.369920
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:47:47.248624 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:51:28.602328
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:51:34.602081 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:55:09.046546
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:55:15.103865 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 01:58:55.384511
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 01:59:01.343566 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:02:39.798275
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:02:45.494712 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:06:19.504360
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:06:25.494311 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:10:02.771771
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:10:08.808773 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:13:42.945526
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:13:48.661153 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:17:23.893641
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:17:29.695218 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:21:05.415337
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:21:11.414492 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:24:49.307248
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:24:55.359130 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:28:50.487189
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:28:56.452936 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:32:33.014977
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:32:38.718389 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:36:15.942014
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:36:21.927963 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:39:57.344284
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:40:03.014599 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:43:41.108983
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:43:46.921673 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:47:28.299659
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:47:34.170525 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:51:09.956541
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:51:15.808176 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:54:56.988505
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:55:02.726689 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 02:58:42.795175
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 02:58:48.563511 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:02:28.749717
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:02:34.669304 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:06:13.935268
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:06:19.774500 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:10:01.415653
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:10:07.247345 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:13:48.170336
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:13:54.091610 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:17:37.159574
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:17:42.963660 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:21:26.600186
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:21:32.592592 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:25:14.404621
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:25:20.335876 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:29:03.575205
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:29:09.586171 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:33:18.753394
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:33:24.770998 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:37:07.027683
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:37:12.964072 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:40:54.544695
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:41:00.306134 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:44:36.498721
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:44:42.382023 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:48:21.086429
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:48:27.037457 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:52:03.736814
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:52:10.445403 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:55:45.200999
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:55:51.316182 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 03:59:24.457082
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 03:59:30.484309 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:03:03.501082
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:03:09.524481 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:06:44.565471
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:06:50.610979 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:10:22.724019
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:10:28.633355 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:14:01.114733
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:14:07.120711 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:17:43.370591
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:17:49.327553 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:21:25.347545
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:21:31.342012 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:25:09.262827
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:25:15.433345 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:28:52.469207
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:28:58.390824 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:33:01.811953
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:33:07.764530 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:36:41.672064
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:36:47.476672 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:40:23.374193
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:40:29.317940 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:44:03.887314
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:44:09.941144 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:47:39.931655
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:47:46.002846 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:51:17.741686
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:51:23.688297 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:54:56.974341
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:55:02.903625 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 04:58:38.611935
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 04:58:44.458510 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:02:18.030812
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:02:24.053258 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:05:57.473620
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:06:03.451353 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:09:37.608496
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:09:43.578209 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:13:16.065320
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:13:22.026393 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:16:58.281998
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:17:04.213939 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:20:38.256756
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:20:44.193405 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:24:17.287325
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:24:23.246051 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:27:55.495235
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:28:01.389527 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:31:35.340487
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:31:41.203437 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:35:12.319350
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:35:18.332251 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:38:52.483067
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:38:58.451509 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:42:34.212747
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:42:40.261591 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:46:13.983139
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:46:19.844160 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:49:56.005857
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:50:01.928295 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:53:36.423011
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:53:42.273316 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 05:57:47.045575
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 05:57:53.001403 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:01:21.944130
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:01:27.947326 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:04:56.615997
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:05:02.552811 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:08:40.534776
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:08:46.384538 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:12:15.602651
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:12:21.563516 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:15:57.945300
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:16:03.978947 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:19:38.575752
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:19:44.533584 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:23:16.459909
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:23:22.506153 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:26:52.079520
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:26:58.152394 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:30:30.700821
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:30:36.677355 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:34:09.823386
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:34:15.742352 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:37:49.214556
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:37:55.206941 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:41:29.081444
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:41:35.068917 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:45:09.916648
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:45:15.926143 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:48:50.493028
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:48:56.474791 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:52:32.964385
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:52:38.927407 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:56:14.606400
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 06:56:20.451938 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 06:59:55.865066
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:00:01.784358 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:03:34.566155
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:03:40.139695 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:07:15.694415
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:07:21.576766 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:10:59.196841
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:11:05.163335 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:14:41.025209
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:14:46.918511 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:18:23.582860
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:18:29.384832 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:22:06.613521
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:22:12.407818 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:25:54.247536
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:26:00.091738 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:29:36.490660
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:29:42.818542 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:33:22.536583
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:33:28.383906 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:37:02.149827
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:37:08.079299 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:40:43.910734
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:40:49.817619 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:44:47.165144
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:44:53.126454 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:48:28.936740
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:48:34.870655 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:52:11.504110
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:52:17.435235 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:55:51.750917
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:55:57.574255 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 07:59:30.472619
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 07:59:36.415693 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:03:13.573292
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:03:19.546655 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:06:53.527267
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:06:59.442885 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:10:33.115732
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:10:39.169169 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:14:16.138071
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:14:22.040882 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:18:03.816025
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:18:09.772702 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:21:49.400429
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:21:55.279029 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:25:34.867149
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:25:40.785863 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:29:23.298474
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:29:29.164462 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:33:12.240245
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:33:18.060928 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:37:00.924993
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:37:06.874016 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:40:52.484569
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:40:58.323208 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:44:42.601616
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:44:48.468442 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 08:48:34.487597
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 08:48:40.431513 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 09:00:35.245676
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 09:00:42.010780 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 09:50:28.525770
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 09:57:47.423361 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 10:01:05.196796
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 10:01:11.139789 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 10:28:37.346230
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 10:43:42.511956 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 11:43:14.293653
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 11:43:20.928321 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 12:51:18.796655
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 12:51:25.082373 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 13:53:25.844957
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 13:53:32.372779 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:30:40.838895
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:30:48.219742 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:34:04.650481
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:34:10.568465 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:38:04.906475
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:38:10.686357 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:41:35.207978
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:41:41.077271 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:45:08.879950
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:45:14.751465 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:48:40.715098
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:48:46.527656 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:52:15.849926
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:52:21.520866 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:56:12.980023
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:56:18.945661 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 14:59:46.885494
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 14:59:52.740958 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:03:22.629514
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:03:28.678692 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:06:56.760001
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:07:02.685213 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:10:30.973520
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:10:36.871085 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:14:07.770218
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:14:13.760725 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:17:48.006531
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:17:54.008296 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:21:24.769462
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:21:30.762941 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:25:31.988347
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:25:38.036527 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:31:58.822363
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:32:06.443631 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:35:58.792876
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:36:04.651737 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-05-23 15:40:06.516097
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-23 15:40:12.367784 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
