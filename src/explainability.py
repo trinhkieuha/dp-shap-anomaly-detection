@@ -172,14 +172,14 @@ class ShapKernelExplainer:
         if self.real_idx:
             x_r = x_anomaly[:, self.real_idx]
             xhat_r = x_recon[:, self.real_idx]
-            errors[:, self.real_idx] = (x_r - xhat_r) ** 2 * params["gamma"]
+            errors[:, self.real_idx] = 0.5 * (x_r - xhat_r) ** 2 * params["gamma"]
 
         # Compute cross-entropy for binary features
         if self.binary_idx:
             x_b = x_anomaly[:, self.binary_idx]
             xhat_b = x_recon[:, self.binary_idx]
             xhat_b = np.clip(xhat_b, eps, 1 - eps)
-            errors[:, self.binary_idx] = -x_b * np.log(xhat_b) - (1 - x_b) * np.log(1 - xhat_b)
+            errors[:, self.binary_idx] = -x_b * np.log(xhat_b) - (1 - x_b) * np.log(1 - xhat_b) * (1 - params["gamma"])
 
         return errors
     
@@ -286,7 +286,7 @@ class ShapKernelExplainer:
         # Load the model and parameters
         model, params = self._version_info_extract(version=version)
 
-        if self.continue_run:
+        if os.path.exists(file_path) and self.continue_run:
             n_done = len(pd.read_csv(file_path)) if os.path.exists(file_path) else 0
         else:
             with open(file_path, "w") as f:
