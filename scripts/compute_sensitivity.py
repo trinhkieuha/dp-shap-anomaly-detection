@@ -13,71 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Import relevant packages
 from src.eda import data_info
 from src.models import AnomalyDetector, AutoencoderTrainer
-from src.dp_utils import compute_empirical_nsr, compute_T_from_nsr
-from src.utils import parse_param_value
-
-def compute_sensitivity(version, x_train, x_train_val, x_val, 
-                        real_cols, binary_cols,  all_cols,
-                        config, epsilon, delta, noise_mechanism):
-    """
-    Compute the sensitivity of the model to the features in the dataset.
-    
-    Parameters:
-    - version: str, the version of the model.
-    - x_train: pd.DataFrame, the training data.
-    - x_train_val: pd.DataFrame, the validation data.
-    - real_cols: list, the list of real-valued columns.
-    - binary_cols: list, the list of binary columns.
-    - all_cols: list, the list of all columns.
-
-    Returns:
-    - None
-    """
-
-    # Train the equivalent baseline model of the DP-SGD model
-    baseline_model = AutoencoderTrainer(
-            input_dim=x_train.shape[1],
-            real_cols=real_cols,
-            binary_cols=binary_cols,
-            all_cols=all_cols,
-            activation='relu',
-            patience_limit=10,
-            verbose=False,
-            dp_sgd=False,
-            post_hoc=False,
-            save_tracking=False,
-            version=None,
-            raise_convergence_error=False,
-            **config
-        ).train(x_train, x_train_val)
-    
-    # Evaluate both models
-    baseline_scores = AnomalyDetector(
-        baseline_model, real_cols, binary_cols, all_cols,
-        lam=config['lam'], gamma=config['gamma']
-    )._compute_anomaly_scores(x_val)
-
-    # Get the scores file of the DP-SGD model
-    dpsgd_scores_file_path = f"experiments/scores/dpsgd/{version}.feather"
-    dpsgd_scores = pd.read_feather(dpsgd_scores_file_path)['score'].values
-
-    # Compute NSR and derive noise scale
-    desired_nsr = compute_empirical_nsr(dpsgd_scores, baseline_scores)
-
-    T = compute_T_from_nsr(
-        signal_std=np.std(baseline_scores),
-        epsilon=epsilon,
-        nsr_target=desired_nsr,
-        mechanism=noise_mechanism,
-        delta=delta,
-    )
-
-    del baseline_model
-    del baseline_scores
-    del dpsgd_scores
-    del desired_nsr
-
-    return T
+from src.dp_utils import max_per_sample_sensitivity
 
 if __name__ == "__main__":
 
@@ -140,10 +76,8 @@ if __name__ == "__main__":
 
         # --- Compute sensitivity ---
         print(f"Computing sensitivity for version {version} with noise mechanism {noise_mechanism}")
-        T = compute_sensitivity(version, X_train, X_train_validate, X_validate, 
-                                real_cols, binary_cols, all_cols, 
-                                config, epsilon, delta, noise_mechanism)
-        
+        T = max_per_sample_sensitivity(len(real_cols), len(binary_cols), config['gamma'])
+
         print(f"→ Sensitivity: {T}")
 
         # --- Append the results to the file---

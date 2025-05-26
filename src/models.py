@@ -495,15 +495,35 @@ class AnomalyDetector:
         x_tensor = tf.convert_to_tensor(x.values.astype(np.float32))
         x_hat = self.model(x_tensor, training=False)
         scores = self.loss_fn.call(x_tensor, x_hat).numpy()
+        if self.post_hoc:
+            l2_reg = tf.add_n([
+                tf.reduce_sum(tf.square(w))
+                for w in self.model.trainable_variables if 'kernel' in w.name
+            ])
+            reg_term = (self.lam / 2.0) * l2_reg
+            scores -= reg_term.numpy()  # Subtract the regularization term from the scores        
 
         if self.post_hoc:
+            # If post-hoc analysis is enabled, clip the scores with T
+            T = kwargs.get('T', None)
+            if T is not None:
+                scores = np.clip(scores, a_min=0, a_max=T)
             # Compute the noise scale
             if self.noise_mechanism == "laplace":
-                noise = add_lap_noise(tf.convert_to_tensor(scores, dtype=tf.float32), kwargs['noise_multiplier'])
+                noise_multiplier = T / self.target_epsilon
             elif self.noise_mechanism == "gaussian":
                 if self.delta is None:
                     raise ValueError("Delta must be set for Gaussian mechanism.")
-                noise = add_gaussian_noise(tf.convert_to_tensor(scores, dtype=tf.float32), kwargs['noise_multiplier'])
+                noise_multiplier = T * np.sqrt(2 * np.log(1.25 / self.delta)) / self.target_epsilon
+            else:
+                raise ValueError(f"Unsupported noise mechanism: {self.noise_mechanism}")
+            # Compute the noise scale
+            if self.noise_mechanism == "laplace":
+                noise = add_lap_noise(tf.convert_to_tensor(scores, dtype=tf.float32), noise_multiplier)
+            elif self.noise_mechanism == "gaussian":
+                if self.delta is None:
+                    raise ValueError("Delta must be set for Gaussian mechanism.")
+                noise = add_gaussian_noise(tf.convert_to_tensor(scores, dtype=tf.float32), noise_multiplier)
             else:
                 raise ValueError(f"Unsupported noise mechanism: {self.noise_mechanism}")
 
@@ -663,7 +683,7 @@ class AutoencoderTuner:
         
         return trainer.train(self.x_train, self.x_train_val)
 
-    def _evaluate_model(self, metric, model, params, final=False, noise_multiplier=None):
+    def _evaluate_model(self, metric, model, params, final=False, T=None):
         """
         Evaluates the trained autoencoder model on the validation set.
         Parameters:
@@ -682,10 +702,10 @@ class AutoencoderTuner:
                                    target_epsilon=self.target_epsilon, delta=self.delta)
         if self.post_hoc:
             scores = detector._compute_anomaly_scores(x=self.x_val,
-                                                      noise_multiplier=noise_multiplier)
+                                                      T=T)
             if final == True:
                 os.makedirs(os.path.dirname("experiments/scores/posthoc_dp/"), exist_ok=True)
-                score_path = f"experiments/scores/posthoc_dp/{self.version}_noise{noise_multiplier}.feather"
+                score_path = f"experiments/scores/posthoc_dp/{self.version}.feather"
         else:
             scores = detector._compute_anomaly_scores(x=self.x_val)
             if final == True:
@@ -711,7 +731,7 @@ class AutoencoderTuner:
         return max_score[0], max_score[1]
     
     @staticmethod
-    def run_trial(seed, config, tuner_self, metric, noise_multiplier=None):
+    def run_trial(seed, config, tuner_self, metric, T=None):
         tf.random.set_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
@@ -726,7 +746,7 @@ class AutoencoderTuner:
             model = tuner_self._train_model(config, final=False, dp_sgd=tuner_self.dp_sgd)
             
         # Evaluate the model
-        threshold, scores = tuner_self._evaluate_model(metric, model, config, noise_multiplier=noise_multiplier)
+        threshold, scores = tuner_self._evaluate_model(metric, model, config, T=T)
 
         clear_tf_memory()
         del model
@@ -764,19 +784,9 @@ class AutoencoderTuner:
                 (sensitivity_df['metric'] == metric),
                 'sensitivity'
             ].values[0]
-            # Compute the noise scale
-            if self.noise_mechanism == "laplace":
-                noise_multiplier = T / self.target_epsilon
-                print(f"Using noise scale = {T} for Laplace mechanism.")
-            elif self.noise_mechanism == "gaussian":
-                if self.delta is None:
-                    raise ValueError("Delta must be set for Gaussian mechanism.")
-                noise_multiplier = T * np.sqrt(2 * np.log(1.25 / self.delta)) / self.target_epsilon
-                print(f"Using noise sigma = {T} for Gaussian mechanism.")
-            else:
-                raise ValueError(f"Unsupported noise mechanism: {self.noise_mechanism}")
+            
         else:
-            noise_multiplier = None
+            T = None
 
         # Objective function for skopt: maps hyperparameter config to negative metric score
         def objective(params):
@@ -784,7 +794,7 @@ class AutoencoderTuner:
             try:
                 seeds = [1234 + i for i in range(eval_num)]
                 results = Parallel(n_jobs=2)(
-                    delayed(AutoencoderTuner.run_trial)(seed, config, self, metric, noise_multiplier) for seed in seeds
+                    delayed(AutoencoderTuner.run_trial)(seed, config, self, metric, T) for seed in seeds
                 )
                 results = [r for r in results if r is not None]
                 if not results or len(results) == 0:
@@ -843,8 +853,8 @@ class AutoencoderTuner:
         optimizer = Optimizer(dimensions=skopt_space,
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
-                            acq_func="EI",                # to promote exploration
-                            acq_func_kwargs={"xi": 0.5} # to promote exploration
+                            acq_func="EI",                
+                            acq_func_kwargs={"xi": 0.5}
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
@@ -969,7 +979,7 @@ class AutoencoderTuner:
             final_model = self._train_model(decoded_final, final=True, dp_sgd=self.dp_sgd)
             
         # Evaluate the model
-        final_eval = self._evaluate_model(metric, final_model, best_config, final=True, noise_multiplier=noise_multiplier)
+        final_eval = self._evaluate_model(metric, final_model, best_config, final=True, T=T)
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
         final_score = final_eval[1]               # Store the full metric dictionary
 

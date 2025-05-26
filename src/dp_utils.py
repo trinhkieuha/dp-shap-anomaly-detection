@@ -74,6 +74,24 @@ def compute_T_from_nsr(signal_std, epsilon, nsr_target, mechanism="gaussian", de
 
     return T
 
+def max_per_sample_sensitivity(d_real, d_binary, gamma=1.0):
+    """
+    Compute the theoretical max per-sample reconstruction loss for post-hoc DP.
+
+    Parameters:
+    - d_real: int, number of real-valued features
+    - d_binary: int, number of binary-valued features
+    - gamma: float in [0, 1], weight on MSE (1 - gamma for CE)
+
+    Returns:
+    - delta: float, max per-sample sensitivity (for both L1 and L2 if scalar output)
+    """
+    max_mse = 0.5 * d_real              # max 0.5 per real-valued dim
+    max_ce  = np.log(2) * d_binary      # max log(2) per binary dim
+
+    delta = gamma * max_mse + (1 - gamma) * max_ce
+    return delta
+
 class DPSGDSanitizer:
     def __init__(self, n, batch_size, target_epsilon, epochs, delta):
         """

@@ -124,19 +124,13 @@ def main():
         binary_cols = var_info[var_info["var_type"] == "binary"]["var_name"].tolist()
 
         # --- Define hyperparameter grid ---
-        base_grid = [0.001, 0.00005]
-        scaled_grid = [round(l * float(args.epsilon) ** 1.8, 3) for l in base_grid]
-        learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-6)]
-        max_rate = min(learning_rate_grid[1], 0.1)
-        min_rate = max(learning_rate_grid[0], 1e-6)
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
             'batch_size': [64, 150],
-            'dropout_rate': [0.0, 0.4],
-            'learning_rate': [max_rate, min_rate],
-            'lam': [1e-4, 1e-1],
+            'dropout_rate': [0.0, 0.1, 0.2, 0.3, 0.4],
+            'learning_rate': [0.1, 0.05, 0.02],
+            'lam': [1e-4, 1e-3, 1e-2, 1e-1],
             'gamma': [0.001, 0.999],
-            'max_epochs': [150, 700],
         }
 
         # --- Initialize tuner object ---
@@ -150,6 +144,7 @@ def main():
             all_cols=all_cols,
             activation='relu',
             patience_limit=10,
+            max_epochs=500,
             version=args.version,
             dp_sgd=False,
             target_epsilon=float(args.epsilon),
@@ -201,18 +196,29 @@ def main():
         )
 
         # Extract noise multiplier
-        for file in os.listdir(f"experiments/scores/posthoc_dp/"):
-            if f"{args.version}_noise" in file and file.endswith(".feather"):
-                noise_multiplier = float(re.search(r'noise(\d+(\.\d+)?)', file).group(1))
-                break
-        if noise_multiplier is None:
-            raise ValueError(f"Noise multiplier not found for version {args.version}")
+        sensitivity_df = pd.read_csv("experiments/perf_summary/sensitivity.csv")
+
+        # Get the sensitivity value for the epsilon, delta, and noise mechanism
+        T = sensitivity_df.loc[
+            (sensitivity_df['epsilon'] == float(args.epsilon)) &
+            (sensitivity_df['delta'] == float(args.delta)) &
+            (sensitivity_df['noise_mechanism'] == args.noise_mechanism) &
+            (sensitivity_df['metric'] == args.metric),
+            'sensitivity'
+        ].values[0]
 
         # Compute scores using the baseline model
-        scores = detector._compute_anomaly_scores(X_test, noise_multiplier=noise_multiplier)
+        scores, x_hat = detector._compute_anomaly_scores(X_test, test_set=True, T=T)
+
+        # Save reconstructed data
+        os.makedirs(os.path.dirname("experiments/predictions/posthoc_dp"), exist_ok=True)
+        pd.DataFrame(x_hat, columns=all_cols).to_feather(f"experiments/predictions/posthoc_dp/{args.version}_recons.feather")
 
         # Detect
         y_pred = detector._detect(scores, best_params['threshold'])
+
+        # Save predictions
+        pd.DataFrame(y_pred, columns=["anomaly"]).to_feather(f"experiments/predictions/posthoc_dp/{args.version}_pred.feather")
 
         # Evaluate
         metrics = detector._evaluate(y_pred, y_test, scores)

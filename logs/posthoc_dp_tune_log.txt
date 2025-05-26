@@ -190,3 +190,59 @@ Status: SUCCESS
 
 === Run started at: 2025-05-11 21:08:42.914461 ===
 Arguments: version=202505100205, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-26 20:40:49.374712 ===
+Arguments: version=202505262040, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-26 20:42:23.506893 ===
+Arguments: version=202505262042, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-26 20:48:02.174381 ===
+Arguments: version=202505262042, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-26 20:49:17.674557 ===
+Arguments: version=202505262042, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 20:49:17.743798
+Status: FAILED
+Error: attempt to get argmax of an empty sequence
+
+
+=== Run started at: 2025-05-26 20:50:20.573400 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 21:00:27.149315
+Status: FAILED
+Error: Cannot save file into a non-existent directory: 'experiments/predictions/posthoc_dp'
+
+
+=== Run started at: 2025-05-26 21:10:29.897064 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 21:10:51.139223
+Status: FAILED
+Error: Cannot save file into a non-existent directory: 'experiments/predictions/posthoc_dp'
+
+
+=== Run started at: 2025-05-26 21:11:31.386897 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 21:11:48.832615
+Status: FAILED
+Error: Cannot save file into a non-existent directory: 'experiments/predictions/posthoc_dp'
+
+
+=== Run started at: 2025-05-26 21:12:22.933308 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 21:12:46.340374
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 21:13:22.714041 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-26 21:35:38.836004 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 21:36:31.742325
+Status: SUCCESS
