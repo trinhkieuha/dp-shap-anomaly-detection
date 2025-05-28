@@ -194,19 +194,12 @@ class ValidationEvaluation:
                 target_epsilon=float(epsilon), delta=float(delta)
             )
 
-            if self.post_hoc:
-                for file in os.listdir(f"../experiments/scores/posthoc_dp/"):
-                    if f"{version}_noise" in file and file.endswith(".feather"):
-                        noise_multiplier = float(re.search(r'noise(\d+(\.\d+)?)', file).group(1))
-                        break
-                if noise_multiplier is None:
-                    raise ValueError(f"Noise multiplier not found for version {version}")
-            else:
-                noise_multiplier = 0
-
             # Compute scores using the baseline model
-            scores = detector._compute_anomaly_scores(self.X_val, noise_multiplier=noise_multiplier)
-            
+            if self.post_hoc:
+                scores = pd.read_feather(f"../experiments/scores/posthoc_dp/{version}.feather")
+            else:
+                scores = detector._compute_anomaly_scores(self.X_val)
+
             y_pred = detector._detect(scores, params["threshold"])
             perf = detector._evaluate(y_pred, self.y_val, scores)
             perf.update(params)

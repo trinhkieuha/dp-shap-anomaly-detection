@@ -1,0 +1,25 @@
+#!/bin/bash
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism gaussian --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism gaussian --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism gaussian --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism laplace --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism laplace --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric auc --n_calls=30 --noise_mechanism laplace --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism gaussian --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism gaussian --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism gaussian --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism laplace --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism laplace --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric f1_score --n_calls=30 --noise_mechanism laplace --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism gaussian --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism gaussian --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism gaussian --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism laplace --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism laplace --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric recall --n_calls=30 --noise_mechanism laplace --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism gaussian --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism gaussian --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism gaussian --epsilon 5 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism laplace --epsilon 1 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism laplace --epsilon 3 --delta 1e-5
+python3.11 "scripts/posthoc_dp_model.py" --metric precision --n_calls=30 --noise_mechanism laplace --epsilon 5 --delta 1e-5

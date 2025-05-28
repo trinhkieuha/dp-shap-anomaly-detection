@@ -1,0 +1,25 @@
+#!/bin/bash
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280617 --continue_run True --n_calls=50 #Precision	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280732 --continue_run True --n_calls=50 #Precision	laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280640 --continue_run True --n_calls=50 #Precision	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280803 --continue_run True --n_calls=50 #Precision	laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280703 --continue_run True --n_calls=50 #Precision	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280826 --continue_run True --n_calls=50 #Precision	laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280335 --continue_run True --n_calls=50 #Recall		gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280450 --continue_run True --n_calls=50 #Recall		laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280357 --continue_run True --n_calls=50 #Recall		gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280515 --continue_run True --n_calls=50 #Recall		laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280423 --continue_run True --n_calls=50 #Recall		gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280545 --continue_run True --n_calls=50 #Recall		laplace	
+python3.11 "scripts/posthoc_dp_model.py" --version 202505280043 --continue_run True --n_calls=70 #F1-Score	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280204 --continue_run True --n_calls=50 #F1-Score	laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280115 --continue_run True --n_calls=50 #F1-Score	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280233 --continue_run True --n_calls=50 #F1-Score	laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280137 --continue_run True --n_calls=50 #F1-Score	gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280303 --continue_run True --n_calls=50 #F1-Score	laplace	
+python3.11 "scripts/posthoc_dp_model.py" --version 202505272158 --continue_run True --n_calls=70 #AUC			gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505272313 --continue_run True --n_calls=50 #AUC			laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505272225 --continue_run True --n_calls=50 #AUC			gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505272344 --continue_run True --n_calls=50 #AUC			laplace	
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505272248 --continue_run True --n_calls=50 #AUC			gaussian
+#python3.11 "scripts/posthoc_dp_model.py" --version 202505280013 --continue_run True --n_calls=50 #AUC			laplace	

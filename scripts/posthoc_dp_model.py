@@ -210,6 +210,10 @@ def main():
         # Compute scores using the baseline model
         scores, x_hat = detector._compute_anomaly_scores(X_test, test_set=True, T=T)
 
+        # Save scores
+        os.makedirs(os.path.dirname("experiments/scores/posthoc_dp"), exist_ok=True)
+        pd.DataFrame(scores, columns=["score"]).to_feather(f"experiments/scores/posthoc_dp/{args.version}_test.feather")
+
         # Save reconstructed data
         os.makedirs(os.path.dirname("experiments/predictions/posthoc_dp"), exist_ok=True)
         pd.DataFrame(x_hat, columns=all_cols).to_feather(f"experiments/predictions/posthoc_dp/{args.version}_recons.feather")

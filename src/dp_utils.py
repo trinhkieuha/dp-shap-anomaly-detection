@@ -15,7 +15,7 @@ def add_gaussian_noise(tensor, sigma):
     - tf.Tensor, the tensor with added Gaussian noise.
     """
     
-    return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
+    return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma, seed=42)
 
 def add_lap_noise(tensor, scale):
     """
@@ -29,7 +29,7 @@ def add_lap_noise(tensor, scale):
 
     dtype = tensor.dtype  # get the data type of the input tensor
     lap = tfp.distributions.Laplace(loc=tf.constant(0.0, dtype=dtype), scale=tf.constant(scale, dtype=dtype))
-    noise = lap.sample(sample_shape=tf.shape(tensor))
+    noise = lap.sample(sample_shape=tf.shape(tensor), seed=42)
     return tensor + noise
 
 def compute_empirical_nsr(reference_scores, baseline_scores):

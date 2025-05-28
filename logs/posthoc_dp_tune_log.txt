@@ -246,3 +246,683 @@ Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5
 Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
 Run ended at: 2025-05-26 21:36:31.742325
 Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 21:38:48.600754 ===
+Arguments: version=202505262138, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 22:01:21.829141
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 22:01:27.229177 ===
+Arguments: version=202505262201, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 22:28:40.713908
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 22:28:45.523412 ===
+Arguments: version=202505262228, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 22:52:15.274893
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 22:52:20.164577 ===
+Arguments: version=202505262252, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 23:16:10.604234
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 23:16:15.420716 ===
+Arguments: version=202505262316, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-26 23:41:15.214946
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-26 23:41:19.949017 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 00:06:18.222980
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 00:06:26.393243 ===
+Arguments: version=202505270006, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 00:35:34.289284
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 00:35:43.217331 ===
+Arguments: version=202505270035, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 00:59:15.319133
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 00:59:20.136460 ===
+Arguments: version=202505270059, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 01:25:33.758933
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 01:25:38.820997 ===
+Arguments: version=202505270125, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 01:47:27.767367
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 01:47:33.192824 ===
+Arguments: version=202505270147, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 02:20:48.399502
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 02:20:57.861179 ===
+Arguments: version=202505270220, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 02:45:31.616621
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 02:45:36.404852 ===
+Arguments: version=202505270245, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 03:10:38.795821
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 03:10:44.019083 ===
+Arguments: version=202505270310, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 03:38:26.049161
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 03:38:32.666647 ===
+Arguments: version=202505270338, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 04:05:41.431177
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 04:05:46.151417 ===
+Arguments: version=202505270405, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 04:33:59.742838
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 04:34:04.608937 ===
+Arguments: version=202505270434, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-27 04:39:36.045777 ===
+Arguments: version=202505270220, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 04:54:36.646386
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 04:54:40.913156 ===
+Arguments: version=202505270338, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 05:10:44.329777
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 05:10:49.717846 ===
+Arguments: version=202505270245, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 05:25:21.100261
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 05:25:25.882510 ===
+Arguments: version=202505270405, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 05:42:22.586991
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 05:42:27.878959 ===
+Arguments: version=202505270310, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 06:00:03.381521
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 06:00:08.434438 ===
+Arguments: version=202505270434, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 06:30:33.483493
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 06:30:38.413486 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 06:45:09.772911
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 06:45:15.229057 ===
+Arguments: version=202505270059, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 07:02:52.723959
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 07:02:58.619877 ===
+Arguments: version=202505270006, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 07:18:36.411507
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 07:18:41.167537 ===
+Arguments: version=202505270125, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 07:40:19.668342
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 07:40:24.591535 ===
+Arguments: version=202505270035, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 09:57:24.312461
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 09:57:32.307431 ===
+Arguments: version=202505270147, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 10:10:13.131415
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 10:10:17.836234 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 10:25:35.450263
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 10:25:40.212905 ===
+Arguments: version=202505262228, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 11:04:12.008043
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 11:04:16.195109 ===
+Arguments: version=202505262138, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 12:19:19.431458
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 12:19:24.218470 ===
+Arguments: version=202505262252, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 13:15:07.503240
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 13:15:12.776662 ===
+Arguments: version=202505262201, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 14:14:15.221470
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 14:14:22.524744 ===
+Arguments: version=202505262316, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 14:30:33.021000
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 14:30:37.699133 ===
+Arguments: version=202505271430, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 14:53:43.930921
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 14:53:48.735962 ===
+Arguments: version=202505271453, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 15:15:12.744379
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 15:15:17.447648 ===
+Arguments: version=202505271515, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 15:42:26.309613
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 15:42:30.516889 ===
+Arguments: version=202505271542, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:04:32.416862
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:04:37.153861 ===
+Arguments: version=202505271604, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:28:29.802606
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:28:34.620334 ===
+Arguments: version=202505271628, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:50:02.295947
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:50:07.136746 ===
+Arguments: version=202505270220, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:50:39.217598
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:50:43.392867 ===
+Arguments: version=202505270338, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:51:06.500428
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:51:10.668288 ===
+Arguments: version=202505270245, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:51:57.587754
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:52:01.718446 ===
+Arguments: version=202505270405, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:52:48.777840
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:52:52.937198 ===
+Arguments: version=202505270310, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:53:14.600209
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:53:18.762264 ===
+Arguments: version=202505270434, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:53:48.158698
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:53:52.303530 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:54:11.822534
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:54:15.995647 ===
+Arguments: version=202505270059, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:54:47.881078
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:54:52.017716 ===
+Arguments: version=202505270006, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:55:42.974994
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:55:47.148009 ===
+Arguments: version=202505270125, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:55:55.806377
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:55:59.931232 ===
+Arguments: version=202505270035, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:56:09.413517
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:56:13.530415 ===
+Arguments: version=202505270147, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:56:34.550963
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:56:38.751806 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:56:49.673406
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:56:53.854289 ===
+Arguments: version=202505262228, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:57:33.480991
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:57:37.597285 ===
+Arguments: version=202505262138, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:57:58.538232
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:58:02.711522 ===
+Arguments: version=202505262252, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:59:01.326447
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:59:05.488482 ===
+Arguments: version=202505262201, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:59:18.357414
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:59:22.497272 ===
+Arguments: version=202505262316, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 16:59:52.654926
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 16:59:56.830706 ===
+Arguments: version=202505271430, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 17:16:32.694046
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 17:16:36.908597 ===
+Arguments: version=202505271430, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 17:17:06.502029
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 17:17:10.687734 ===
+Arguments: version=202505271542, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 17:32:48.483705
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 17:32:53.460384 ===
+Arguments: version=202505271453, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 17:49:05.891542
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 17:49:10.698913 ===
+Arguments: version=202505271604, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:09:00.798977
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 18:09:05.676483 ===
+Arguments: version=202505271515, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:22:58.564334
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 18:23:03.836380 ===
+Arguments: version=202505271628, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=precision, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:37:37.525277
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 18:42:53.848641 ===
+Arguments: version=202505270220, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:43:35.567511
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 18:45:11.959164 ===
+Arguments: version=202505270220, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:45:46.620070
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 18:50:18.278443 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 18:50:30.202830
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 19:59:31.665874 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-27 20:03:54.536866 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 20:17:03.884127
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 20:17:08.846417 ===
+Arguments: version=202505262228, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 20:17:36.006599
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 20:17:40.227124 ===
+Arguments: version=202505262138, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 20:33:03.613934
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 20:33:09.589789 ===
+Arguments: version=202505262252, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 20:33:56.901856
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 20:34:01.450404 ===
+Arguments: version=202505262201, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 20:57:24.613507
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 20:57:32.518523 ===
+Arguments: version=202505262316, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:17:56.246028
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:18:03.138858 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:36:17.385295
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:36:22.296125 ===
+Arguments: version=202505270059, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=70, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-27 21:44:15.012920 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:45:06.811264
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:46:10.726323 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:46:33.903834
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:49:56.968394 ===
+Arguments: version=202505262050, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:50:14.018279
+Status: SUCCESS
+Run ended at: 2025-05-27 21:50:40.192716
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:50:46.144060 ===
+Arguments: version=202505270006, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=70, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-27 21:51:48.668738 ===
+Arguments: version=202505262341, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=70, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 21:52:43.417171
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 21:55:27.891237 ===
+Arguments: version=202505272155, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-27 21:58:09.124728 ===
+Arguments: version=202505272158, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 22:25:34.824061
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 22:25:41.021260 ===
+Arguments: version=202505272225, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 22:48:19.323784
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 22:48:25.754837 ===
+Arguments: version=202505272248, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 23:13:31.194755
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 23:13:36.812708 ===
+Arguments: version=202505272313, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-27 23:44:36.479398
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-27 23:44:44.276645 ===
+Arguments: version=202505272344, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 00:13:51.295152
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 00:13:58.296215 ===
+Arguments: version=202505280013, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 00:43:46.905307
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 00:43:54.721714 ===
+Arguments: version=202505280043, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 01:15:37.892383
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 01:15:45.817212 ===
+Arguments: version=202505280115, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-28 01:30:12.362289 ===
+Arguments: version=202505280043, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 01:31:45.527892
+Status: SUCCESS
+Run ended at: 2025-05-28 01:37:06.259434
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 01:37:12.863799 ===
+Arguments: version=202505280137, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 02:04:21.412171
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 02:04:29.989090 ===
+Arguments: version=202505280204, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 02:33:04.340988
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 02:33:13.389185 ===
+Arguments: version=202505280233, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 03:03:13.057293
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 03:03:22.210342 ===
+Arguments: version=202505280303, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 03:35:21.689812
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 03:35:30.406124 ===
+Arguments: version=202505280335, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 03:57:51.174869
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 03:57:56.004474 ===
+Arguments: version=202505280357, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 04:23:16.071627
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 04:23:20.940964 ===
+Arguments: version=202505280423, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 04:50:18.998984
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 04:50:27.419610 ===
+Arguments: version=202505280450, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 05:15:35.839693
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 05:15:40.787542 ===
+Arguments: version=202505280515, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 05:45:25.970609
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 05:45:31.349750 ===
+Arguments: version=202505280545, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 06:16:58.925083
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 06:17:04.935208 ===
+Arguments: version=202505280617, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 06:40:27.542955
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 06:40:32.406810 ===
+Arguments: version=202505280640, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 07:03:43.492470
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 07:03:48.223815 ===
+Arguments: version=202505280703, noise_mechanism=gaussian, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 07:32:48.047537
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 07:32:54.700249 ===
+Arguments: version=202505280732, noise_mechanism=laplace, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 08:03:16.762140
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 08:03:22.252693 ===
+Arguments: version=202505280803, noise_mechanism=laplace, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 08:26:41.511341
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 08:26:45.820363 ===
+Arguments: version=202505280826, noise_mechanism=laplace, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 08:52:19.577660
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 10:58:24.336525 ===
+Arguments: version=202505280335, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 11:15:36.378036
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 11:15:44.248801 ===
+Arguments: version=202505280043, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 11:32:59.616551
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 11:33:04.764193 ===
+Arguments: version=202505272158, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 11:47:49.275691
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 11:54:03.522366 ===
+Arguments: version=202505280335, noise_mechanism=gaussian, epsilon=1, delta=1e-5, metric=recall, n_calls=50, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 11:54:38.095822
+Status: SUCCESS
+
+
+=== Run started at: 2025-05-28 11:56:24.744669 ===
+Arguments: version=202505280115, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-05-28 11:56:39.617316 ===
+Arguments: version=202505280115, noise_mechanism=gaussian, epsilon=3, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-05-28 11:56:51.439626
+Status: SUCCESS
