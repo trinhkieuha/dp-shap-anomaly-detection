@@ -194,7 +194,7 @@ class ValidationEvaluation:
                 target_epsilon=float(epsilon), delta=float(delta)
             )
 
-            # Compute scores using the baseline model
+            # Compute scores on validation set
             if self.post_hoc:
                 scores = pd.read_feather(f"../experiments/scores/posthoc_dp/{version}.feather")
             else:

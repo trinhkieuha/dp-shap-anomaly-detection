@@ -753,7 +753,7 @@ class AutoencoderTuner:
 
         return scores[metric]
 
-    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=True):
+    def bo_tune(self, param_space, metric="auc", n_calls=30, random_starts=5, eval_num=3, warm_start=False):
         """
         Performs Bayesian Optimization to tune hyperparameters using skopt.
 
@@ -854,13 +854,13 @@ class AutoencoderTuner:
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
                             acq_func="EI",                
-                            acq_func_kwargs={"xi": 0.5}
+                            acq_func_kwargs={"xi": 1}
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
         completed_trials = set()
         if self.continue_run and os.path.exists(log_path) and len(pd.read_csv(log_path)) > 0:
-            df_log = pd.read_csv(log_path)
+            df_log = pd.read_csv(log_path).sort_values(by=metric, ascending=True)
 
             for _, row in df_log.iterrows():
                 params = []
