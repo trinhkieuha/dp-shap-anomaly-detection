@@ -5,6 +5,7 @@ import math
 import numpy as np
 import tensorflow_probability as tfp
 
+@tf.function
 def add_gaussian_noise(tensor, sigma):
     """
     Adds Gaussian noise to a tensor.
@@ -19,6 +20,7 @@ def add_gaussian_noise(tensor, sigma):
     
     return tensor + noise
 
+@tf.function
 def add_lap_noise(tensor, scale):
     """
     Adds Laplace noise to a tensor.

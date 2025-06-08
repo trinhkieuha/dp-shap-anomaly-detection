@@ -4024,3 +4024,50 @@ Status: SUCCESS
 
 === Run started at: 2025-06-08 19:54:14.527934 ===
 Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-08 22:14:32.227245
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-08 22:14:38.581086 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:02:30.578192 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:03:24.414171 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:03:49.492492 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:04:39.698406 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:05:29.174151 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:05:51.532189 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-08 23:05:52.248918
+Status: FAILED
+Error: in user code:
+
+    File "/Users/trinhha/Documents/VU AMSTERDAM/STUDY/Thesis/Code/src/models.py", line 272, in train  *
+        x_train_tf = tf.convert_to_tensor(x_train.to_numpy(dtype=np.float32))
+
+    AttributeError: 'SymbolicTensor' object has no attribute 'to_numpy'
+
+
+
+=== Run started at: 2025-06-08 23:07:13.991693 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-08 23:07:40.924979 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP

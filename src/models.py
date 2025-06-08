@@ -483,6 +483,7 @@ class AnomalyDetector:
         self.delta = delta
         self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
+    @tf.function
     def _compute_anomaly_scores(self, x, test_set=False, **kwargs):
         """
         Computes anomaly scores, with optional post-hoc differential privacy.
