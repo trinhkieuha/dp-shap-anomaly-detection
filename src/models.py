@@ -5,7 +5,7 @@ import warnings
 import numpy as np
 import tensorflow as tf
 import random
-from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score
+from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from itertools import product
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -20,7 +20,7 @@ import glob
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
 warnings.filterwarnings("ignore")
 
-class HybridLoss(tf.keras.losses.Loss):
+class HybridLoss():
     def __init__(self, model, real_cols, binary_cols, all_cols, lam, gamma, reduce=True):
         """
         Initializes the inputs to compute loss.
@@ -36,7 +36,6 @@ class HybridLoss(tf.keras.losses.Loss):
                   if False returns per-sample loss (for DP or anomaly scoring)
         """
 
-        super().__init__()
         self.model = model
         self.real_cols = real_cols
         self.binary_cols = binary_cols
@@ -45,7 +44,7 @@ class HybridLoss(tf.keras.losses.Loss):
         self.gamma = gamma
         self.reduce = reduce
 
-    def call(self, y_true, y_pred):
+    def __call__(self, y_true, y_pred):
         col_to_idx = {col: i for i, col in enumerate(self.all_cols)}
         real_idx = [col_to_idx[c] for c in self.real_cols]
         binary_idx = [col_to_idx[c] for c in self.binary_cols]
@@ -235,8 +234,8 @@ class AutoencoderTrainer:
         - train_loss_history: list of float, training loss at each epoch.
         - val_loss_history: list of float, validation loss at each epoch.
         """
-        plt.plot(train_loss_history[-100:], label='Train Loss')
-        plt.plot(val_loss_history[-100:], label='Val Loss')
+        plt.plot(train_loss_history, label='Train Loss')
+        plt.plot(val_loss_history, label='Val Loss')
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
         plt.title("Training and Validation Loss")
@@ -267,24 +266,7 @@ class AutoencoderTrainer:
                             reduce=False) # Not reduce to calculate per-example loss
 
         # Prepare data for TensorFlow
-        train_data = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
-        train_data = train_data.cache().batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
-        """sampling_prob = self.batch_size / len(x_train)  # Poisson sampling probability
-
-        # Create full dataset
-        full_dataset = tf.data.Dataset.from_tensor_slices(x_train.values.astype(np.float32))
-
-        # Poisson sampling: keep each example with probability q
-        def poisson_sample(x):
-            return tf.random.uniform(()) < sampling_prob
-
-        # Apply sampling and batching
-        train_data = (
-            full_dataset
-            .filter(poisson_sample)  # Poisson sampling
-            .batch(self.batch_size)
-            .prefetch(tf.data.AUTOTUNE)
-        )"""
+        x_train_tf = tf.convert_to_tensor(x_train.to_numpy(dtype=np.float32))
         val_data = tf.convert_to_tensor(x_val.values.astype(np.float32))
 
         # Initialize the training
@@ -296,10 +278,11 @@ class AutoencoderTrainer:
         best_weights = None
         train_loss_tracker = tf.keras.metrics.Mean(name="train_loss")
         val_loss_tracker = tf.keras.metrics.Mean(name="val_loss")
+        train_size = len(x_train)
 
         # Initialize the DPSGD sanitizer
         if self.dp_sgd:
-            sanitizer = DPSGDSanitizer(n=x_train.shape[0],
+            sanitizer = DPSGDSanitizer(n=train_size,
                                         batch_size=self.batch_size,
                                         target_epsilon=self.target_epsilon,
                                         epochs=self.max_epochs,
@@ -332,23 +315,34 @@ class AutoencoderTrainer:
                 with open(log_path, "w") as f:
                     f.write("epoch,train_loss,val_loss\n")
 
+        @tf.function
+        def per_example_grad(x_i):
+            with tf.GradientTape() as tape:
+                recon_i = self.autoencoder(tf.expand_dims(x_i, 0), training=True)
+                loss_i = loss_fn(tf.expand_dims(x_i, 0), recon_i)
+            return tape.gradient(loss_i, self.autoencoder.trainable_variables)
+        
         # Define a TensorFlow function for each training step
         @tf.function
         def train_step(x_batch):
+            """
+            Performs a single training step on a mini-batch of data.
+            Parameters:
+            - x_batch: tf.Tensor, mini-batch of input data.
+            """
             with tf.GradientTape() as tape:
                 recon = self.autoencoder(x_batch, training=True)
-                per_batch_loss = loss_fn(x_batch, recon)
-                mean_loss = tf.reduce_mean(per_batch_loss)
-            grads = tape.gradient(mean_loss, self.autoencoder.trainable_variables)
+                per_example_loss = loss_fn(x_batch, recon)
+                mean_loss = tf.reduce_mean(per_example_loss)
+            
             if self.dp_sgd:
-                sanitized_grads = []
-                for px_grad in grads:
-                    sanitized_grad = sanitizer.sanitize(px_grad, sigma=noise_multiplier, l2norm_pct=self.l2norm_pct)
-                    sanitized_grads.append(sanitized_grad)
+                per_example_grads = tf.vectorized_map(per_example_grad, x_batch)
+                sanitized_grads = sanitizer.sanitize(per_example_grads, sigma=noise_multiplier, l2norm_pct=self.l2norm_pct)
                 optimizer.apply_gradients(zip(sanitized_grads, self.autoencoder.trainable_variables))
             else:
+                grads = tape.gradient(mean_loss, self.autoencoder.trainable_variables)
                 optimizer.apply_gradients(zip(grads, self.autoencoder.trainable_variables))
-            
+
             train_loss_tracker.update_state(mean_loss)
 
         # Loop over the epoch
@@ -358,10 +352,21 @@ class AutoencoderTrainer:
             train_loss_tracker.reset_state()
             val_loss_tracker.reset_state()
 
-            # Loop over mini-batches
-            for x_batch in train_data:
-                train_step(x_batch)
-            
+            if not self.dp_sgd:
+                train_data = tf.data.Dataset.from_tensor_slices(x_train_tf)
+                train_data = train_data.cache().batch(self.batch_size).prefetch(tf.data.AUTOTUNE) # mini-batches
+                # Training
+                for x_batch in train_data:
+                    train_step(x_batch)
+
+            else:
+                # Simulate training process
+                for t in range(train_size // self.batch_size): # So that we have an equivalent number of batches as in the non-DP case
+                    # Convert the sampled batch to tf.Tensor
+                    indices = tf.random.shuffle(tf.range(train_size))[:self.batch_size]
+                    x_batch = tf.gather(x_train_tf, indices)
+                    train_step(x_batch)
+
             # Validation loss
             val_recon = self.autoencoder(val_data, training=False)
             val_loss_tracker.update_state(tf.reduce_mean(loss_fn(val_data, val_recon)))
@@ -494,7 +499,7 @@ class AnomalyDetector:
         # Standard scoring using trained model
         x_tensor = tf.convert_to_tensor(x.values.astype(np.float32))
         x_hat = self.model(x_tensor, training=False)
-        scores = self.loss_fn.call(x_tensor, x_hat).numpy()
+        scores = self.loss_fn(x_tensor, x_hat).numpy()
         if self.post_hoc:
             l2_reg = tf.add_n([
                 tf.reduce_sum(tf.square(w))
@@ -720,15 +725,35 @@ class AutoencoderTuner:
         if final:
             pd.DataFrame(scores, columns=['score']).to_feather(score_path)
 
-        eval_scores = []
-        for q in np.linspace(0.70, 0.95, 5):
+        best_metric_score = 0
+        final_q = None
+        final_threshold = None
+        final_eval = None
+        # Tune the threshold
+        for q in np.arange(0.70, 0.95, 0.02):
+            # Calculate the threshold
             threshold = np.quantile(scores, q)
+            # Predict
             y_pred = detector._detect(scores, threshold)
-            eval_scores.append((threshold, detector._evaluate(y_pred, self.y_val, scores)))
-        if metric == 'auc':
-            metric = 'f1_score' # if the chosen metric for hyperparameter tuning is 'auc,' use f1 for threshold instead since auc will be the same
-        max_score = max(eval_scores, key=lambda x: x[1][metric])
-        return max_score[0], max_score[1]
+            # Calculate the tuning objective value
+            if metric == "precision":
+                metric_score = precision_score(self.y_val, y_pred)
+            elif metric == "recall":
+                metric_score = recall_score(self.y_val, y_pred)
+            elif metric == "f1_score":
+                metric_score = f1_score(self.y_val, y_pred)
+            elif metric == "auc": # Use youden's j instead since auc remains the same for all thresholds
+                tn, fp, fn, tp = confusion_matrix(self.y_val, y_pred).ravel()
+                sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0  # Recall
+                specificity = tn / (tn + fp) if (tn + fp) > 0 else 0
+                metric_score = sensitivity + specificity - 1
+            # If metric_score gets better
+            if metric_score > best_metric_score:
+                final_q = q
+                final_threshold = threshold
+                final_eval = detector._evaluate(y_pred, self.y_val, scores)
+                best_metric_score = metric_score
+        return final_threshold, final_eval, final_q
     
     @staticmethod
     def run_trial(seed, config, tuner_self, metric, T=None):
@@ -746,7 +771,7 @@ class AutoencoderTuner:
             model = tuner_self._train_model(config, final=False, dp_sgd=tuner_self.dp_sgd)
             
         # Evaluate the model
-        threshold, scores = tuner_self._evaluate_model(metric, model, config, T=T)
+        threshold, scores, q = tuner_self._evaluate_model(metric, model, config, T=T)
 
         clear_tf_memory()
         del model
@@ -854,7 +879,8 @@ class AutoencoderTuner:
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
                             acq_func="EI",                
-                            acq_func_kwargs={"xi": 1}
+                            acq_func_kwargs={"xi": 1},
+                            #initial_point_generator="hammersly"
                             )
         
         # Initialize log file and evaluated set if checkpoint doesn't exist
@@ -970,6 +996,9 @@ class AutoencoderTuner:
         print("Start training the final model with best config...")
         
         # Train the model
+        tf.random.set_seed(1234)
+        np.random.seed(1234)
+        random.seed(1234)
         if self.post_hoc: # For post-hoc model
             # Train the baseline model with the current configuration
             final_model = self._train_model(decoded_final, final=True, dp_sgd=False)
@@ -981,6 +1010,7 @@ class AutoencoderTuner:
         # Evaluate the model
         final_eval = self._evaluate_model(metric, final_model, best_config, final=True, T=T)
         best_config["threshold"] = final_eval[0]  # Add threshold to the config
+        best_config["q"] = final_eval[-1]
         final_score = final_eval[1]               # Store the full metric dictionary
 
         return final_model, best_config, final_score

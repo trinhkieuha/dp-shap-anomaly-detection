@@ -15,7 +15,7 @@ def add_gaussian_noise(tensor, sigma):
     - tf.Tensor, the tensor with added Gaussian noise.
     """
     
-    return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma, seed=42)
+    return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
 
 def add_lap_noise(tensor, scale):
     """
@@ -29,7 +29,7 @@ def add_lap_noise(tensor, scale):
 
     dtype = tensor.dtype  # get the data type of the input tensor
     lap = tfp.distributions.Laplace(loc=tf.constant(0.0, dtype=dtype), scale=tf.constant(scale, dtype=dtype))
-    noise = lap.sample(sample_shape=tf.shape(tensor), seed=42)
+    noise = lap.sample(sample_shape=tf.shape(tensor))
     return tensor + noise
 
 def compute_empirical_nsr(reference_scores, baseline_scores):
@@ -140,7 +140,6 @@ class DPSGDSanitizer:
         if steps is None:
             steps = int(math.ceil(self.epochs * self.n / self.batch_size))
         dp_event_obj = dp_accounting.SelfComposedDpEvent(
-            #dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
             dp_accounting.SampledWithoutReplacementDpEvent(self.n, self.batch_size, dp_accounting.GaussianDpEvent(sigma)), steps
         )
         return dp_event_obj
@@ -166,7 +165,7 @@ class DPSGDSanitizer:
         - sigma: float, the noise scale for the Gaussian mechanism.
         - steps: int, the number of steps completed so far.
         Returns:
-            dp_accounting.PoissonSampledDpEvent(self.q, dp_accounting.GaussianDpEvent(sigma)), steps
+            dp_accounting.SampledWithoutReplacementDpEvent(self.n, self.batch_size, dp_accounting.GaussianDpEvent(sigma)), steps
         - float, the achieved epsilon for the given delta.
         """
         dp_event_obj = self._make_event(sigma, steps)
@@ -176,6 +175,7 @@ class DPSGDSanitizer:
 
         return achieved_epsilon
 
+    @tf.function
     def sanitize(self, grad, sigma, l2norm_pct=90.0):
         """
         Sanitizes the gradients using the Gaussian mechanism for differential privacy.
@@ -187,16 +187,27 @@ class DPSGDSanitizer:
         - tf.Tensor, the sanitized gradients.
         """    
 
-        # Compute the L2 norms of the gradients
-        l2_norms = tf.norm(grad)
-    
+        # Compute L2 norms for each per-example gradient
+        squared_norms = tf.nest.map_structure(
+            lambda g: tf.reduce_sum(tf.square(g), axis=tf.range(1, tf.rank(g))),
+            grad
+        )
+        total_squared = tf.add_n(squared_norms)
+        l2_norms = tf.sqrt(total_squared)
+
         # Compute the 90th percentile
         l2norm_bound = tf.minimum(tfp.stats.percentile(l2_norms, l2norm_pct, interpolation='nearest'), 5)
 
         # Clip the gradients
-        grad = tf.clip_by_norm(grad, clip_norm=l2norm_bound)
-        
+        clipped_grad = clipped_grads = tf.nest.map_structure(
+            lambda g: g * tf.expand_dims(l2norm_bound, axis=tf.range(0, tf.rank(g))[:1]),
+            grad
+        )
+
         # Add noises
-        sanitized_grad = add_gaussian_noise(grad, sigma * l2norm_bound) # Add noise
+        sanitized_grad = tf.nest.map_structure(
+            lambda g: add_gaussian_noise(tf.reduce_sum(g, axis=0), sigma * l2norm_bound) / tf.cast(tf.shape(g)[0], tf.float32),
+            clipped_grad
+        )
 
         return sanitized_grad

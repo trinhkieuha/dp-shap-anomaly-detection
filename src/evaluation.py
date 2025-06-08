@@ -3,13 +3,15 @@ from datetime import datetime
 import pandas as pd
 import tensorflow as tf
 import pickle
-from src.models import AnomalyDetector
+from src.models import AutoencoderTrainer, AnomalyDetector
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from math import pi
 import os
 from src.dp_utils import *
+from src.eda import data_info
+from tqdm import tqdm
 
 plt.rcParams['text.usetex'] = False
 plt.rcParams['mathtext.fontset'] = 'stix'  # or other, 'dejavuserif'
@@ -401,3 +403,111 @@ def compute_fidelity(baseline_prediction, prediction):
     - fidelity: float, fidelity score
     """
     return np.mean(baseline_prediction == prediction)
+
+class StatisticalEval():
+    def __init__(self):
+
+        # Load training data
+        self.X_train = pd.read_feather("data/processed/X_train.feather")
+
+        # Load train-validation data
+        self.X_train_val = pd.read_feather("data/processed/X_train_validate.feather")
+        
+        # Load test data
+        self.X_test = pd.read_feather("data/processed/X_test.feather")
+        self.y_test = pd.read_feather("data/processed/y_test.feather")
+        
+        # Extract variable types from metadata
+        self.var_info = data_info(self.X_test)
+        self.all_cols = self.X_test.columns
+        self.real_cols = self.var_info[self.var_info["var_type"] == "numerical"]["var_name"].tolist()
+        self.binary_cols = self.var_info[self.var_info["var_type"] == "binary"]["var_name"].tolist()
+
+        # Metrics
+        self.metric_labels = {
+            "precision": "Precision",
+            "recall": "Recall",
+            "f1_score": "F1-Score",
+            "auc": "AUC"
+        }
+
+    def _multi_eval(self, model_type, version, epsilon, delta, n_runs=100):
+        
+        # Load model and hyperparameters
+        with open(f"hyperparams/{model_type}/{version}.pkl", "rb") as f:
+            params = pickle.load(f)
+
+        # Initialize results storage
+        log_path = f"results/stats_eval/{model_type}/{version}.csv"
+        os.makedirs(os.path.dirname(log_path), exist_ok=True) # Create directory if it doesn't exist
+        if os.path.exists(log_path):
+            exist_len = len(pd.read_csv(log_path))
+            n_runs -= exist_len
+        else:
+            with open(log_path, "w") as f:
+                f.write(",".join(self.metric_labels.values()) + "\n")
+
+        # Run multiple evaluations
+        for _ in tqdm(range(n_runs), desc=f"Evaluating {model_type} model version {version} with epsilon={epsilon}, delta={delta}"):
+            # Train model
+            trainer = AutoencoderTrainer(
+                input_dim=self.X_train.shape[1],
+                real_cols=self.real_cols,
+                binary_cols=self.binary_cols,
+                all_cols=self.all_cols,
+                activation='relu',
+                patience_limit=10,
+                verbose=False,
+                dp_sgd=True if model_type == "dpsgd" else False,
+                post_hoc=False,
+                target_epsilon=epsilon,
+                delta=delta,
+                save_tracking=False,
+                raise_convergence_error=True,
+                **{key: value for key, value in params.items() if key not in ['threshold', 'q']}
+            )
+            model = trainer.train(self.X_train, self.X_train_val)
+
+            # Initialize anomaly detector
+            detector = AnomalyDetector(
+                model=model,
+                real_cols=self.real_cols,
+                binary_cols=self.binary_cols,
+                all_cols=self.all_cols,
+                lam=params['lam'],
+                gamma=params['gamma'],
+            )
+
+            # Compute scores
+            scores = detector._compute_anomaly_scores(self.X_test)
+
+            # Detect
+            threshold = np.quantile(scores, params['q'])
+            y_pred = detector._detect(scores, threshold)
+
+            # Evaluate
+            metrics = detector._evaluate(y_pred, self.y_test, scores)
+            metric_values = [metrics[metric] for metric in self.metric_labels.keys()]
+
+            # Log results
+            with open(log_path, "a") as f:
+                f.write(",".join([f"{value}" for value in metric_values]) + "\n")
+
+    def __call__(self, metric_used="AUC", n_runs=100):
+        
+        # Load baseline model versions
+        baseline = pd.read_csv("experiments/perf_summary/baseline_val_results.csv")
+        baseline_model = baseline.query(f'tuned_by == "{metric_used}"')
+        for version in baseline_model["version"].tolist():
+            self._multi_eval("baseline", version, 0, 0, n_runs=n_runs)
+
+        # Load dpsgd model versions
+        dpsgd = pd.read_csv("experiments/perf_summary/dpsgd_val_results.csv")
+        dpsgd_models = dpsgd.query(f'tuned_by == "{metric_used}"')
+        for i, row in dpsgd_models.iterrows():
+            epsilon = row["epsilon"]
+            delta = row["delta"]
+            version = row["version"]
+            self._multi_eval("dpsgd", version, epsilon, delta, n_runs=n_runs)
+
+        return print(f"Statistical evaluation completed for {n_runs} runs with metric '{metric_used}'.")

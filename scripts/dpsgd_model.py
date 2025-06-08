@@ -118,8 +118,8 @@ def main():
         binary_cols = var_info[var_info["var_type"] == "binary"]["var_name"].tolist()
 
         # --- Define hyperparameter grid ---
-        base_grid = [0.0001, 0.00001]
-        scaled_grid = [round(l * float(args.epsilon), 3) for l in base_grid]
+        base_grid = [0.001, 0.0001]
+        scaled_grid = [round(l * float(args.epsilon)*2, 3) for l in base_grid]
         learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-7)]
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
@@ -142,7 +142,7 @@ def main():
             binary_cols=binary_cols,
             all_cols=all_cols,
             activation='relu',
-            patience_limit=10,
+            patience_limit=20,
             version=args.version,
             dp_sgd=True,
             target_epsilon=float(args.epsilon),
