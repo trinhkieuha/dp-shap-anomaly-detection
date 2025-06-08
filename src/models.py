@@ -20,7 +20,7 @@ import glob
 pd.set_option('display.max_columns', None) # Ensure all columns are displayed
 warnings.filterwarnings("ignore")
 
-class HybridLoss():
+class HybridLoss(tf.keras.losses.Loss):
     def __init__(self, model, real_cols, binary_cols, all_cols, lam, gamma, reduce=True):
         """
         Initializes the inputs to compute loss.
@@ -35,6 +35,8 @@ class HybridLoss():
         - reduce: bool, if True returns scalar loss (mean over batch),
                   if False returns per-sample loss (for DP or anomaly scoring)
         """
+
+        super().__init__(reduction='none')
 
         self.model = model
         self.real_cols = real_cols

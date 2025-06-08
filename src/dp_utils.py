@@ -14,8 +14,10 @@ def add_gaussian_noise(tensor, sigma):
     Returns:
     - tf.Tensor, the tensor with added Gaussian noise.
     """
+
+    noise = tf.random.normal(tf.shape(tensor), stddev=sigma)
     
-    return tensor + tf.random.normal(tf.shape(tensor), stddev=sigma)
+    return tensor + noise
 
 def add_lap_noise(tensor, scale):
     """
@@ -188,26 +190,24 @@ class DPSGDSanitizer:
         """    
 
         # Compute L2 norms for each per-example gradient
-        squared_norms = tf.nest.map_structure(
-            lambda g: tf.reduce_sum(tf.square(g), axis=tf.range(1, tf.rank(g))),
-            grad
-        )
-        total_squared = tf.add_n(squared_norms)
-        l2_norms = tf.sqrt(total_squared)
-
+        flat_grads = [
+            tf.reshape(g, (self.batch_size, -1))
+            for g in grad
+        ]
+        squared_norms = [tf.reduce_sum(tf.square(fg), axis=1) for fg in flat_grads]
+        total_squared = tf.add_n(squared_norms) # this has shape [batch]
+        l2_norms = tf.sqrt(total_squared + 1e-6)
+        
         # Compute the 90th percentile
         l2norm_bound = tf.minimum(tfp.stats.percentile(l2_norms, l2norm_pct, interpolation='nearest'), 5)
 
         # Clip the gradients
-        clipped_grad = clipped_grads = tf.nest.map_structure(
-            lambda g: g * tf.expand_dims(l2norm_bound, axis=tf.range(0, tf.rank(g))[:1]),
-            grad
-        )
-
-        # Add noises
         sanitized_grad = tf.nest.map_structure(
-            lambda g: add_gaussian_noise(tf.reduce_sum(g, axis=0), sigma * l2norm_bound) / tf.cast(tf.shape(g)[0], tf.float32),
-            clipped_grad
+            lambda g: add_gaussian_noise(
+                tf.reduce_sum(g * tf.expand_dims(l2norm_bound, axis=tf.range(0, tf.rank(g))[:1]), axis=0),
+                sigma * l2norm_bound
+            ) / tf.cast(tf.shape(g)[0], tf.float32),
+            grad
         )
 
         return sanitized_grad

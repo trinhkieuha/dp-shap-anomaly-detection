@@ -153,7 +153,7 @@ def main():
 
         # --- Perform tuning using selected strategy ---
         best_model, best_params, best_score = tuner.bo_tune(
-            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=int(max(2, 6-float(args.epsilon)))
+            param_grid, metric=args.metric, n_calls=args.n_calls, random_starts=args.random_starts, eval_num=2
         )
 
         # --- Save the best hyperparameters ---
