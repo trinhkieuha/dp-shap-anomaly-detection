@@ -483,7 +483,6 @@ class AnomalyDetector:
         self.delta = delta
         self.loss_fn = HybridLoss(model, real_cols, binary_cols, all_cols, lam, gamma, reduce=False)
 
-    @tf.function
     def _compute_anomaly_scores(self, x, test_set=False, **kwargs):
         """
         Computes anomaly scores, with optional post-hoc differential privacy.
@@ -882,7 +881,7 @@ class AutoencoderTuner:
                             n_initial_points=random_starts,
                             base_estimator=self.bo_estimator,
                             acq_func="EI",                
-                            acq_func_kwargs={"xi": 1},
+                            acq_func_kwargs={"xi": 0.5},
                             #initial_point_generator="hammersly"
                             )
         
@@ -927,7 +926,7 @@ class AutoencoderTuner:
             # Load the previous best configurations
             top_configs_df = pd.read_csv(f"experiments/hyperparam_tune/{model_type}/bayes_{metric}_{prev_version}.csv").sort_values(metric, ascending=False).head(k)
 
-            for i, row in top_configs_df.iterrows():
+            for i, row in top_configs_df.sort_values(metric).iterrows():
                 x0 = []
                 for k in param_space.keys():
                     val = parse_param_value(row[k], k, param_space)
@@ -999,9 +998,9 @@ class AutoencoderTuner:
         print("Start training the final model with best config...")
         
         # Train the model
-        tf.random.set_seed(1234)
-        np.random.seed(1234)
-        random.seed(1234)
+        tf.random.set_seed(1236)
+        np.random.seed(1236)
+        random.seed(1236)
         if self.post_hoc: # For post-hoc model
             # Train the baseline model with the current configuration
             final_model = self._train_model(decoded_final, final=True, dp_sgd=False)

@@ -1,954 +1,4 @@
 
-
-=== Run started at: 2025-04-13 00:52:12.158985 ===
-Arguments: version=202504130052, tune_method=bayesian, metric=auc, n_calls=10, random_starts=5
-Run ended at: 2025-04-13 00:53:52.701752
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 00:54:37.559994 ===
-Arguments: version=202504130054, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 01:09:08.327520
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 01:11:13.593870 ===
-Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 01:19:20.469320
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 01:19:43.718323 ===
-Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 01:37:39.929748
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 17:14:21.279572 ===
-Arguments: version=202504131714, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-13 17:15:41.080202 ===
-Arguments: version=202504131715, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 17:31:52.589204
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 19:12:36.718649 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 19:30:45.850156
-Status: FAILED
-Error: [Errno 2] No such file or directory: 'hyperparams/202504131912.json'
-
-
-=== Run started at: 2025-04-13 19:33:46.140599 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 19:48:00.974012
-Status: FAILED
-Error: Object of type int64 is not JSON serializable
-
-
-=== Run started at: 2025-04-13 19:48:08.137346 ===
-Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-13 20:17:19.346456 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 20:31:57.082156
-Status: FAILED
-Error: Object of type int64 is not JSON serializable
-
-
-=== Run started at: 2025-04-13 20:32:04.704386 ===
-Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-13 20:32:13.699985 ===
-Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-13 20:35:57.253727 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 20:52:36.308828
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 20:58:10.655433 ===
-Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 21:10:14.869371
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 21:10:21.954531 ===
-Arguments: version=202504130111, tune_method=bayesian, metric=precision, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 21:21:37.412742
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-13 21:21:44.243888 ===
-Arguments: version=202504131715, tune_method=bayesian, metric=recall, n_calls=30, random_starts=5
-Run ended at: 2025-04-13 21:55:03.749576
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-17 22:05:50.551497 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-17 22:22:20.078759 ===
-Arguments: version=202504131912, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 22:34:02.257295
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-17 22:38:26.842795 ===
-Arguments: version=202504130119, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-04-17 22:47:16.028867
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 02:30:44.526905 ===
-Arguments: version=202504180230, tune_method=bayesian, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-04-18 02:38:42.741434
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 02:38:47.706505 ===
-Arguments: version=202504180238, tune_method=bayesian, metric=f1_score, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-04-18 02:45:11.073417 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 02:59:46.150526
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 02:59:50.942076 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 03:14:15.759345
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 03:14:20.521556 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 03:27:38.675571
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 03:27:43.527408 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 03:46:31.243567
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 16:48:37.237812 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 17:13:17.218251
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 17:13:22.033075 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 17:30:28.125766
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 17:30:33.069845 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 17:52:06.776864
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-18 17:52:11.543703 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-04-18 18:13:50.870700
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:14:59.438154 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=55, random_starts=5
-Run ended at: 2025-04-20 21:17:14.025296
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:18:07.904303 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=55, random_starts=5
-Run ended at: 2025-04-20 21:18:42.892303
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:20:18.064590 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=55, random_starts=5
-Run ended at: 2025-04-20 21:20:52.849703
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:32:54.832483 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=55, random_starts=5
-Run ended at: 2025-04-20 21:33:28.303983
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:33:59.420827 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-20 21:36:28.251014
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:38:03.389547 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
-Run ended at: 2025-04-20 21:42:21.020092
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-20 21:49:35.520718 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-20 21:54:58.395930
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 00:54:21.832393 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 00:55:38.704732
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:12:33.557207 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-21 17:13:07.041908
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:13:11.725300 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
-Run ended at: 2025-04-21 17:14:18.982288
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:14:23.762667 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-
-
-=== Run started at: 2025-04-21 17:19:38.143005 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-21 17:20:14.607974
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:21:43.455060 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-21 17:22:10.897916
-Status: FAILED
-Error: cannot access local variable 'spent_eps' where it is not associated with a value
-
-
-=== Run started at: 2025-04-21 17:22:15.491984 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
-
-
-=== Run started at: 2025-04-21 17:26:06.823296 ===
-Arguments: version=202504180314, tune_method=bayesian, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-04-21 17:26:41.818315
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:26:46.547017 ===
-Arguments: version=202504180327, tune_method=bayesian, metric=recall, n_calls=55, random_starts=5
-Run ended at: 2025-04-21 17:27:53.109045
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:27:57.851523 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:29:15.843583
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:29:20.512558 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:30:00.323091
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:33:37.220461 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:34:54.466879
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:34:59.138211 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:35:37.650991
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:36:33.286526 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:37:52.629658
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:38:45.906868 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:40:03.277992
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:40:21.235099 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:41:01.997117
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:41:59.374654 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:42:41.498173
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:45:07.376050 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:45:47.551518
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:46:22.091094 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:47:01.833463
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:47:30.444015 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:48:06.826488
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:48:15.368538 ===
-Arguments: version=202504180245, tune_method=bayesian, metric=auc, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:48:54.061708
-Status: SUCCESS
-
-
-=== Run started at: 2025-04-21 17:49:26.081744 ===
-Arguments: version=202504180259, tune_method=bayesian, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-04-21 17:50:43.210980
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 17:56:35.112132 ===
-Arguments: version=202505051756, metric=auc, n_calls=30, random_starts=5
-
-
-=== Run started at: 2025-05-05 21:44:53.588382 ===
-Arguments: version=202505052144, metric=auc, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 22:10:31.705268
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 22:10:35.992549 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 22:27:29.471034
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 22:27:33.702297 ===
-Arguments: version=202505052227, metric=precision, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 22:47:23.434475
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 22:47:28.240628 ===
-Arguments: version=202505052247, metric=recall, n_calls=30, random_starts=5
-Run ended at: 2025-05-05 23:08:58.657424
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 23:09:03.442288 ===
-Arguments: version=202505052144, metric=auc, n_calls=50, random_starts=5
-Run ended at: 2025-05-05 23:22:48.594154
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 23:22:53.349822 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-05 23:39:54.623037
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 23:39:59.749199 ===
-Arguments: version=202505052227, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-05-05 23:59:33.482732
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-05 23:59:38.220892 ===
-Arguments: version=202505052247, metric=recall, n_calls=50, random_starts=5
-Run ended at: 2025-05-06 00:10:43.173995
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 00:10:47.885157 ===
-Arguments: version=202505052144, metric=auc, n_calls=70, random_starts=5
-Run ended at: 2025-05-06 00:23:35.644512
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 00:23:40.421229 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-05-06 00:31:49.786456
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 00:35:04.756542 ===
-Arguments: version=202505052144, metric=auc, n_calls=80, random_starts=5
-Run ended at: 2025-05-06 00:42:51.927982
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 00:42:57.245728 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-
-
-=== Run started at: 2025-05-06 00:48:38.343082 ===
-Arguments: version=202505060048, metric=auc, n_calls=50, random_starts=7
-Run ended at: 2025-05-06 01:32:35.636379
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 01:32:39.983970 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-06 02:27:47.489762
-Status: FAILED
-Error: The model did not converge (slope = -0.003139359274304901). Please check the training parameters.
-
-
-=== Run started at: 2025-05-06 02:27:52.221455 ===
-Arguments: version=202505052227, metric=precision, n_calls=50, random_starts=5
-Run ended at: 2025-05-06 03:29:23.552653
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 03:29:29.232602 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-Run ended at: 2025-05-06 04:42:32.380356
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 04:42:36.653898 ===
-Arguments: version=202505060048, metric=auc, n_calls=60, random_starts=7
-Run ended at: 2025-05-06 04:51:39.676145
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 04:51:44.418082 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=60, random_starts=5
-Run ended at: 2025-05-06 04:59:29.407981
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 10:55:30.246880 ===
-Arguments: version=202505060048, metric=auc, n_calls=80, random_starts=7
-Run ended at: 2025-05-06 11:14:18.106625
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 11:14:22.866077 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=80, random_starts=5
-Run ended at: 2025-05-06 11:35:46.902957
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 11:54:48.692373 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-06 12:20:58.172169
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 12:21:03.675735 ===
-Arguments: version=202505060048, metric=auc, n_calls=100, random_starts=7
-Run ended at: 2025-05-06 12:38:22.361287
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 12:38:26.552668 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=70, random_starts=5
-Run ended at: 2025-05-06 12:47:35.664063
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 12:47:40.440970 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-Run ended at: 2025-05-06 12:49:16.495652
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 14:00:52.464258 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=100, random_starts=5
-Run ended at: 2025-05-06 14:31:58.850883
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 14:32:04.071940 ===
-Arguments: version=202505061432, metric=auc, n_calls=50, random_starts=9
-Run ended at: 2025-05-06 15:15:45.440390
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 15:15:50.586299 ===
-Arguments: version=202505061515, metric=f1_score, n_calls=50, random_starts=9
-
-
-=== Run started at: 2025-05-06 15:17:46.534485 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=120, random_starts=5
-Run ended at: 2025-05-06 15:35:10.960643
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 15:35:16.056629 ===
-Arguments: version=202505060048, metric=auc, n_calls=120, random_starts=7
-Run ended at: 2025-05-06 15:52:18.607537
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 15:52:24.221822 ===
-Arguments: version=202505061552, metric=f1_score, n_calls=50, random_starts=9
-
-
-=== Run started at: 2025-05-06 16:03:40.700923 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=150, random_starts=5
-
-
-=== Run started at: 2025-05-06 16:22:55.342875 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=70, random_starts=5
-
-
-=== Run started at: 2025-05-06 16:23:51.250866 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=70, random_starts=5
-
-
-=== Run started at: 2025-05-06 17:19:32.567571 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=30, random_starts=5
-Run ended at: 2025-05-06 17:42:53.613201
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 17:43:13.772208 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=40, random_starts=5
-Run ended at: 2025-05-06 18:03:51.641730
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 18:12:51.910720 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-06 18:36:44.159564
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 19:46:48.845520 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=70, random_starts=5
-Run ended at: 2025-05-06 20:04:23.907422
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 20:04:34.797676 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=90, random_starts=5
-
-
-=== Run started at: 2025-05-06 20:13:17.955408 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=90, random_starts=5
-Run ended at: 2025-05-06 20:39:34.019219
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 20:40:41.846863 ===
-Arguments: version=202505061432, metric=auc, n_calls=50, random_starts=9
-Run ended at: 2025-05-06 21:00:49.737172
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 21:05:34.421410 ===
-Arguments: version=202505061432, metric=auc, n_calls=70, random_starts=9
-Run ended at: 2025-05-06 21:36:01.475737
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 21:36:24.512729 ===
-Arguments: version=202505061432, metric=auc, n_calls=80, random_starts=9
-Run ended at: 2025-05-06 21:44:02.454010
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 21:52:31.267858 ===
-Arguments: version=202505061432, metric=auc, n_calls=100, random_starts=9
-Run ended at: 2025-05-06 22:13:55.207994
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 22:21:13.340496 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=100, random_starts=5
-Run ended at: 2025-05-06 22:40:26.106469
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 22:41:28.534439 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=110, random_starts=5
-Run ended at: 2025-05-06 23:03:41.949280
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:12:47.391343 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=110, random_starts=5
-Run ended at: 2025-05-06 23:16:46.239327
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:19:44.540149 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=110, random_starts=5
-Run ended at: 2025-05-06 23:21:29.527655
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:21:38.625955 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=120, random_starts=5
-Run ended at: 2025-05-06 23:35:49.250701
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:36:18.335518 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=125, random_starts=5
-Run ended at: 2025-05-06 23:40:16.445667
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:40:24.311944 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=125, random_starts=5
-Run ended at: 2025-05-06 23:42:23.270231
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:42:38.849225 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-06 23:45:17.263697
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:45:41.169516 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-06 23:49:26.924104
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:49:40.234643 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-
-
-=== Run started at: 2025-05-06 23:50:09.475907 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-06 23:54:05.487791
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:54:43.168620 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-06 23:57:05.808235
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-06 23:57:35.217000 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=150, random_starts=5
-Run ended at: 2025-05-07 00:12:58.628139
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 00:13:52.435103 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=180, random_starts=5
-
-
-=== Run started at: 2025-05-07 00:19:54.963278 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=150, random_starts=5
-
-
-=== Run started at: 2025-05-07 00:35:35.544600 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=150, random_starts=5
-
-
-=== Run started at: 2025-05-07 01:06:43.572138 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:06:43.633697
-Status: FAILED
-Error: Error tokenizing data. C error: Expected 7 fields in line 122, saw 14
-
-
-
-=== Run started at: 2025-05-07 01:11:25.503234 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:15:06.795495
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:18:26.034731 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:20:42.371489
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:29:16.479608 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:31:37.465170
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:32:16.754875 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:34:50.182915
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:35:02.561193 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:38:57.461747
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:44:53.395044 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 01:47:03.987669
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 01:59:13.257459 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 02:01:44.536614
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:02:08.570607 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-Run ended at: 2025-05-07 02:03:30.585972
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:04:31.704991 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 02:04:51.030658
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:04:58.994643 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-Run ended at: 2025-05-07 02:05:36.185187
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:05:52.966452 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 02:06:12.383168
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:06:52.293063 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 02:07:15.191435
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:08:04.976031 ===
-Arguments: version=202505061432, metric=auc, n_calls=70, random_starts=9
-Run ended at: 2025-05-07 02:08:17.625232
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:08:42.834452 ===
-Arguments: version=202505061432, metric=auc, n_calls=70, random_starts=9
-Run ended at: 2025-05-07 02:09:01.485755
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:09:43.230084 ===
-Arguments: version=202505061432, metric=auc, n_calls=70, random_starts=9
-Run ended at: 2025-05-07 02:12:10.471894
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:12:34.922159 ===
-Arguments: version=202505061432, metric=auc, n_calls=120, random_starts=9
-Run ended at: 2025-05-07 02:36:44.423341
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:54:18.573880 ===
-Arguments: version=202505052247, metric=recall, n_calls=60, random_starts=5
-Run ended at: 2025-05-07 02:55:47.156925
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 02:56:17.672899 ===
-Arguments: version=202505052247, metric=recall, n_calls=80, random_starts=5
-Run ended at: 2025-05-07 03:26:38.187918
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 14:10:54.752761 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 14:11:20.837583
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 14:14:35.971676 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=130, random_starts=5
-Run ended at: 2025-05-07 14:14:52.353108
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 14:15:33.537269 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=150, random_starts=5
-Run ended at: 2025-05-07 14:30:27.510427
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 14:47:03.730263 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=170, random_starts=5
-Run ended at: 2025-05-07 15:14:21.835974
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 15:18:30.309636 ===
-Arguments: version=202505052210, metric=f1_score, n_calls=200, random_starts=5
-
-
-=== Run started at: 2025-05-07 15:28:06.269393 ===
-Arguments: version=202505071528, metric=f1_score, n_calls=50, random_starts=5
-
-
-=== Run started at: 2025-05-07 16:12:57.972571 ===
-Arguments: version=202505071612, metric=f1_score, n_calls=50, random_starts=5
-
-
-=== Run started at: 2025-05-07 16:24:07.389097 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 16:24:07.451398
-Status: FAILED
-Error: cannot access local variable 'model_type' where it is not associated with a value
-
-
-=== Run started at: 2025-05-07 16:24:38.153557 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 17:06:54.032679
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 17:07:00.427586 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=70, random_starts=5
-Run ended at: 2025-05-07 17:33:16.672340
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 17:35:58.615832 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=70, random_starts=5
-Run ended at: 2025-05-07 17:36:04.866953
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 17:36:10.795627 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=70, random_starts=5
-Run ended at: 2025-05-07 17:36:19.367273
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 17:36:46.284181 ===
-Arguments: version=202505071624, metric=f1_score, n_calls=100, random_starts=5
-
-
-=== Run started at: 2025-05-07 17:57:19.313758 ===
-Arguments: version=202505071757, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 17:57:19.372485
-Status: FAILED
-Error: 'int' object has no attribute 'copy'
-
-
-=== Run started at: 2025-05-07 17:58:07.011707 ===
-Arguments: version=202505071758, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 19:03:57.347870
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 19:05:18.485653 ===
-Arguments: version=202505071758, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 19:05:27.876239
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 19:06:10.132145 ===
-Arguments: version=202505071758, metric=f1_score, n_calls=70, random_starts=5
-
-
-=== Run started at: 2025-05-07 19:27:53.291598 ===
-Arguments: version=202505071758, metric=f1_score, n_calls=70, random_starts=5
-
-
-=== Run started at: 2025-05-07 19:28:12.521740 ===
-Arguments: version=202505071928, metric=f1_score, n_calls=50, random_starts=5
-
-
-=== Run started at: 2025-05-07 19:28:58.436433 ===
-Arguments: version=202505071928, metric=f1_score, n_calls=50, random_starts=5
-
-
-=== Run started at: 2025-05-07 19:32:02.115612 ===
-Arguments: version=202505071932, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 20:22:28.265481
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 20:56:56.281019 ===
-Arguments: version=202505071932, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 20:57:06.006119
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 20:57:12.354968 ===
-Arguments: version=202505071932, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 20:57:21.302234
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 20:58:09.421413 ===
-Arguments: version=202505071932, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 20:58:21.207613
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 20:58:31.582073 ===
-Arguments: version=202505071932, metric=f1_score, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 20:58:49.308861
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 20:59:10.470699 ===
-Arguments: version=202505072059, metric=auc, n_calls=50, random_starts=5
-Run ended at: 2025-05-07 21:48:46.197295
-Status: SUCCESS
-
-
-=== Run started at: 2025-05-07 21:48:51.157701 ===
-Arguments: version=202505072148, metric=recall, n_calls=50, random_starts=5
-
-
-=== Run started at: 2025-05-07 23:55:32.415767 ===
-Arguments: version=202505072148, metric=recall, n_calls=50, random_starts=5, bo_estimator=ET
-
-
-=== Run started at: 2025-05-07 23:57:28.341933 ===
-Arguments: version=202505072148, metric=recall, n_calls=50, random_starts=5, bo_estimator=ET
-
-
-=== Run started at: 2025-05-07 23:58:04.840269 ===
-Arguments: version=202505072148, metric=recall, n_calls=50, random_starts=5, bo_estimator=ET
-Run ended at: 2025-05-08 00:09:23.280714
-Status: SUCCESS
-
-
 === Run started at: 2025-05-08 00:09:29.397111 ===
 Arguments: version=202505080009, metric=f1_score, n_calls=50, random_starts=5, bo_estimator=GP
 Run ended at: 2025-05-08 00:09:54.041308
@@ -1587,4 +637,400 @@ Status: SUCCESS
 === Run started at: 2025-06-08 06:58:17.864731 ===
 Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
 Run ended at: 2025-06-08 06:58:55.731077
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:48:40.328431 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 21:49:21.001373
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:49:26.622784 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 21:51:26.077793
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:51:32.717218 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 21:51:59.904764
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:52:06.391013 ===
+Arguments: version=202505080154, metric=precision, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 21:53:33.170236
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:54:50.655049 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 21:57:03.032025
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:57:09.192133 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 21:59:11.230222
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 21:59:18.582030 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:00:12.918816
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:00:20.114351 ===
+Arguments: version=202505080154, metric=precision, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:01:57.245815
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:02:08.674914 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:04:29.032720
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:04:36.076773 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:06:45.195310
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:06:52.493569 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:07:30.444200
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:07:36.678850 ===
+Arguments: version=202505080154, metric=precision, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:08:48.598997
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:09:09.869915 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:11:12.693053
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:11:43.060734 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:13:26.085579
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:13:47.572119 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:15:49.701333
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:16:11.647253 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:18:08.523777
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:18:31.653377 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:20:34.140260
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:20:52.830837 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:22:56.051950
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:23:45.281240 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:25:08.380835
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:26:17.397897 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:27:11.583772
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:27:48.602219 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:30:03.228071
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:31:41.142306 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 22:34:02.255235
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:35:20.261556 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:37:30.307985
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:37:52.404321 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:40:00.617831
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:40:19.343378 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:42:38.454203
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:42:57.569690 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:45:22.147854
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:46:02.675847 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:48:04.781954
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:49:45.538754 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:51:52.910513
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:52:21.693542 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:54:30.793954
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:55:10.315669 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 22:57:22.059900
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 22:58:33.255892 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 23:00:38.603876
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:01:03.931936 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 23:03:07.976038
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:03:40.429242 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 23:05:55.430456
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:06:43.148131 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 23:08:52.664568
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:10:17.031571 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:12:57.563369
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:13:24.457285 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:14:12.443504
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:15:25.482935 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:17:55.195841
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:19:16.735177 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:21:44.121908
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:22:21.621130 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:24:22.370989
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:24:28.864521 ===
+Arguments: version=202505112013, metric=f1_score, n_calls=10, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-09 23:26:31.191593
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:26:37.476565 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:28:39.175419
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:33:09.052697 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:35:01.406568
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:35:36.099899 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:37:15.100489
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:37:40.487492 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:39:34.039122
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:41:28.398072 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:43:22.155218
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:45:08.604021 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:47:02.222061
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:47:32.786252 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:49:23.827556
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:49:44.127487 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:51:32.259460
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:51:48.370219 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:53:38.581363
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:54:41.104309 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-09 23:56:27.830207
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-09 23:59:23.266350 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:01:13.109738
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:01:44.337161 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:03:36.495899
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:04:13.133315 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:05:46.790702
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:06:55.939226 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:08:45.685979
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:10:10.338082 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:12:02.339085
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:12:53.799147 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:14:50.792316
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:17:55.358107 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:20:13.069271
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:20:35.750320 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:22:35.557980
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:23:34.411404 ===
+Arguments: version=202505080012, metric=auc, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:25:54.783951
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:26:40.675192 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:28:32.139887
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:29:00.720911 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:30:50.574689
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:31:06.959323 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:33:02.771228
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:33:32.397222 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:35:33.541138
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:36:25.223052 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:38:16.629211
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:38:46.851506 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:40:36.124114
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 00:41:12.590106 ===
+Arguments: version=202505080250, metric=recall, n_calls=10, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 00:43:01.931329
 Status: SUCCESS
