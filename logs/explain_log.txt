@@ -2040,3 +2040,49 @@ Status: SUCCESS
 Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_size=100, nsamples=500, background_method=fixed
 Run ended at: 2025-05-25 05:36:37.019249
 Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:52:22.167402 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=False, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 00:57:32.760175
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:57:40.304137 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:03:10.674656
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:03:18.712938 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:08:46.116063
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:08:54.132985 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:14:16.667162
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:14:23.055960 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:18:53.193744
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:18:58.984836 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:23:22.879590
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:23:29.235520 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
+Run ended at: 2025-06-11 01:28:01.264600
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 01:28:07.399912 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_size=100, nsamples=500, background_method=fixed
