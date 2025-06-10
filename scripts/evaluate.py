@@ -15,7 +15,7 @@ def main():
     eval = StatisticalEval()
 
     # Run the evaluation
-    eval(metric_used="AUC", n_runs=10)
+    eval(metric_used="AUC", n_runs=50)
 
 if __name__ == "__main__":
     main()

@@ -123,7 +123,7 @@ def main():
         learning_rate_grid = [scaled_grid[0] + 0.00001, max(scaled_grid[1] - 0.00001, 1e-7)]
         param_grid = {
             'hidden_dims': [[64], [64, 32]],
-            'batch_size': [64, 200],
+            'batch_size': [64, 300],
             'dropout_rate': [0.0, 0.4],
             'learning_rate': learning_rate_grid,
             'lam': [1e-4, 1e-1],

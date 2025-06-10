@@ -732,7 +732,7 @@ class AutoencoderTuner:
         final_threshold = None
         final_eval = None
         # Tune the threshold
-        for q in np.arange(0.70, 0.95, 0.02):
+        for q in np.arange(0.70, 0.95, 0.01):
             # Calculate the threshold
             threshold = np.quantile(scores, q)
             # Predict
@@ -755,6 +755,7 @@ class AutoencoderTuner:
                 final_threshold = threshold
                 final_eval = detector._evaluate(y_pred, self.y_val, scores)
                 best_metric_score = metric_score
+            #print(q, threshold, recall_score(self.y_val, y_pred))
         return final_threshold, final_eval, final_q
     
     @staticmethod

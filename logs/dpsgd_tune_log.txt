@@ -1789,3 +1789,265 @@ Status: SUCCESS
 Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
 Run ended at: 2025-06-10 03:09:36.259985
 Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:11:42.412963 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:14:46.128179
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:15:39.491167 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:18:22.602686
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:29:18.677691 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:31:24.654031
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:33:39.029187 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:35:44.702777
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:37:42.460055 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:41:17.809433
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:46:14.450590 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:49:50.026238
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:51:10.433340 ===
+Arguments: version=202506071334, epsilon=1, delta=1e-5, metric=auc, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 03:54:53.667487
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 03:59:10.307274 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:01:05.261900
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:05:18.104985 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:07:10.823714
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:08:19.073952 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:10:13.598738
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:10:34.430098 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:12:28.069779
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:13:52.177759 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:15:49.306761
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:20:06.943158 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:22:02.065231
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:23:28.913767 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:26:00.354511
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:29:33.214375 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:32:01.318190
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:34:07.892421 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:36:34.956928
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 04:45:25.014317 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-10 04:45:53.326320 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 04:48:21.925071
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 05:04:06.525411 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 05:06:34.615279
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 05:15:29.774634 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 05:51:32.097367
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 05:51:37.629982 ===
+Arguments: version=202506081049, epsilon=3, delta=1e-5, metric=f1_score, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 07:14:13.047946
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 07:14:20.590503 ===
+Arguments: version=202506081557, epsilon=1, delta=1e-5, metric=f1_score, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 07:20:18.222922
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 07:20:23.657774 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-10 15:41:39.143039 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 16:40:07.374005
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 16:40:14.217819 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=9, bo_estimator=GP
+
+
+=== Run started at: 2025-06-10 17:13:40.617784 ===
+Arguments: version=202506082214, epsilon=3, delta=1e-5, metric=recall, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 18:30:56.300610
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 18:31:03.576369 ===
+Arguments: version=202506090641, epsilon=1, delta=1e-5, metric=recall, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 18:33:27.370957
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 18:33:32.651010 ===
+Arguments: version=202505172146, epsilon=3, delta=1e-5, metric=precision, n_calls=30, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-10 18:41:28.126088
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 18:41:34.321922 ===
+Arguments: version=202505180036, epsilon=5, delta=1e-5, metric=precision, n_calls=50, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-10 18:52:12.321990
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 18:52:18.720156 ===
+Arguments: version=202505180036, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=7, bo_estimator=GP
+Run ended at: 2025-06-10 19:03:09.697450
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 19:05:59.119808 ===
+Arguments: version=202506091417, epsilon=5, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 19:13:33.254171
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 19:13:39.430375 ===
+Arguments: version=202506091856, epsilon=1, delta=1e-5, metric=precision, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-10 19:16:58.792314
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 19:18:21.579671 ===
+Arguments: version=202506101918, epsilon=5, delta=1e-5, metric=f1_score, n_calls=30, random_starts=5, bo_estimator=GP
+
+
+=== Run started at: 2025-06-10 21:39:12.611528 ===
+Arguments: version=202506070611, epsilon=3, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-10 21:42:21.456478
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-10 21:45:52.763160 ===
+Arguments: version=202506102145, epsilon=5, delta=1e-5, metric=auc, n_calls=30, random_starts=5, bo_estimator=GP
+Run ended at: 2025-06-11 00:01:49.918509
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:02:26.955219 ===
+Arguments: version=202506070329, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:04:46.159498
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:05:01.038153 ===
+Arguments: version=202506070329, epsilon=5, delta=1e-5, metric=auc, n_calls=70, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:07:24.371015
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:14:07.717170 ===
+Arguments: version=202506080706, epsilon=5, delta=1e-5, metric=f1_score, n_calls=50, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:16:18.449877
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:17:27.843507 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:22:15.279314
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:22:52.965827 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:26:01.104947
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:26:46.951603 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:29:48.554800
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:30:03.109730 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:33:06.459982
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:35:02.479704 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:37:41.516618
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:38:36.944873 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:41:14.515846
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 00:43:50.819959 ===
+Arguments: version=202506081954, epsilon=5, delta=1e-5, metric=recall, n_calls=30, random_starts=9, bo_estimator=GP
+Run ended at: 2025-06-11 00:46:28.471767
+Status: SUCCESS
