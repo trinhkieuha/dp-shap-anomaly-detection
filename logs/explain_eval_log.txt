@@ -3123,3 +3123,603 @@ Status: SUCCESS
 
 === Run started at: 2025-05-25 10:01:45.952662 ===
 Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+
+
+=== Run started at: 2025-06-11 14:33:29.966145 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=False, background_method=fixed
+Run ended at: 2025-06-11 14:35:01.955673
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:35:06.933106 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:36:37.890627
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:36:43.018135 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:38:12.425838
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:38:17.320331 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:39:52.782584
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:39:58.242211 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:41:33.756269
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:41:39.029026 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:43:10.094161
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:43:15.812575 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:44:46.929360
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:44:52.545961 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:46:24.440412
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:46:30.178561 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:48:00.321915
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:48:05.957933 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:49:38.495403
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:49:44.520461 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:51:21.391483
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:51:27.354563 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:53:02.304125
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:53:07.965520 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:54:40.298586
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:54:45.987589 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:56:17.966243
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:56:23.710392 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:57:59.590438
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:58:05.249389 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 14:59:37.386985
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 14:59:43.425561 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:01:20.976909
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:01:26.996758 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:03:03.616915
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:03:09.418493 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:04:42.391741
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:04:48.392929 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:06:20.370672
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:06:26.310602 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:07:59.355750
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:08:05.228142 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:09:38.062274
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:09:44.272950 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:11:12.913753
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:11:19.023418 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:11:19.082120
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:11:24.506031 ===
+Arguments: metric=AUC, model_type=baseline, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:11:24.569121
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:11:29.880421 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=False, background_method=fixed
+Run ended at: 2025-06-11 15:13:12.033310
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:13:18.152710 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:14:50.969476
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:14:56.949823 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:16:29.548347
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:16:35.554995 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:18:08.737415
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:18:14.744822 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:19:46.519855
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:19:52.464389 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:21:25.462826
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:21:31.567698 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:23:08.651469
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:23:14.810901 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:24:51.358603
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:24:57.420231 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:26:30.695825
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:26:36.771044 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:28:07.828660
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:28:13.731520 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:29:49.414208
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:29:55.317129 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:31:33.710292
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:31:39.181543 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:33:20.759058
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:33:26.988202 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:35:07.803863
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:35:14.068516 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:36:52.114352
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:36:58.020904 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:38:31.052412
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:38:36.950153 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:40:12.188700
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:40:18.420442 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:41:52.185301
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:41:58.015196 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:43:29.270176
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:43:35.022753 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:45:07.342477
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:45:13.290631 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:46:50.664316
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:46:56.708718 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:48:31.529955
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:48:37.415001 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:50:02.596888
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:50:08.469030 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:51:39.692997
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:51:45.408295 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:53:17.303566
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:53:23.161592 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:54:51.634811
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:54:57.592783 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:56:29.984023
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:56:36.158443 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:58:12.146708
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 15:58:18.392161 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 15:59:58.556566
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:00:04.648261 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:01:40.790487
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:01:46.928716 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:03:21.861837
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:03:28.038659 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:05:01.784324
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:05:07.931689 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:06:40.138462
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:06:46.053830 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:08:18.711117
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:08:24.838704 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:10:00.482441
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:10:06.792367 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:11:45.256877
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:11:51.319573 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:13:22.427125
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:13:28.403942 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:14:59.548767
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:15:05.249503 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:16:36.324923
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:16:42.390034 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:18:12.591071
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:18:18.519986 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:19:46.285690
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:19:51.914018 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:21:25.660551
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:21:31.706403 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:23:05.436632
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:23:11.532129 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:24:43.997630
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:24:49.866615 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:26:20.008636
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:26:25.857467 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:27:48.722403
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:27:54.789217 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:29:25.730613
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:29:31.651369 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:31:01.635233
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:31:07.503701 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:32:36.137558
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:32:42.151257 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:34:16.185211
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:34:22.400778 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:35:56.448912
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:36:02.632478 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:37:35.404907
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:37:41.423224 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:39:12.335017
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:39:18.278233 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:40:48.544684
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:40:54.511705 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:42:25.920823
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:42:31.938096 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:44:03.079288
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:44:09.087619 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:45:40.097433
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:45:46.520655 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:47:23.665195
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:47:29.921518 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:49:08.088516
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:49:14.289970 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:50:48.189356
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:51:07.414423 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:52:38.929404
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:52:44.915330 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:54:19.105539
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:54:26.529672 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:56:09.983276
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:56:16.615419 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:58:01.320756
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:58:07.363275 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 16:59:42.664074
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 16:59:48.991909 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:01:38.715780
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:01:46.144466 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:03:25.240316
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:03:31.510051 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:05:10.374697
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:05:16.797337 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:06:47.656584
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:06:53.861077 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:06:53.926543
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:06:59.602799 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:06:59.670117
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:07:05.933868 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:07:06.001406
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:07:12.121991 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:07:12.192281
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:07:18.459102 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:07:18.549743
+Status: SUCCESS
+
+
+=== Run started at: 2025-06-11 17:07:24.519320 ===
+Arguments: metric=AUC, model_type=dpsgd, continue_run=True, background_method=fixed
+Run ended at: 2025-06-11 17:07:24.581344
+Status: SUCCESS

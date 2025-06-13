@@ -11,3 +11,5 @@ python3.11 "scripts/dpsgd_model.py" --version 202506081954 --continue_run True -
 #python3.11 "scripts/dpsgd_model.py" --version 202506091417 --continue_run True --n_calls=30 #Precision-5
 python3.11 "scripts/dpsgd_model.py" --version 202506091623 --continue_run True --n_calls=50 #Precision-3
 #python3.11 "scripts/dpsgd_model.py" --version 202506091856 --continue_run True --n_calls=30 #Precision-1
+
+#python3.11 "scripts/dpsgd_model.py" --version 202506122246 --continue_run True --n_calls=30 #AUC-------10
