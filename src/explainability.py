@@ -352,7 +352,7 @@ def shap_gap(baseline_shap, dp_shap, gap_type="euclidean"):
     - gap_type: str, type of distance to compute (default is "euclidean"). Options are "euclidean" or "cosine".
 
     Returns:
-    - float, average distance across all samples
+    - np.ndarray, distance across all samples
     """
     # Ensure input shapes are compatible
     assert baseline_shap.shape == dp_shap.shape, "SHAP value arrays must have the same shape."
@@ -375,7 +375,6 @@ def shap_gap(baseline_shap, dp_shap, gap_type="euclidean"):
     else:
         raise ValueError("Invalid type. Use 'euclidean' or 'cosine'.")
 
-    # Return average distance
     return shapgap_dist
 
 def normalize_shap(shap_values: np.ndarray, method: str = "l2") -> np.ndarray:
