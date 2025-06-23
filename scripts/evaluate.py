@@ -12,10 +12,10 @@ from src.evaluation import StatisticalEval
 
 def main():
     # Initialize the evaluation class
-    eval = StatisticalEval()
+    eval = StatisticalEval(explain=False)
 
     # Run the evaluation
-    eval(metric_used="AUC", n_runs=50)
+    eval(metric_used="AUC", n_runs=100)
 
 if __name__ == "__main__":
     main()

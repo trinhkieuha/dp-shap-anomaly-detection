@@ -13,6 +13,8 @@ from src.dp_utils import *
 from src.eda import data_info
 from tqdm import tqdm
 import random
+import subprocess
+from src.explainability import shap_gap, normalize_shap
 
 plt.rcParams['text.usetex'] = False
 plt.rcParams['mathtext.fontset'] = 'stix'  # or other, 'dejavuserif'
@@ -406,7 +408,9 @@ def compute_fidelity(baseline_prediction, prediction):
     return np.mean(baseline_prediction == prediction)
 
 class StatisticalEval():
-    def __init__(self):
+    def __init__(self, explain=False):
+
+        self.explain = explain
 
         # Load training data
         self.X_train = pd.read_feather("data/processed/X_train.feather")
@@ -451,7 +455,10 @@ class StatisticalEval():
                 params_dict[model] = pickle.load(f)
 
             # Initialize results storage
-            log_path = f"results/stats_eval/{model_type}/{version}.csv"
+            if self.explain:
+                log_path = f"results/stats_eval/{model_type}/{version}_test.csv"
+            else:
+                log_path = f"results/stats_eval/{model_type}/{version}.csv"
             os.makedirs(os.path.dirname(log_path), exist_ok=True) # Create directory if it doesn't exist
             if not os.path.exists(log_path):
                 with open(log_path, "w") as f:
@@ -459,9 +466,21 @@ class StatisticalEval():
                         f.write(",".join(self.metric_labels.values()) + "\n")
                     else:
                         f.write(",".join(self.metric_labels.values()) + ",Fidelity\n")
+                if self.explain:
+                    agg_type = ["mean", "std", "median", "iqr"]
+                    if model_type == 'baseline':
+                        explain_metrics = ["infidelity", "aopc"]
+                    else:
+                        explain_metrics = ["infidelity", "aopc", "shapgap_euclidean", "shapgap_cosine"]
+                    metric_col = [f"{a}_{metric}"for metric in explain_metrics for a in agg_type]
+                    with open(f"results/stats_eval/{model_type}/{version}_eval.csv", "w") as f:
+                        f.write(",".join(metric_col) + "\n")
                 exist_runs = 0
             else:
-                exist_runs = len(pd.read_csv(log_path))
+                if self.explain:
+                    exist_runs = min([len(pd.read_csv(log_path)), len(pd.read_csv(f"results/stats_eval/{model_type}/{version}_eval.csv"))])
+                else:
+                    exist_runs = len(pd.read_csv(log_path))
             
             # If the exist runs of the current model < current min_runs
             if exist_runs < min_runs:
@@ -471,8 +490,12 @@ class StatisticalEval():
         for model in model_list:
             model_type = model[0]
             version = model[1]
-            log_path = f"results/stats_eval/{model_type}/{version}.csv"
+            if self.explain:
+                log_path = f"results/stats_eval/{model_type}/{version}_test.csv"
+            else:
+                log_path = f"results/stats_eval/{model_type}/{version}.csv"
             pd.read_csv(log_path)[:min_runs].to_csv(log_path, index=False)
+            pd.read_csv(f"results/stats_eval/{model_type}/{version}_eval.csv")[:min_runs].to_csv(f"results/stats_eval/{model_type}/{version}_eval.csv", index=False)
         
         # Run multiple evaluations
         for r in tqdm(range(min_runs, n_runs), desc=f"Evaluating models"):
@@ -480,8 +503,12 @@ class StatisticalEval():
             np.random.seed(seeds[r])
             random.seed(seeds[r])
             
+            # Train and evaluate prediction
             for (model_type, version, epsilon, delta), params in params_dict.items():
-                log_path = f"results/stats_eval/{model_type}/{version}.csv"
+                if self.explain:
+                    log_path = f"results/stats_eval/{model_type}/{version}_test.csv"
+                else:
+                    log_path = f"results/stats_eval/{model_type}/{version}.csv"
                 # Train model
                 trainer = AutoencoderTrainer(
                     input_dim=self.X_train.shape[1],
@@ -500,6 +527,8 @@ class StatisticalEval():
                     **{key: value for key, value in params.items() if key not in ['threshold', 'q']}
                 )
                 model = trainer.train(self.X_train, self.X_train_val)
+                if self.explain: # Save only for explanability
+                    model.save(f"models/{model_type}/{version}_test")
 
                 # Initialize anomaly detector
                 detector = AnomalyDetector(
@@ -537,6 +566,57 @@ class StatisticalEval():
                         perf += f",{fidelity}" + "\n"
                     f.write(perf)
 
+            # Explain
+            if self.explain:
+                subprocess.run(["bash", "scripts/explain_test.sh"])
+                subprocess.run(["bash", "scripts/explain_eval_test.sh"])
+
+                # Evaluate the explanations
+                for (model_type, version, epsilon, delta), params in params_dict.items():
+                    # Write to the log file
+                    eval_log_path = f"results/stats_eval/{model_type}/{version}_eval.csv"
+                    
+                    # Read the explanationa and corresponding evaluation
+                    explanation = pd.read_feather(f"results/explainability/{model_type}/{version}_fixed_test.feather")
+                    explain_eval = pd.read_feather(f"results/explainability/{model_type}/{version}_fixed_eval_test.feather")
+
+                    # Statistical properties of the evaluation
+                    agg_type = ["mean", "std", "median", "iqr"]
+                    if model_type == 'baseline':
+                        explain_metrics = ["infidelity", "aopc"]
+                    else:
+                        explain_metrics = ["infidelity", "aopc", "shapgap_euclidean", "shapgap_cosine"]
+                    metric_col = [f"{a}_{metric}"for metric in explain_metrics for a in agg_type]
+                    eval_dict = {}
+                    for metric in explain_metrics[:2]:
+                        eval_dict[f"mean_{metric}"] = explain_eval[metric].mean()
+                        eval_dict[f"std_{metric}"] = explain_eval[metric].std()
+                        eval_dict[f"median_{metric}"] = explain_eval[metric].median()
+                        eval_dict[f"iqr_{metric}"] = explain_eval[metric].quantile(0.75) - explain_eval[metric].quantile(0.25)
+
+                    # Calculate the SHAPGap
+                    if model_type == "baseline":
+                        baseline_explanation = explanation
+                    
+                    elif model_type == "dpsgd":
+                        dpsgd_explanation = explanation
+                        for gap_type in ["euclidean", "cosine"]:
+                            # Normalize the explanations
+                            baseline_explanation_norm = normalize_shap(baseline_explanation, method="l2")
+                            dpsgd_explanation_norm = normalize_shap(dpsgd_explanation, method="l2")
+                            # Compute SHAPGap
+                            gap = shap_gap(baseline_explanation_norm, dpsgd_explanation_norm, gap_type=gap_type)
+                            # Calculate the statistical properties
+                            eval_dict[f"mean_shapgap_{gap_type}"] = np.mean(gap)
+                            eval_dict[f"std_shapgap_{gap_type}"] = np.std(gap)
+                            eval_dict[f"median_shapgap_{gap_type}"] = np.median(gap)
+                            eval_dict[f"iqr_shapgap_{gap_type}"] = np.quantile(gap, 0.75) - np.quantile(gap, 0.25)
+
+                    # Write to the log file
+                    eval_list = f'{",".join([f"{eval_dict[col]:.3f}" for col in metric_col])}\n'
+                    with open(eval_log_path, "a") as f:
+                        f.write(eval_list)
+
     def __call__(self, metric_used="AUC", n_runs=100):
         
         # Load the best models
@@ -551,24 +631,30 @@ class StatisticalEval():
         n_rows = 0
         for version in baseline_model["version"].tolist():
             try:
-                log_path = f"results/stats_eval/baseline/{version}.csv"
+                if self.explain:
+                    log_path = f"results/stats_eval/baseline/{version}_test.csv"
+                else:
+                    log_path = f"results/stats_eval/baseline/{version}.csv"
                 n_rows += len(pd.read_csv(log_path))
             except:
                 n_rows += 0
         for version in dpsgd_models["version"].tolist():
             try:
-                log_path = f"results/stats_eval/dpsgd/{version}.csv"
+                if self.explain:
+                    log_path = f"results/stats_eval/dpsgd/{version}_test.csv"
+                else:
+                    log_path = f"results/stats_eval/dpsgd/{version}.csv"
                 n_rows += len(pd.read_csv(log_path))
             except:
                 n_rows += 0
-        if n_rows == 0:
+        """if n_rows == 0:
             seeds = random.sample(range(1000000), n_runs)
             with open("results/stats_eval/seeds.txt", "w") as f:
                 for seed in seeds:
                     f.write(f"{seed}\n")
-        else:
-            with open("results/stats_eval/seeds.txt", "r") as f:
-                seeds = [int(line.strip()) for line in f]
+        else:"""
+        with open("results/stats_eval/seeds.txt", "r") as f:
+            seeds = [int(line.strip()) for line in f]
 
         model_list = []
         

@@ -5,7 +5,7 @@ sys.dont_write_bytecode = True
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import relevant packages
-from src.explainability import ShapKernelExplainer
+from src.explainability_test import ShapKernelExplainer
 
 # Import necessary libraries
 from datetime import datetime
@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--background_method", type=str, default="fixed", help="Background method for SHAP explanations.")
     parser.add_argument("--background_size", type=int, default=100, help="Background size for SHAP explanations.")
     parser.add_argument("--nsamples", type=int, default=500, help="Number of samples for SHAP explanations.")
+    parser.add_argument("--test", type=bool, default=False)
 
     # --- Parse arguments ---
     args = parser.parse_args()
@@ -43,7 +44,7 @@ def main():
 
     # --- Run SHAP explanations ---
     try:
-        shap_init = ShapKernelExplainer(model_type=model_type, metric=metric, continue_run=continue_run)
+        shap_init = ShapKernelExplainer(model_type=model_type, metric=metric, continue_run=continue_run, test=args.test)
         shap_init.explain_all_versions(background_size=background_size, nsamples=nsamples, background_method=background_method)
     except Exception as e:
         # --- Log failure with timestamp and error ---
