@@ -436,6 +436,37 @@ class StatisticalEval():
             "auc": "AUC"
         }
 
+    def _single_eval(self, model_type, version, epsilon, delta, seed=None):
+        
+        with open(f"hyperparams/{model_type}/{version}.pkl", "rb") as f:
+            params = pickle.load(f)
+        
+        tf.random.set_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+        
+        # Train model
+        trainer = AutoencoderTrainer(
+            input_dim=self.X_train.shape[1],
+            real_cols=self.real_cols,
+            binary_cols=self.binary_cols,
+            all_cols=self.all_cols,
+            activation='relu',
+            patience_limit=10,
+            verbose=False,
+            dp_sgd=True if model_type == "dpsgd" else False,
+            post_hoc=False,
+            target_epsilon=epsilon,
+            delta=delta,
+            version=version,
+            save_tracking=True,
+            raise_convergence_error=True,
+            **{key: value for key, value in params.items() if key not in ['threshold', 'q']}
+        )
+        model = trainer.train(self.X_train, self.X_train_val)
+
+        return model
+
     def _multi_eval(self, model_list, seeds=None, n_runs=100):
         
         # If seeds are not specified, set from 0 to n_runs
@@ -669,6 +700,34 @@ class StatisticalEval():
             version = row["version"]
             model_list.append(("dpsgd", version, epsilon, delta))
         
+        # Run the multiple-run test
         self._multi_eval(model_list, seeds, n_runs=n_runs)
+
+        # Find the median run
+        # Calculate the median index
+        median_ind = int(len(seeds)/2)
+
+        # Get all the multiple-run test results
+        perf_stats = pd.DataFrame()
+        for (model_type, version, epsilon, delta) in model_list:
+            # Read the result file
+            perf = pd.read_csv(f"results/stats_eval/{model_type}/{version}.csv")
+            # Add the model name column
+            perf.insert(0, "Model", f"{model_type}/{version}")
+            # Add the seed column
+            perf["seed"] = seeds
+
+            # Concat the tmp result to the final result
+            perf_stats = pd.concat([perf_stats, perf], ignore_index=True)
+
+        # Find the median seed
+        mean_by_seed = perf_stats.drop(columns=["Model"]).groupby("seed").mean().sort_values(by="AUC")
+        median_seed = int(mean_by_seed[median_ind:median_ind+1].index[0])
+
+        # Run the final model
+        print("Start training the final model...")
+        for (model_type, version, epsilon, delta) in model_list:
+            model = self._single_eval(model_type, version, epsilon, delta, median_seed)
+            model.save(f"models/{model_type}/{version}_final") # Save the final model
 
         return print(f"Statistical evaluation completed for {n_runs} runs with metric '{metric_used}'.")
