@@ -20,7 +20,7 @@ class ShapKernelExplainer:
     Class to handle SHAP KernelExplainer for anomaly detection models.
     """
 
-    def __init__(self, model_type='baseline', metric='F1-Score', continue_run=False, test=False):
+    def __init__(self, model_type='baseline', metric='F1-Score', continue_run=False):
         """
         Initializes the ShapKernelExplainer with model type and loads test data.
 
@@ -28,12 +28,10 @@ class ShapKernelExplainer:
         - model_type: str, type of the model to be used (default is 'baseline')
         - metric: str, tuning objective used to select the best model (default is 'F1-Score')
         - continue_run: bool, whether to continue a previous run (default is False)
-        - test: bool, whether to empirically test if the explainability is stable across runs
         """
         # Set the model type
         self.model_type = model_type
         self.continue_run = continue_run
-        self.test = test
 
         # Read relevant files
         self.X_train = pd.read_feather("data/processed/X_train.feather")
@@ -74,10 +72,7 @@ class ShapKernelExplainer:
             raise ValueError("Version must be provided for model extraction.")
 
         # Load the model and parameters
-        if self.test:
-            model = tf.keras.models.load_model(f"models/{self.model_type}/{version}_test")
-        else:
-            model = tf.keras.models.load_model(f"models/{self.model_type}/{version}_final")
+        model = tf.keras.models.load_model(f"models/{self.model_type}/{version}")
 
         # Check if the version is provided
         version_info = self.model_info[self.model_info["version"] == version]
@@ -286,10 +281,7 @@ class ShapKernelExplainer:
 
         # Initialize the file to save the results
         os.makedirs(f"results/explainability/{self.model_type}", exist_ok=True)
-        if self.test:
-            file_path = f"results/explainability/{self.model_type}/{version}_{background_method}_test.csv"
-        else:
-            file_path = f"results/explainability/{self.model_type}/{version}_{background_method}_final.csv"
+        file_path = f"results/explainability/{self.model_type}/{version}_{background_method}.csv"
 
         # Load the model and parameters
         model, params = self._version_info_extract(version=version)
@@ -344,11 +336,7 @@ class ShapKernelExplainer:
         """
         # Loop through each version and explain
         for version in self.model_info["version"].unique():
-            if self.test:
-                path = f"results/explainability/{self.model_type}/{version}_{background_method}_test"
-            else:
-                path = f"results/explainability/{self.model_type}/{version}_{background_method}_final"
-            if os.path.exists(f"{path}.feather") and not os.path.exists(f"{path}.csv") and self.continue_run:
+            if os.path.exists(f"results/explainability/{self.model_type}/{version}_{background_method}.feather") and not os.path.exists(f"results/explainability/{self.model_type}/{version}_{background_method}.csv") and self.continue_run:
                 print(f"SHAP values for version {version} already computed. Skipping...")
             else:
                 self._explain(version=version, background_size=background_size, nsamples=nsamples, background_method=background_method)
@@ -428,7 +416,7 @@ def normalize_shap(shap_values: np.ndarray, method: str = "l2") -> np.ndarray:
         raise ValueError(f"Unknown normalization method: '{method}'. Choose from ['l2', 'l1', 'minmax', 'zscore'].")
     
 class ExplainabilityEvaluator:
-    def __init__(self, model_type='baseline', metric='F1-Score', background_method='iw', continue_run=False, test=False):
+    def __init__(self, model_type='baseline', metric='F1-Score', background_method='iw', continue_run=False):
         """
         Initializes the ExplainabilityEvaluator with model type and loads test data.
         Parameters:
@@ -436,14 +424,12 @@ class ExplainabilityEvaluator:
         - metric: str, tuning objective used to select the best model (default is 'F1-Score')
         - background_method: str, method to sample the background set (default is 'iw'). Options are "fixed" or "iw".
         - continue_run: bool, whether to continue a previous run (default is False)
-        - test: bool, whether to empirically test if the explainability across runs is stable
         """
         # Set the model type and other parameters
         self.model_type = model_type
         self.metric = metric
         self.background_method = background_method
         self.continue_run = continue_run
-        self.test = test
 
         # Initialize SHAP KernelExplainer
         self.shap_init = ShapKernelExplainer(model_type=model_type, metric=metric, continue_run=False)
@@ -502,7 +488,7 @@ class ExplainabilityEvaluator:
         Generates a perturbation vector I = x - z0, where z0 = baseline + Gaussian noise.
 
         Parameters:
-        - x: np.ndarray, input point x in R^d
+        - x: np.ndarray, input point x ∈ ℝ^d
         - sigma: float, standard deviation of Gaussian noise
         - baseline: str, 'zero' or 'mean' (default 'zero')
 
@@ -665,20 +651,14 @@ class ExplainabilityEvaluator:
             background_set = None
         
         # Load SHAP values
-        if self.test:
-            shap_values = pd.read_feather(f"results/explainability/{self.model_type}/{version}_{self.background_method}_test.feather").values
-        else:
-            shap_values = pd.read_feather(f"results/explainability/{self.model_type}/{version}_{self.background_method}.feather").values
+        shap_values = pd.read_feather(f"results/explainability/{self.model_type}/{version}_{self.background_method}.feather").values
         
         # Get the test data and the corresponding data
         X_test = self.shap_init.X_test.values
 
         # Initialize the file to save the results
         os.makedirs(f"results/explainability/{self.model_type}", exist_ok=True)
-        if self.test:
-            file_path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval_test.csv"
-        else:
-            file_path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval_final.csv"
+        file_path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.csv"
 
         if os.path.exists(file_path) and self.continue_run:
             n_done = len(pd.read_csv(file_path)) if os.path.exists(file_path) else 0
@@ -745,11 +725,7 @@ class ExplainabilityEvaluator:
         """
         # Loop through each version and evaluate
         for version in self.shap_init.model_info["version"].unique():
-            if self.test:
-                path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval_test"
-            else:
-                path = f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval_final"
-            if os.path.exists(f"{path}.feather") and not os.path.exists(f"{path}.csv") and self.continue_run:
+            if os.path.exists(f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.feather") and not os.path.exists(f"results/explainability/{self.model_type}/{version}_{self.background_method}_eval.csv") and self.continue_run:
                 print(f"Evaluation results for version {version} already computed. Skipping...")
             else:
                 self._evaluate(version=version)

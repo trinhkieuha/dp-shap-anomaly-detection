@@ -5,7 +5,7 @@ sys.dont_write_bytecode = True
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import relevant packages
-from src.explainability_test import ShapKernelExplainer
+from src.explainability import ShapKernelExplainer
 
 # Import necessary libraries
 from datetime import datetime
@@ -21,7 +21,7 @@ def main():
     parser.add_argument("--continue_run", type=bool, default=False, help="Continue run if already started.")
     parser.add_argument("--background_method", type=str, default="fixed", help="Background method for SHAP explanations.")
     parser.add_argument("--background_size", type=int, default=100, help="Background size for SHAP explanations.")
-    parser.add_argument("--nsamples", type=int, default=500, help="Number of samples for SHAP explanations.")
+    parser.add_argument("--nsamples", type=int, default=1000, help="Number of samples for SHAP explanations.")
     parser.add_argument("--test", type=bool, default=False)
 
     # --- Parse arguments ---

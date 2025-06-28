@@ -5,7 +5,7 @@ sys.dont_write_bytecode = True
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import relevant packages
-from src.explainability_test import ShapKernelExplainer, ExplainabilityEvaluator
+from src.explainability import ExplainabilityEvaluator
 
 # Import necessary libraries
 from datetime import datetime
