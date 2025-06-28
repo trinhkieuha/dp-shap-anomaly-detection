@@ -465,6 +465,25 @@ class StatisticalEval():
         )
         model = trainer.train(self.X_train, self.X_train_val)
 
+        detector = AnomalyDetector(
+                model=model,
+                real_cols=self.real_cols,
+                binary_cols=self.binary_cols,
+                all_cols=self.all_cols,
+                lam=params['lam'],
+                gamma=params['gamma'],
+            )
+        scores, x_hat = detector._compute_anomaly_scores(self.X_test, test_set=True)
+
+        # Save reconstructed data
+        pd.DataFrame(x_hat, columns=self.all_cols).to_feather(f"experiments/predictions/{model_type}/{version}_recons_final.feather")
+
+        # Detect
+        y_pred = detector._detect(scores, params['threshold'])
+
+        # Save predictions
+        pd.DataFrame(y_pred, columns=["anomaly"]).to_feather(f"experiments/predictions/{model_type}/{version}_pred_final.feather")
+
         return model
 
     def _multi_eval(self, model_list, seeds=None, n_runs=100):
