@@ -53,3 +53,12 @@ Final outputs (on the test set) including input description, performance metrics
 - **`stats_eval/`**: Multiple-run evaluation results.
 - **`explainability/`**: Explanation-related outputs, including SHAP values and evaluation metrics.
 - **`figures/`**: Stores plots and visualizations generated during the analysis.
+
+## Dependencies
+
+This project uses the following key libraries:
+- [TensorFlow](https://www.tensorflow.org/) – for implementing and training the (DP-)autoencoder models
+- [dp-accounting](https://github.com/google/differential-privacy/tree/main/accounting) – for Rényi Differential Privacy (RDP) accounting and computing privacy guarantees
+- [SHAP](https://github.com/shap/shap) – for post-hoc explainability of model predictions using KernelSHAP
+
+Please refer to `requirements.txt` for the complete list of dependencies.
