@@ -1,6 +1,6 @@
 # Analyzing the Explainability-Privacy Trade-off in Differentially Private Deep Learning for Anomaly Detection
 
-This repository contains the code, experiments, and outputs for my master's thesis.
+This repository contains the code, experiments, and outputs for my analysis on how DP-SGD training affects deep anomaly detection in terms or explainability.
 
 ## 📝 Description
 
