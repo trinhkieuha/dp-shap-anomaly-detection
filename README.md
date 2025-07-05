@@ -6,6 +6,15 @@ This repository contains the code, experiments, and outputs for my Master's thes
 
 This project investigates how **DP-SGD** impacts both **performance** and **explainability** in **deep learning-based anomaly detection** using autoencoders. Explainability is assessed using **KernelSHAP**.
 
+## 📁 Data Sources
+
+This project uses the **Bank Marketing Dataset** published by Moro, Rita, and Cortez (2014), which is publicly available for research purposes.
+
+- **Title**: Bank Marketing  
+- **Authors**: Moro, S., Rita, P., & Cortez, P. (2014)  
+- **DOI**: [https://doi.org/10.24432/C5K306](https://doi.org/10.24432/C5K306)  
+- **License**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
+
 ## ⚙️ Components
 
 - **Jupyter Notebooks (`notebooks/`)**  
